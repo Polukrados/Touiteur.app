@@ -7,7 +7,7 @@ use iutnc\touiteur\action\Action;
 class DefaultAction extends Action
 {
 
-    private ArrayList<Touit> $list;
+    private array $listTouit;
 
     public function __construct()
     {
