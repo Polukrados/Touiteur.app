@@ -91,13 +91,6 @@ input[type="submit"] {
     background-repeat: no-repeat;
 }
 
-.input-icon-genre-musical {
-    background-image: url("images/genre_musical.png");
-    background-size: 16px 16px;
-    background-position: 10px;
-    background-repeat: no-repeat;
-}
-
 .input-icon-password {
     background-image: url("images/icon_password.png");
     background-size: 16px 16px;
