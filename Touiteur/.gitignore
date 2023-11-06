@@ -34,3 +34,4 @@ out
 *.class
 vendor
 *.lock
+*.ini
