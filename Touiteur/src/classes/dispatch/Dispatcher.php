@@ -18,8 +18,8 @@ class Dispatcher
     public function run(): void
     {
         switch ($this->action) {
-            case 'display-touit':
-                $requete = new action\DisplayTouit();
+            case 'add-user':
+                $requete = new action\AddUserAction();
                 break;
             default:
                 $requete = new action\DefaultAction();

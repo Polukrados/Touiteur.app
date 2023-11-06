@@ -52,11 +52,58 @@ form {
     border: solid 2px black;
 }
 
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="text"],
+input[type="submit"] {
+    height: 50px;
+    width: 360px;
+    border-radius: 20px;
+    padding-left: 35px;
+    margin: 20px 0 0 0;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+    background-color: rgb(209, 232, 252);
+    text-align: center;
+    padding: 0;
+    margin: 20px 0 20px 0;
+}
+
 /************************************************************/
 /*                                                          */
 /*                     Style icon                           */
 /*                                                          */
 /************************************************************/
+.input-icon-email {
+    background-image: url("images/icon_mail.png");
+    background-size: 16px 16px;
+    background-position: 10px;
+    background-repeat: no-repeat;
+}
+
+.input-icon-age {
+    background-image: url("images/age.png");
+    background-size: 16px 16px;
+    background-position: 10px;
+    background-repeat: no-repeat;
+}
+
+.input-icon-genre-musical {
+    background-image: url("images/genre_musical.png");
+    background-size: 16px 16px;
+    background-position: 10px;
+    background-repeat: no-repeat;
+}
+
+.input-icon-password {
+    background-image: url("images/icon_password.png");
+    background-size: 16px 16px;
+    background-position: 10px;
+    background-repeat: no-repeat;
+}
 
 /************************************************************/
 /*                                                          */
@@ -84,3 +131,79 @@ form {
     font-weight: bold;
 }
 
+/************************************************************/
+/*                                                          */
+/*                     Page d'inscription                   */
+/*                                                          */
+/************************************************************/
+h1 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2%;
+}
+
+.add-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add_user_form {
+    height: auto;
+}
+
+/************************************************************/
+/*                                                          */
+/*                     Page infos utilisateur               */
+/*                                                          */
+/************************************************************/
+.style_infos_util {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px black;
+    width: 400px;
+    margin: auto;
+}
+
+/************************************************************/
+/*                                                          */
+/*                     Page ajout playlist                  */
+/*                                                          */
+/************************************************************/
+.add-playlist {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/************************************************************/
+/*                                                          */
+/*                     Page track                           */
+/*                                                          */
+/************************************************************/
+.add-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add_podcast_track {
+    height: 100px;
+    width: 400px;
+}
+
+/************************************************************/
+/*                                                          */
+/*                     liste des playlists                  */
+/*                                                          */
+/************************************************************/
+.liste_playlist {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+    width: 400px;
+    margin: auto;
+}
