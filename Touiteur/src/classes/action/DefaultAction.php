@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\action\Action;
 
-class DisplayTouit extends Action
+class DefaultAction extends Action
 {
 
     public function __construct()
@@ -14,6 +14,6 @@ class DisplayTouit extends Action
 
     public function execute(): string
     {
-        return "";
+        return "touiteur";
     }
 }
