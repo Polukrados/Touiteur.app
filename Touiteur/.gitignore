@@ -32,3 +32,5 @@ bin/
 out
 *.iml
 *.class
+vendor
+.lock
