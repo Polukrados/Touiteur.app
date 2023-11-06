@@ -16,7 +16,8 @@ class DefaultAction extends Action
 
     public function execute(): string
     {
-        return <<<HTML
+        $res="";
+        $res.=<<<HTML
             <header> 
               <p class ='libelle_page_courante'>Accueil</p> 
               <nav class="menu">
@@ -25,7 +26,7 @@ class DefaultAction extends Action
                  </ul>
                </nav>
             </header>
-            <div class ='bienvenue-message'>Bienvenue sur Touiteur !</div>
            HTML;
+        return $res;
     }
 }
