@@ -7,6 +7,8 @@ use iutnc\touiteur\action\Action;
 class DefaultAction extends Action
 {
 
+    private ArrayList<Touit> $list;
+
     public function __construct()
     {
         parent::__construct();
@@ -24,5 +26,6 @@ class DefaultAction extends Action
                </nav>
             </header>
             <div class ='bienvenue-message'>Bienvenue sur Touiteur !</div>
-           HTML;    }
+           HTML;
+    }
 }
