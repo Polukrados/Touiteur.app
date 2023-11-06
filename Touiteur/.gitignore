@@ -33,4 +33,4 @@ out
 *.iml
 *.class
 vendor
-.lock
+*.lock
