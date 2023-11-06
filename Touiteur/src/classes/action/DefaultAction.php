@@ -14,6 +14,15 @@ class DefaultAction extends Action
 
     public function execute(): string
     {
-        return "touiteur";
-    }
+        return <<<HTML
+            <header> 
+              <p class ='libelle_page_courante'>Accueil</p> 
+              <nav class="menu">
+                 <ul>
+                  
+                 </ul>
+               </nav>
+            </header>
+            <div class ='bienvenue-message'>Bienvenue sur Touiteur !</div>
+           HTML;    }
 }
