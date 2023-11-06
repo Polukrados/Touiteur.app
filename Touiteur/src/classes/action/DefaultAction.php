@@ -22,7 +22,8 @@ class DefaultAction extends Action
               <p class ='libelle_page_courante'>Accueil</p> 
               <nav class="menu">
                  <ul>
-                  
+                  <li><a href="?action=accueil">S'inscrire</a></li>
+                  <li><a href="?action=accueil">Se connecter</a></li>
                  </ul>
                </nav>
             </header>
