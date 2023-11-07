@@ -56,6 +56,7 @@ class Signin extends Action
                             </header>
                             HTML;
             } else {
+                echo "signin";
                 throw new LoginException();
             }
         }
