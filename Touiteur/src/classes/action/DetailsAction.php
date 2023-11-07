@@ -35,19 +35,22 @@ class DetailsAction extends Action
                 $userName = $row['prenom'] . ' ' . $row['nom'];
                 $content = $row['texte'];
                 $timestamp = $row['datePublication'];
-                $imagePath = "images/" . $row['cheminFichier'];
+                $imagePath = $row['cheminFichier'] ? "images/" . $row['cheminFichier'] : '';
                 $score = $row['note'] ?? 0;
+
+                $imageHTML = $imagePath ? "<img src=\"$imagePath\" alt=\"Image associée au tweet\">" : '';
 
                 // Touit long
                 $tweetHTML = <<<HTML
-                <div class="tweet-detail">
-                    <div class="user">Utilisateur: $userName</div>
-                    <div class="content">$content</div>
-                    <div class="timestamp">Publié le : $timestamp</div>
-                    <img src="$imagePath" alt="Image associée au tweet">
-                    <div class="score">Score : $score</div>
-                </div>
-            HTML;
+                            <div class="tweet-detail">
+                            <div class="user">Utilisateur: $userName</div>
+                            <div class="content">$content</div>
+                            <div class="timestamp">Publié le : $timestamp</div>
+                            $imageHTML
+                            <div class="score">Score : $score</div>
+                            </div>
+                            HTML;
+
                 // Page
                 $pageContent = <<<HTML
                 <header>
