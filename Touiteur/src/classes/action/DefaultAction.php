@@ -20,10 +20,10 @@ class DefaultAction extends Action
         if ($this->http_method === 'GET') {
             $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Images.cheminFichier
                         FROM Touites
-                        left JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                        left JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                        left JOIN TouitesImages ON TouitesImages.TouiteID= Touites.TouiteID
-                        left JOIN Images ON Images.ImageID=TouitesImages.ImageID
+                        LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
+                        LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
+                        LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.touiteID
+                        LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
                         ORDER BY Touites.datePublication DESC");
 
             $tweets = '';
@@ -34,13 +34,12 @@ class DefaultAction extends Action
                 $timestamp = $row['datePublication'];
                 $imagePath = $row['cheminFichier'];
 
-                // Tweet court avec un formulaire pour les détails
+                // Touit court
                 $tweetHTML = <<<HTML
             <div class="tweet">
                 <div class="user">Utilisateur: $userName</div>
                 <div class="content">$content</div>
                 <div class="timestamp">Publié le : $timestamp</div>
-                <img src="$imagePath" alt="Image associée au tweet">
                 <form method="post" action="?action=default">
                     <input type="hidden" name="tweet_id" value="$tweetID">
                     <input type="submit" value="Voir les détails">
@@ -53,8 +52,8 @@ class DefaultAction extends Action
 
             // Page
             $pageContent = <<<HTML
-        <header> 
-            <p class="libelle_page_courante">Accueil</p> 
+        <header>
+            <p class="libelle_page_courante">Accueil</p>
             <nav class="menu">
                 <ul>
                     <li><a href="?action=add-user">S'inscrire</a></li>
@@ -71,11 +70,13 @@ class DefaultAction extends Action
         } else {
             if (isset($_POST['tweet_id'])) {
                 $tweetID = intval($_POST['tweet_id']);
-                $query = $db->prepare("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Evaluations.note
+                $query = $db->prepare("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Evaluations.note, Images.cheminFichier
                         FROM Touites
                         INNER JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                         INNER JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
                         LEFT JOIN Evaluations ON Touites.touiteID = Evaluations.touiteID
+                        LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.TouiteID
+                        LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
                         WHERE Touites.touiteID = :tweet_id");
                 $query->bindParam(':tweet_id', $tweetID, PDO::PARAM_INT);
                 $query->execute();
@@ -85,10 +86,10 @@ class DefaultAction extends Action
                     $userName = $row['prenom'] . ' ' . $row['nom'];
                     $content = $row['texte'];
                     $timestamp = $row['datePublication'];
-                    $imagePath = $row['cheminFichier'];
-                    $score = $row['note'] ?? 'N/A'; // Si la note n'est pas disponible
+                    $imagePath = "images/".$row['cheminFichier'];
+                    $score = $row['note'] ?? 0;
 
-                    // Tweet en détail
+                    // Touit long
                     $tweetHTML = <<<HTML
                 <div class="tweet-detail">
                     <div class="user">Utilisateur: $userName</div>
@@ -98,27 +99,23 @@ class DefaultAction extends Action
                     <div class="score">Score : $score</div>
                 </div>
             HTML;
-
-                    // Lien pour retourner à la liste des tweets
-                    $backLink = '<a href="?action=default">Retour à la liste des tweets</a>';
-
                     // Page
                     $pageContent = <<<HTML
-                <header> 
+                <header>
+                    <a href="?action=default"><img src="images/retour_arriere.png" alt="Image associée au tweet"></a> 
                     <p class="libelle_page_courante">Détails du Tweet</p>
                 </header>
                 <div class="tweet-details">
                     $tweetHTML
-                    $backLink
                 </div>
             HTML;
 
                     return $pageContent;
                 } else {
-                    return 'Tweet non trouvé.';
+                    return 'Touit non trouvé.';
                 }
             } else {
-                return 'ID';
+                return 'IDnon trouvé';
             }
         }
     }
