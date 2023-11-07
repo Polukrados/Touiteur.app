@@ -159,44 +159,10 @@ h1 {
     margin: auto;
 }
 
-/************************************************************/
-/*                                                          */
-/*                     Page ajout playlist                  */
-/*                                                          */
-/************************************************************/
-.add-playlist {
+.erreur_authentification {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 2px solid rgb(209, 232, 252);
 }
 
-/************************************************************/
-/*                                                          */
-/*                     Page track                           */
-/*                                                          */
-/************************************************************/
-.add-track {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.add_podcast_track {
-    height: 100px;
-    width: 400px;
-}
-
-/************************************************************/
-/*                                                          */
-/*                     liste des playlists                  */
-/*                                                          */
-/************************************************************/
-.liste_playlist {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-left: solid 2px black;
-    border-right: solid 2px black;
-    width: 400px;
-    margin: auto;
-}

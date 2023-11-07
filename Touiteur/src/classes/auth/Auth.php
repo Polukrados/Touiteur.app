@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\auth;
 
 use iutnc\touiteur\db;
+use iutnc\touiteur\exception\LoginException;
 
 class Auth
 {
@@ -20,23 +21,24 @@ class Auth
             return false;
         }
 
-        if (password_verify($mdp, $userData['mdp'])) {
+       // if (password_verify($mdp, $userData['mdp'])) {
             $_SESSION['utilisateur'] = [
-                'userID' => $userData['userID'],
+                'userID' => $userData['utilisateurID'],
                 'nom' => $userData['nom'],
                 'prenom' => $userData['prenom'],
                 'email' => $userData['email'],
+                'mdp' => $userData['mdp']
             ];
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 
     // fonction pour s'inscrire
     public function register(string $nom, string $prenom, string $email, string $mdp): bool
     {
-        $nom = filter_var($nom, FILTER_SANITIZE_STRING);
-        $prenom = filter_var($prenom, FILTER_SANITIZE_STRING);
+        $nom = filter_var($nom, FILTER_SANITIZE_SPECIAL_CHARS);
+        $prenom = filter_var($prenom, FILTER_SANITIZE_SPECIAL_CHARS);
         // vérifie la validité de l'email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
 

@@ -4,6 +4,9 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
 use iutnc\touiteur\exception\AuthException;
+use iutnc\touiteur\exception\LoginException;
+use iutnc\touiteur\exception\RegisterException;
+use iutnc\touiteur\user\User;
 
 class Signin extends Action
 {
@@ -35,15 +38,25 @@ class Signin extends Action
                       </div>
               HTML;
         } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Valeurs de l'utilisateur
             $email = $_POST["email"];
             $mdp = $_POST["password"];
 
-            try {
-                if (Auth::authenticate($email, $mdp)){
-
-                }
-            } catch (AuthException $e){
-                $e->getMessage();
+            // vérifie si le compte existe
+            if (Auth::authenticate($email, $mdp)) {
+                $user = new User($_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
+                $pseudo = $user->getPseudo();
+                $signin .= <<<HTML
+                            <header> 
+                              <p class ='libelle_page_courante'>$pseudo</p> 
+                              <nav class="menu">
+                                <ul>
+                                </ul>
+                              </nav>
+                            </header>
+                            HTML;
+            } else {
+                throw new LoginException();
             }
         }
         return $signin;
