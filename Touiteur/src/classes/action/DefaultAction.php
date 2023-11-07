@@ -18,10 +18,12 @@ class DefaultAction extends Action
         $db = ConnectionFactory::makeConnection();
 
         if ($this->http_method === 'GET') {
-            $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication
+            $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Images.cheminFichier
                         FROM Touites
-                        INNER JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                        INNER JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
+                        left JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
+                        left JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
+                        left JOIN TouitesImages ON TouitesImages.TouiteID= Touites.TouiteID
+                        left JOIN Images ON Images.ImageID=TouitesImages.ImageID
                         ORDER BY Touites.datePublication DESC");
 
             $tweets = '';
@@ -30,6 +32,7 @@ class DefaultAction extends Action
                 $userName = $row['prenom'] . ' ' . $row['nom'];
                 $content = $row['texte'];
                 $timestamp = $row['datePublication'];
+                $imagePath = $row['cheminFichier'];
 
                 // Tweet court avec un formulaire pour les détails
                 $tweetHTML = <<<HTML
@@ -37,6 +40,7 @@ class DefaultAction extends Action
                 <div class="user">Utilisateur: $userName</div>
                 <div class="content">$content</div>
                 <div class="timestamp">Publié le : $timestamp</div>
+                <img src="$imagePath" alt="Image associée au tweet">
                 <form method="post" action="?action=default">
                     <input type="hidden" name="tweet_id" value="$tweetID">
                     <input type="submit" value="Voir les détails">
@@ -81,6 +85,7 @@ class DefaultAction extends Action
                     $userName = $row['prenom'] . ' ' . $row['nom'];
                     $content = $row['texte'];
                     $timestamp = $row['datePublication'];
+                    $imagePath = $row['cheminFichier'];
                     $score = $row['note'] ?? 'N/A'; // Si la note n'est pas disponible
 
                     // Tweet en détail
@@ -89,6 +94,7 @@ class DefaultAction extends Action
                     <div class="user">Utilisateur: $userName</div>
                     <div class="content">$content</div>
                     <div class="timestamp">Publié le : $timestamp</div>
+                    <img src="$imagePath" alt="Image associée au tweet">
                     <div class="score">Score : $score</div>
                 </div>
             HTML;
