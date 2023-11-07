@@ -54,6 +54,9 @@ class Signin extends Action
                                 </ul>
                               </nav>
                             </header>
+                            <div class="password">
+                                
+                            </div>  
                             HTML;
             } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
