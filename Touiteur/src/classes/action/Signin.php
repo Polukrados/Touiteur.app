@@ -61,7 +61,6 @@ class Signin extends Action
                             </div>                     
                           HTML;
 
-
             } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
                             <header> 
