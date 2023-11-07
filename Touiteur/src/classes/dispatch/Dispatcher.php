@@ -21,6 +21,9 @@ class Dispatcher
             case 'add-user':
                 $requete = new action\AddUserAction();
                 break;
+            case 'signin';
+                $requete = new action\Signin();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;
