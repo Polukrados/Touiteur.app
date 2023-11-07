@@ -50,7 +50,6 @@ class DetailsAction extends Action
                             <div class="score">Score : $score</div>
                             </div>
                             HTML;
-
                 // Page
                 $pageContent = <<<HTML
                 <header>
