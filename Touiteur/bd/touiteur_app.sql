@@ -81,10 +81,10 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`imageID`, `description`, `cheminFichier`) VALUES
-(1, 'Image de profil', 'C:xampphtdocsdev_webTouiteur.appTouiteurimagesicone_de_profil.jpg'),
-(2, 'Couverture pour touite', 'C:xampphtdocsdev_webTouiteur.appTouiteurimagescouverture_touite.jpg'),
-(3, 'Illustration de touite', 'C:xampphtdocsdev_webTouiteur.appTouiteurimagesillustration_touite.jpg'),
-(4, 'Photo de paysage', 'C:xampphtdocsdev_webTouiteur.appTouiteurimagesphoto_paysage.jpg');
+(1, 'Image de profil', 'C:\xampp\htdocs\Touiteur.app\Touiteur\images\icone_de_profil.jpg'),
+(2, 'Couverture pour touite', 'C:\xampp\htdocs\Touiteur.app\Touiteur\images\couverture_touite.jpg'),
+(3, 'Illustration de touite', 'C:\xampp\htdocs\Touiteur.app\Touiteur\images\illustration_touite.jpg'),
+(4, 'Photo de paysage', 'C:\xampp\htdocs\Touiteur.app\Touiteur\images\photo_paysage.jpg');
 
 -- --------------------------------------------------------
 
