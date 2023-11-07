@@ -4,6 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\action\Action;
 use iutnc\touiteur\db\ConnectionFactory;
+use PDO;
 
 class DefaultAction extends Action
 {
@@ -15,19 +16,27 @@ class DefaultAction extends Action
     public function execute(): string
     {
         $db = ConnectionFactory::makeConnection();
-        $query = $db->query("SELECT * FROM tweets ORDER BY timestamp DESC");
+        $query = $db->query("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Images.cheminFichier
+                            FROM Touites
+                            INNER JOIN Utilisateurs ON Touites.userID = Utilisateurs.userID
+                            LEFT JOIN TouitesImages ON Touites.touiteID = TouitesImages.touiteID
+                            LEFT JOIN Images ON TouitesImages.imageID = Images.imageID
+                            ORDER BY Touites.datePublication DESC");
+
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-            $user_id = $row['user_id']; // Supposons que vous avez une colonne "user_id" pour l'identifiant de l'utilisateur
-            $content = $row['content'];
-            $timestamp = $row['timestamp'];
+            $userName = $row['prenom'] . ' ' . $row['nom'];
+            $content = $row['texte'];
+            $timestamp = $row['datePublication'];
+            $imagePath = $row['cheminFichier'];
 
             // Tweet
             $tweetHTML = <<<HTML
                 <div class="tweet">
-                    <div class="user">User ID: $user_id</div>
+                    <div class="user">Utilisateur: $userName</div>
                     <div class="content">$content</div>
-                    <div class="timestamp">Posted at: $timestamp</div>
+                    <div class="timestamp">Publié le : $timestamp</div>
+                    <img src="$imagePath" alt="Image associée au tweet">
                 </div>
             HTML;
 
