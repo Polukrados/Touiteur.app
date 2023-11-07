@@ -18,26 +18,31 @@ class DefaultAction extends Action
         $pageContent = "";
         if ($this->http_method === 'GET') {
             $db = ConnectionFactory::makeConnection();
-            $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication
+            $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier                        FROM Touites
                         FROM Touites
-                        LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                        LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                        LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.touiteID
-                        LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
+                        left JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
+                        left JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
+                        left JOIN TouitesImages ON TouitesImages.TouiteID= Touites.TouiteID
+                        left JOIN Images ON Images.ImageID=TouitesImages.ImageID
+                        LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
+                        LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
                         ORDER BY Touites.datePublication DESC");
 
             $tweets = '';
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $tweetID = $row['touiteID'];
+                $userID = $row['utilisateurID'];
                 $userName = $row['prenom'] . ' ' . $row['nom'];
                 $content = $row['texte'];
+                $tagID = $row['tagID'];
+                $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
 
                 // Touit court
                 $tweets .= <<<HTML
             <div class="tweet">
-                <div class="user">Utilisateur: $userName</div>
-                <div class="content">$content</div>
+                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
+                <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                 <div class="timestamp">Publié le : $timestamp</div>
                 <a href="?action=details&tweet_id=$tweetID">Voir les détails</a>
             </div>

@@ -60,7 +60,7 @@ class Auth
         // vérifie la qualité du mdp et l'ajoute à la bd s'il est bon
         if ($this->checkPasswordStrength($mdp, 8)) {
             $hash = password_hash($mdp, PASSWORD_DEFAULT, ['cost' => 12]);
-            $query2 = "INSERT INTO utilisateurs (nom, prenom, email, mdp) VALUES(:nom, :prenom, :email, :hash)";
+            $query2 = "INSERT INTO utilisateurs (nom, prenom, email, passwd) VALUES(:nom, :prenom, :email, :hash)";
             $st = $db->prepare($query2);
             $st->bindParam(":nom", $nom);
             $st->bindParam(":prenom", $prenom);
