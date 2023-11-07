@@ -41,15 +41,32 @@ class AddUserAction extends Action
 
             $auth = new Auth();
             // ajoute l'utilisateur dans la bd s'il n'existe pas déjà et si le mdp est assez fort
-            $auth->register($nom, $prenom, $email, $passwd);
-
-            if ($auth){
+            if ($auth->register($nom, $prenom, $email, $passwd)){
                 echo "test";
                 header("Location: ?action=default");
                 exit;
-            } else {
-                echo "auth";
-                throw new RegisterException();
+            } else { // Affiche une erreur si l'inscription a échoué
+                $add_user .= <<<HTML
+                                <header> 
+                                  <p class ='libelle_page_courante'>Connexion</p> 
+                                  <nav class="menu">
+                                    <ul>
+                                      <li><a href="?action=accueil">Accueil</a></li>
+                                      <li><a href="?action=signin">Se connecter</a></li>
+                                    </ul>
+                                  </nav>
+                                </header>
+                                <div class="add-user">
+                                    <form class="add_user_form" action='?action=add-user' method='post'>
+                                                      <h1> Créer votre compte </h1>
+                                    <input type='text' placeholder='Nom' name='nom' id='nom' class='input-icon-nom' required><br><br>
+                                    <input type='text' placeholder='Prénom' name='prenom' id='prenom' class='input-icon-prenom' required><br><br>
+                                    <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
+                                    <input type='password' placeholder='Mot de passe' name='password' id='password' class='input-icon-password' required><br><br>
+                                    <input type='submit' value="S'inscrire">
+                                    <p class="erreur_authentification"> Inscription échouée </p>
+                              </div>                      
+                              HTML;
             }
         }
 
