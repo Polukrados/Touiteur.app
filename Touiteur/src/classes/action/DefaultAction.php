@@ -79,9 +79,11 @@ class DefaultAction extends Action
 
             // Page
             $pageContent = <<<HTML
-        <header>
-            <p class="libelle_page_courante">Accueil</p>
+        <header class="container">
             <nav class="menu">
+                <div class="logo-accueil">
+                    <a href="?action=default"><img src="images/logo_appli.png" alt="Accueil"></a>
+                </div>
                 <ul>
                     <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
                     <li><a href="?action=add-user">S'inscrire</a></li>
