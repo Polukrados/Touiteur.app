@@ -1,4 +1,6 @@
-Détaillons les clés pour chaque table et justifions la 3FN pour chacune :
+# Exercice 5 :
+
+**Détails des clés pour chaque table et justifions la 3FN pour chacune :**
 
 ### Table `abonnementtags`
 **Clé primaire :** (userID, tagID)
