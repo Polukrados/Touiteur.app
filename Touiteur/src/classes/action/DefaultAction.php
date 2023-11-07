@@ -48,7 +48,7 @@ class DefaultAction extends Action
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $tweetID = $row['touiteID'];
                 $userID = $row['utilisateurID'];
-                $userName = $row['prenom'] . ' ' . $row['nom'];
+                $userName = $row['prenom'] . '_' . $row['nom'];
                 $content = $this->texte($row['texte']);
                 $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
