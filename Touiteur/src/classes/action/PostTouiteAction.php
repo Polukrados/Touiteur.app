@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\db\ConnectionFactory;
+use PDO;
 
 class PostTouiteAction extends Action
 {
@@ -34,13 +35,13 @@ class PostTouiteAction extends Action
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
-            if (!isset($_SESSION['utilisateurID'])) {
+            if (!isset($_SESSION['utilisateur'])) {
                 header('Location: ?action=signin');
                 exit;
             }
             // Assainir les entrées
             $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $utilisateurID = $_SESSION['utilisateurID']; // Supposons que l'ID utilisateur est stocké dans la session
+            $utilisateurID = $_SESSION['utilisateur']['userID'];
 
             // Gérer le téléchargement du fichier
             $mediaPath = null;
