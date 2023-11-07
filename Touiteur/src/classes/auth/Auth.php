@@ -21,7 +21,7 @@ class Auth
             return false;
         }
 
-       // if (password_verify($mdp, $userData['mdp'])) {
+       if (password_verify($mdp, $userData['mdp'])) {
             $_SESSION['utilisateur'] = [
                 'userID' => $userData['utilisateurID'],
                 'nom' => $userData['nom'],
@@ -30,8 +30,8 @@ class Auth
                 'mdp' => $userData['mdp']
             ];
             return true;
-        //}
-        //return false;
+        }
+        return false;
     }
 
     // fonction pour s'inscrire
