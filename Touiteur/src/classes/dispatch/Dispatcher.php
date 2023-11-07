@@ -30,6 +30,9 @@ class Dispatcher
             case 'tag-touite-list':
                 $requete = new action\TagTouiteListAction();
                 break;
+            case 'details':
+                $requete = new action\DetailsAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;
