@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\db\ConnectionFactory;
+use PDO;
 
 class PostTouiteAction extends Action
 {
@@ -34,13 +35,13 @@ class PostTouiteAction extends Action
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
-            if (!isset($_SESSION['utilisateurID'])) {
+            if (!isset($_SESSION['utilisateur'])) {
                 header('Location: ?action=signin');
                 exit;
             }
             // Assainir les entrées
             $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $utilisateurID = $_SESSION['utilisateurID']; // Supposons que l'ID utilisateur est stocké dans la session
+            $utilisateurID = $_SESSION['utilisateur']['userID'];
 
             // Gérer le téléchargement du fichier
             $mediaPath = null;
@@ -51,20 +52,20 @@ class PostTouiteAction extends Action
                 // Vous pouvez également générer un nom de fichier unique pour éviter les écrasements
             }
 
+            $description = $_POST['texte'];
             $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
             // Préparer la requête pour insérer les données dans la base de données
-            $query = $connection->prepare("INSERT INTO touites (touiteID, texte, datePublication) VALUES (:touiteID, :texte, :datePublication)");
-            $query->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
+            $query = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
             $query->bindParam(':texte', $texte);
             $query->bindParam(':datePublication', $datePublication);
-            $queryImage = $connection->prepare("INSERT INTO images (imageID, description, cheminFichier) VALUES (:imageID :descption, :mediaPath)");
-            $queryImage->bindParam(':imageID', $imageID);
+
+            $queryImage = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:descption, :mediaPath)");
             $queryImage->bindParam(':description', $description);
             $queryImage->bindParam(':mediaPath', $mediaPath);
+
             $query2 = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
-            $query2->bindParam(':touiteID', $touiteID);
-            $query2->bindParam(':imageID', $imageID);
+
             $query3 = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
             $query3->bindParam(':touiteID', $touiteID);
             $query3->bindParam(':utilisateurID', $utilisateurID);

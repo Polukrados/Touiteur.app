@@ -42,22 +42,26 @@ class Signin extends Action
             $email = $_POST["email"];
             $mdp = $_POST["password"];
 
-            // vérifie si le compte existe
+            // vérifie si le compte existe et si c'est le cas, affiche les touites de ses abonnements
             if (Auth::authenticate($email, $mdp)) {
-                $user = new User($_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
+                $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
                 $pseudo = $user->getPseudo();
+                $tweets = $user->getTouitFollow();
                 $signin .= <<<HTML
                             <header> 
                               <p class ='libelle_page_courante'>$pseudo</p> 
                               <nav class="menu">
                                 <ul>
+                                  <li><a href="?action=post-touite">Publier un touite</a></li>
                                 </ul>
                               </nav>
                             </header>
-                            <div class="password">
-                                
-                            </div>  
-                            HTML;
+                            <div class="tweets">
+                                $tweets
+                            </div>                     
+                          HTML;
+
+
             } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
                             <header> 
