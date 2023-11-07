@@ -33,6 +33,9 @@ class Dispatcher
             case 'details':
                 $requete = new action\DetailsAction();
                 break;
+            case 'post-touite':
+                $requete = new action\PostTouiteAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;

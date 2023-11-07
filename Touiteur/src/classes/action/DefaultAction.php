@@ -55,6 +55,7 @@ class DefaultAction extends Action
             <p class="libelle_page_courante">Accueil</p>
             <nav class="menu">
                 <ul>
+                    <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
                     <li><a href="?action=add-user">S'inscrire</a></li>
                     <li><a href="?action=signin">Se connecter</a></li>
                 </ul>
