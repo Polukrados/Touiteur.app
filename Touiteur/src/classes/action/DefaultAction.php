@@ -26,34 +26,55 @@ class DefaultAction extends Action
         $pageContent = "";
         if ($this->http_method === 'GET') {
             $db = ConnectionFactory::makeConnection();
-            $query = $db->query("SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle
-                        FROM Touites
-                        left JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                        left JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                        left JOIN TouitesImages ON TouitesImages.TouiteID= Touites.TouiteID
-                        left JOIN Images ON Images.ImageID=TouitesImages.ImageID
-                        LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
-                        LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-                        ORDER BY Touites.datePublication DESC");
+            $touitesParPages = 10;
+            $pageCourante = isset($_GET['page']) ? intval($_GET['page']) : 1;
+            $offset = ($pageCourante - 1) * $touitesParPages;
 
+            $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle
+                                        FROM Touites
+                                        LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
+                                        LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
+                                        LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.TouiteID
+                                        LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
+                                        LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
+                                        LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
+                                        ORDER BY Touites.datePublication DESC
+                                        LIMIT :limit OFFSET :offset");
+
+            $query->bindParam(':limit', $touitesParPages, PDO::PARAM_INT);
+            $query->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $query->execute();
             $tweets = '';
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $tweetID = $row['touiteID'];
                 $userID = $row['utilisateurID'];
                 $userName = $row['prenom'] . ' ' . $row['nom'];
-                $content = $this->texte($row['texte']);                $tagID = $row['tagID'];
+                $content = $this->texte($row['texte']);
+                $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
 
                 // Touit court
                 $tweets .= <<<HTML
             <div class="tweet">
-                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
+                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a> - <a href='?action=follow-user&user_id=$userID'>Suivre</a></div>
                 <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                 <div class="timestamp">Publié le : $timestamp</div>
                 <a href="?action=details&tweet_id=$tweetID">Voir les détails</a>
             </div>
         HTML;
+            }
+
+
+            $countQuery = $db->query("SELECT COUNT(*) as total FROM Touites");
+
+            $totalTouites = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
+            $totalPages = ceil($totalTouites / $touitesParPages);
+
+            // Pagination
+            $paginationLinks = '';
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
             }
 
             // Page
@@ -70,6 +91,9 @@ class DefaultAction extends Action
         </header>
         <div class="tweets">
             $tweets
+        </div>
+        <div class="pagination">
+            $paginationLinks
         </div>
     HTML;
         }

@@ -36,6 +36,9 @@ class Dispatcher
             case 'post-touite':
                 $requete = new action\PostTouiteAction();
                 break;
+            case 'follow-user':
+                $requete = new action\FollowUserAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;

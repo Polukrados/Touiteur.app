@@ -78,6 +78,16 @@ class Auth
                 'mdp' => $userData['mdp']
             ];
 
+            $userData = $st->fetch();
+
+            $_SESSION['utilisateur'] = [
+                            'userID' => $userData['utilisateurID'],
+                            'nom' => $userData['nom'],
+                            'prenom' => $userData['prenom'],
+                            'email' => $userData['email'],
+                            'mdp' => $userData['mdp']
+            ];
+
             return true;
         }
         return false;
