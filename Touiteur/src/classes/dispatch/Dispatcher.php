@@ -21,8 +21,14 @@ class Dispatcher
             case 'add-user':
                 $requete = new action\AddUserAction();
                 break;
-            case 'signin';
+            case 'signin':
                 $requete = new action\Signin();
+                break;
+            case 'user-touite-list':
+                $requete = new action\UserTouiteListAction();
+                break;
+            case 'tag-touite-list':
+                $requete = new action\TagTouiteListAction();
                 break;
             default:
                 $requete = new action\DefaultAction();
