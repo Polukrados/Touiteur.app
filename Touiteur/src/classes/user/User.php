@@ -9,8 +9,6 @@ class User{
     private string $email;
     private string $mdp;
 
-    private array $tabFollow;
-
     // Constructeur
     public function __construct(string $nom, string $prenom, string $email, string $mdp){
         $this->pseudo = $prenom . "_" . $nom;
@@ -19,19 +17,26 @@ class User{
     }
 
     // Récupère les follows de l'utilisateur
-    public function getFollower() {
+    public function getFollower() :array{
         $db = ConnectionFactory::makeConnection();
         $query = 'SELECT suiviID FROM suivi WHERE suivreID = :suiveur';
         $st = $db->prepare($query);
         $st->bindParam(":suiveur", $_SESSION['userID']['utilisateurID']);
         $st->execute();
 
+        $tabFollow = [];
         while ($data = $st->fetch()){
             $this->tabFollow[] = $data;
         }
+
+        return $tabFollow;
     }
 
-    public function
+    public function getTouitFromFollow(): array {
+
+        $tabTouitFollow = [];
+        return $tabTouitFollow;
+    }
 
     // GETTERS
     public function getPseudo(): string {
