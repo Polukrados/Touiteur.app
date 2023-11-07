@@ -48,6 +48,7 @@ class AddUserAction extends Action
                 header("Location: ?action=default");
                 exit;
             } else {
+                echo "auth";
                 throw new RegisterException();
             }
         }
