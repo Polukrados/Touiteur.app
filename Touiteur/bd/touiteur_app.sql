@@ -147,9 +147,9 @@ CREATE TABLE `touites` (
 
 INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`) VALUES
                                                                    (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00'),
-                                                                   (2, 'Un autre touite avec un #ExempleTag', '2023-11-06 11:00:00'),
-                                                                   (3, 'Découvrez mon travail sur mon site #Portfolio', '2023-11-06 12:00:00'),
-                                                                   (4, 'Je suis d’accord avec ça #Accord', '2023-11-06 13:00:00');
+                                                                   (2, 'Un autre touite avec un', '2023-11-06 11:00:00'),
+                                                                   (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00'),
+                                                                   (4, 'Je suis d’accord avec ça', '2023-11-06 13:00:00');
 
 -- --------------------------------------------------------
 
@@ -207,6 +207,7 @@ CREATE TABLE `touitesutilisateurs` (
 
 INSERT INTO `touitesutilisateurs` (`TouiteID`, `utilisateurID`) VALUES
                                                                     (1, 4),
+																	(2, 3),
                                                                     (4, 1),
                                                                     (3, 2);
 

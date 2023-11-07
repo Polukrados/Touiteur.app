@@ -27,7 +27,6 @@ class PostTouiteAction extends Action
                   <div class="post-touite">
                     <form class="post_touite_form" action='?action=post-touite' method='post' enctype="multipart/form-data">
                         <h1> Publier votre Touite </h1>
-                        <input type='text' placeholder='Titre' name='titre' id='titre' required><br><br>
                         <textarea placeholder='Votre touite ici' name='texte' id='texte' required></textarea><br><br>
                         <input type='file' name='media' id='media'><br><br>
                         <input type='submit' value='Publier'>
@@ -39,28 +38,26 @@ class PostTouiteAction extends Action
                 header('Location: ?action=signin');
                 exit;
             }
-            // Assainir les entrées
             $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $utilisateurID = $_SESSION['utilisateur']['userID'];
 
             // Gérer le téléchargement du fichier
             $mediaPath = null;
             if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
-                // Valider le fichier ici (type, taille, etc.)
+                // Valider le fichier
                 $mediaPath = 'chemin/vers/le/dossier/uploads/' . basename($_FILES['media']['name']);
                 move_uploaded_file($_FILES['media']['tmp_name'], $mediaPath);
-                // Vous pouvez également générer un nom de fichier unique pour éviter les écrasements
             }
 
             $description = $_POST['texte'];
             $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
-            // Préparer la requête pour insérer les données dans la base de données
+            // requêtes pour insérer les données dans la base de données
             $query = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
             $query->bindParam(':texte', $texte);
             $query->bindParam(':datePublication', $datePublication);
 
-            $queryImage = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:descption, :mediaPath)");
+            $queryImage = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
             $queryImage->bindParam(':description', $description);
             $queryImage->bindParam(':mediaPath', $mediaPath);
 
@@ -75,7 +72,7 @@ class PostTouiteAction extends Action
                 // Redirection ou affichage d'un message de succès
                 $post_touite_html .= "<p>Touite publié avec succès !</p>";
             } catch (\PDOException $e) {
-                // Gérer l'erreur, peut-être enregistrer dans un fichier de logs
+                // Gérer l'erreur
                 $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
             }
         }
