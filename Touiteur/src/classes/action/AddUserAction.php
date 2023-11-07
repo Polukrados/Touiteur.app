@@ -19,13 +19,14 @@ class AddUserAction extends Action
                       </ul>
                     </nav>
                   </header>
-                  <h1> Créer votre compte </h1>
                   <div class="add-user">
                         <form class="add_user_form" action='?action=add-user' method='post'>
+                                          <h1> Créer votre compte </h1>
+                        <input type='text' placeholder='Nom' name='nom' id='nom' class='input-icon-nom' required><br><br>
+                        <input type='text' placeholder='Prénom' name='prenom' id='prenom' class='input-icon-prenom' required><br><br>
                         <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                         <input type='password' placeholder='Mot de passe' name='password' id='password' class='input-icon-password' required><br><br>
-                        <input type='number' placeholder='Age' name='age' id='age' class='input-icon-age' required><br><br>
-                        <input type='submit' value='Connexion'>
+                        <input type='submit' value='S'inscrire>
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
