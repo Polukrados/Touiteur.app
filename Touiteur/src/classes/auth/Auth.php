@@ -23,7 +23,7 @@ class Auth
 
        if (password_verify($mdp, $userData['mdp'])) {
             $_SESSION['utilisateur'] = [
-                'utilisateurID' => $userData['utilisateurID'],
+                'userID' => $userData['utilisateurID'],
                 'nom' => $userData['nom'],
                 'prenom' => $userData['prenom'],
                 'email' => $userData['email'],
@@ -71,7 +71,7 @@ class Auth
             $userData = $st->fetch();
 
             $_SESSION['utilisateur'] = [
-                'utilisateurID' => $userData['utilisateurID'],
+                'userID' => $userData['utilisateurID'],
                 'nom' => $userData['nom'],
                 'prenom' => $userData['prenom'],
                 'email' => $userData['email'],
