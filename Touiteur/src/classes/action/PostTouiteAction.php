@@ -43,8 +43,13 @@ class PostTouiteAction extends Action
                 header('Location: ?action=signin');
                 exit;
             }
-            $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            // ID de l'utilisateur de la session
             $utilisateurID = $_SESSION['utilisateur']['userID'];
+
+            // Valeurs du touite
+            $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_SPECIAL_CHARS);
+            $description = $_POST['texte'];
 
             // Gérer le téléchargement du fichier
             $mediaPath = null;
@@ -54,15 +59,19 @@ class PostTouiteAction extends Action
                 move_uploaded_file($_FILES['media']['tmp_name'], 'images/'.$mediaPath);
             }
 
-            $description = $_POST['texte'];
             $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
-            // // insère dans la table touites
+            /*********************************************
+             *                                           *
+             *      INSERTION DES DONNEES DANS LA BD     *
+             *                                           *
+             *********************************************/
+            // insertion dans la table touites
             $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
             $query_touite->bindParam(':texte', $texte);
             $query_touite->bindParam(':datePublication', $datePublication);
 
-            // insère dans la table images
+            // insertion dans la table images
             $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
             $query_image->bindParam(':description', $description);
             $query_image->bindParam(':mediaPath', $mediaPath);
@@ -76,12 +85,12 @@ class PostTouiteAction extends Action
             $query_recup_idImage->execute();
             $imageID = $query_recup_idImage->fetch()['imageID'];
 
-            // insère dans la table touitesimages
+            // insertion dans la table touitesimages
             $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
             $query_touite_image->bindParam(":touiteID", $touiteID);
             $query_touite_image->bindParam(":imageID", $imageID);
 
-            // insère dans la table touitesutilisateurs
+            // insertion dans la table touitesutilisateurs
             $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
             $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
             $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
