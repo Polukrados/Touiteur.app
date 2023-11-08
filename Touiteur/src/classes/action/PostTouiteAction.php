@@ -54,7 +54,7 @@ class PostTouiteAction extends Action
             if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
                 // fichier uploader
                 $mediaPath = basename($_FILES['media']['name']);
-                move_uploaded_file($_FILES['media']['tmp_name'], $mediaPath);
+                move_uploaded_file($_FILES['media']['tmp_name'], 'images/'.$mediaPath);
             }
 
             $description = $_POST['texte'];
