@@ -20,13 +20,13 @@ class User{
         $this->mdp = $mdp;
     }
 
-    /**********************************************************
-     *                                                        *
+    /***********************************************************
+     *                                                         *
      * FONCTIONS POUR RECUPERER LES TOUITES DE SES ABONNEMENTS *
-     *                                                        *
+     *                                                         *
      **********************************************************/
     // Récupère les id des utilisateurs abonné par l'utilisateur
-    public function getFollow(): array{
+    public function getFollowedUserID(): array{
         $db = ConnectionFactory::makeConnection();
         $query = 'SELECT suiviID 
                   FROM suivi 
@@ -43,9 +43,9 @@ class User{
     }
 
     // Récupère l'id des touites des follows de l'utilisateur
-    public function getTouitIDFromFollow(): array
+    public function getTouitIDFromFollowedUsers(): array
     {
-        $tabFollow = $this->getFollow();
+        $tabFollow = $this->getFollowedUserID();
         $tabTouitFollow = [];
 
         $db = ConnectionFactory::makeConnection();
@@ -64,9 +64,10 @@ class User{
         return $tabTouitFollow;
     }
 
-    public function getTouitFollow(): string{
-        $tab_touites_follow = $this->getTouitIDFromFollow();
-        $tweets = "";
+    // Récupère les touites de de follows de l'utilisateur
+    public function getTouitsFromFollowedUsers(): string{
+        $tab_touites_follow = $this->getTouitIDFromFollowedUsers();
+        $touits_follow = "";
 
         $db = ConnectionFactory::makeConnection();
         foreach ($tab_touites_follow as $touit) {
@@ -83,28 +84,9 @@ class User{
             $st = $db->prepare($query);
             $st->bindParam(':touit', $touit);
 
-            $data = $st->fetch();
-            if ($st->execute()) {
-                while ($data = $st->fetch()) {
-                    $touiteID = $data['touiteID'];
-                    $userID = $data['utilisateurID'];
-                    $userName = $data['prenom'] . ' ' . $data['nom'];
-                    $tagID = $data['tagID'];
-                    $libelle = $data['libelle'];
-                    $timestamp = $data['datePublication'];
-
-                    // Touit court
-                    $tweets .= <<<HTML
-                                <div class="tweet">
-                                    <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
-                                    <div class="timestamp">Publié le : $timestamp</div>
-                                    <a href="?action=details&tweet_id=$touiteID">Voir les détails</a>
-                                </div>
-                                HTML;
-                }
-            }
+            $touits_follow = $this->generateTweetHTML($st);
         }
-        return $tweets;
+        return $touits_follow;
     }
 
 
@@ -114,7 +96,7 @@ class User{
      *                                                                         *
      ***************************************************************************/
     // Récupère les tag follow par l'utilisateur
-    public function getTagFollow() :array{
+    public function getFollowedTagID() :array{
         $db = ConnectionFactory::makeConnection();
         $query = 'SELECT tagID 
                   FROM abonnementtags 
@@ -131,26 +113,76 @@ class User{
     }
 
     // Récupère l'id des touites des tag follows par l'utilisateur
-    public function getTouitIDFromTagFollow(): array
+    public function getTouitIDFromFollowedTag(): array
     {
-        $tabTagFollow = $this->getTagFollow();
+        $tabTagFollow = $this->getFollowedTagID();
         $tabTouitIdTagFollow = [];
 
         $db = ConnectionFactory::makeConnection();
-        foreach ($tabTouitIdTagFollow as $tag_follow) {
+        foreach ($tabTagFollow as $tag_follow) {
             $query = "SELECT TouiteID  
                       FROM touitestags
-                      WHERE utilisateurID = :followTagID";
+                      WHERE tagID = :followTagID";
 
             $st = $db->prepare($query);
             $st->bindParam(":followTagID", $tag_follow);
             $st->execute();
-            $data = $st->fetch();
-            $tabTouitIdTagFollow[] = $data['TouiteID'];
+            while($data = $st->fetch()) {
+                $tabTouitIdTagFollow[] = $data['TouiteID'];
+            }
         }
         return $tabTouitIdTagFollow;
     }
 
+    // Récupère les touites de de follows de l'utilisateur
+    public function getTouitTagFollow(): string{
+        $tab_tag_touites_follow = $this->getTouitIDFromFollowedTag();
+        $touits_tag_follow = "";
+
+        $db = ConnectionFactory::makeConnection();
+        foreach ($tab_tag_touites_follow as $touit_tag) {
+            $query = "SELECT t.touiteID, t.texte, u.utilisateurID, u.nom, u.prenom, t.datePublication, Tags.tagID, Tags.libelle
+                      FROM Touites t
+                      LEFT JOIN TouitesUtilisateurs ON t.touiteID = TouitesUtilisateurs.TouiteID
+                      LEFT JOIN Utilisateurs u ON TouitesUtilisateurs.utilisateurID = u.utilisateurID
+                      LEFT JOIN TouitesImages ON TouitesImages.TouiteID= t.TouiteID
+                      LEFT JOIN Images ON Images.ImageID=TouitesImages.ImageID
+                      LEFT JOIN TouitesTags ON t.touiteID = TouitesTags.TouiteID
+                      LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
+                      WHERE t.touiteID = :$touit_tag
+                     ORDER BY t.datePublication DESC";
+            $st = $db->prepare($query);
+            $st->bindParam(':$touit_tag', $touit_tag);
+
+            $touits_tag_follow = $this->generateTweetHTML($st);
+        }
+        return $touits_tag_follow;
+    }
+
+    // Fonction pour générer le code HTML d'un touit
+    public function generateTweetHTML(\PDOStatement $st): string{
+        $touits_followed = "";
+        if ($st->execute()) {
+            while ($data = $st->fetch()) {
+                $touiteID = $data['touiteID'];
+                $userID = $data['utilisateurID'];
+                $userName = $data['prenom'] . ' ' . $data['nom'];
+                $tagID = $data['tagID'];
+                $libelle = $data['libelle'];
+                $timestamp = $data['datePublication'];
+
+                // Touit court
+                $touits_followed .= <<<HTML
+                                <div class="tweet">
+                                    <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
+                                    <div class="timestamp">Publié le : $timestamp</div>
+                                    <a href="?action=details&tweet_id=$touiteID">Voir les détails</a>
+                                </div>
+                                HTML;
+            }
+        }
+        return $touits_followed;
+    }
 
     // GETTERS
     public function getPseudo(): string {

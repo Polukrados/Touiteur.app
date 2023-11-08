@@ -46,7 +46,8 @@ class Signin extends Action
             if (Auth::authenticate($email, $mdp)) {
                 $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
                 $pseudo = $user->getPseudo();
-                $tweets = $user->getTouitFollow();
+                $touits = $user->getTouitsFromFollowedUsers();
+                $touits .= $user->getTouitTagFollow();
                 $signin .= <<<HTML
                             <header> 
                               <p class ='libelle_page_courante'>$pseudo</p> 
@@ -57,7 +58,7 @@ class Signin extends Action
                               </nav>
                             </header>
                             <div class="tweets">
-                                $tweets
+                                $touits
                             </div>                     
                           HTML;
 
