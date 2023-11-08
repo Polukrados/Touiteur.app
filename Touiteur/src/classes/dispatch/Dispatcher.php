@@ -39,6 +39,9 @@ class Dispatcher
             case 'profile-user':
                 $requete = new action\ProfileUserAction();
                 break;
+            case 'logout':
+                $requete = new action\LogoutAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;
