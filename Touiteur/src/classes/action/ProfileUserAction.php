@@ -17,6 +17,9 @@ class ProfileUserAction extends Action
     {
         $db = ConnectionFactory::makeConnection();
 
+        $userID = "";
+        $pageContent="";
+
         if (isset($_GET['user_id'])) {
             $userID = intval($_GET['user_id']);
 
