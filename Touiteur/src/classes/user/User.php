@@ -173,10 +173,10 @@ class User{
 
                 // Touit court
                 $touits_followed .= <<<HTML
-                                <div class="tweet">
+                                <div class="menu-nav">
                                     <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
                                     <div class="timestamp">Publié le : $timestamp</div>
-                                    <a href="?action=details&tweet_id=$touiteID">Voir les détails</a>
+                                    <a class="details-link" href="?action=details&tweet_id=$touiteID">Voir les détails</a>
                                 </div>
                                 HTML;
             }

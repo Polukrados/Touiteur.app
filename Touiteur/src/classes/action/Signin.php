@@ -54,6 +54,7 @@ class Signin extends Action
                               <nav class="menu-nav">
                                 <ul>
                                   <li><a href="?action=post-touite">Publier un touite</a></li>
+                                  <li><a href="?action=accueil">Accueil</a></li>
                                 </ul>
                               </nav>
                             </header>
@@ -75,7 +76,7 @@ class Signin extends Action
                             </header>
                             <div class="form-container">
                                 <form class="form" action='?action=signin' method='post'>
-                                                    <h1> Connecter-vous à Touiteur </h1>
+                                                    <h1> Connectez-vous à Touiteur </h1>
                                 <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                                 <input type='password' placeholder='Mot de passe' name='password' id='password' class='input-icon-password' required><br><br>
                                 <input type='submit' value='Se connecter'>

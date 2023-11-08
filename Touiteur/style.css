@@ -209,6 +209,17 @@ body, html {
     cursor: pointer;
 }
 
+.tweet .user .suivre i{
+    color: #ff4081;
+    transition: transform 0.2s ease-in-out;
+}
+
+.tweet .user .suivre i:hover{
+    transform: rotate(180deg);
+    scale: 1.3;
+    cursor: cell;
+}
+
 .tweet .content {
     margin-top: 20px;
     font-size: 1em;
@@ -453,15 +464,6 @@ body, html {
     color: rgb(0, 166, 255);
 }
 
-.profile-container .suivre {
-    transition: transform 0.3s ease-in-out;
-}
-
-.profile-container .suivre:hover {
-    transform: scale(1.2);
-    cursor: cell;
-}
-
 .template-feed .content {
     font-size: 1em;
     margin-bottom: 10px;
@@ -523,30 +525,19 @@ body, html {
 
 
 
-.tweet .user .suivre i{
-    color: #ff4081;
-    transition: transform 0.2s ease-in-out;
-}
-
-.tweet .user .suivre i:hover{
-    transform: rotate(180deg);
-    scale: 1.3;
-    cursor: cell;
-}
 
 
-
-
-
-
-
+/* PROFIL */
 
 .profile-container {
+    align-items: center;
+    justify-content: center;
     max-width: 600px;
     margin: 20px auto;
-    border: 1px solid #e1e8ed;
+    border: 1px dashed #e1e8ed;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #232222;
+    color: whitesmoke;
 }
 
 .profile-header {
@@ -557,7 +548,6 @@ body, html {
 
 .profile-header h1 {
     margin: 0;
-    color: #14171a;
     font-size: 24px;
     font-weight: bold;
 }
@@ -590,32 +580,6 @@ body, html {
 .tweets-container {
     padding: 20px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /************************************************************/
 /*                    Suivi Tags                            */
