@@ -11,7 +11,6 @@ class PostTouiteAction extends Action
     public function execute(): string
     {
         $post_touite_html = "";
-        $connection = ConnectionFactory::makeConnection();
 
         if ($this->http_method == "GET") {
             $post_touite_html .= <<<HTML
@@ -37,6 +36,9 @@ class PostTouiteAction extends Action
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
+            $connection = ConnectionFactory::makeConnection();
+
+            // si l'utilisateur n'est pas connecté, alors on le redirige vers la page pour se connecter
             if (!isset($_SESSION['utilisateur'])) {
                 header('Location: ?action=signin');
                 exit;
@@ -47,31 +49,48 @@ class PostTouiteAction extends Action
             // Gérer le téléchargement du fichier
             $mediaPath = null;
             if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
-                // Valider le fichier
-                $mediaPath = 'chemin/vers/le/dossier/uploads/' . basename($_FILES['media']['name']);
+                // fichier uploader
+                $mediaPath = 'images/' . basename($_FILES['media']['name']);
                 move_uploaded_file($_FILES['media']['tmp_name'], $mediaPath);
             }
 
             $description = $_POST['texte'];
             $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
-            // requêtes pour insérer les données dans la base de données
-            $query = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
-            $query->bindParam(':texte', $texte);
-            $query->bindParam(':datePublication', $datePublication);
+            // // insère dans la table touites
+            $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
+            $query_touite->bindParam(':texte', $texte);
+            $query_touite->bindParam(':datePublication', $datePublication);
 
-            $queryImage = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
-            $queryImage->bindParam(':description', $description);
-            $queryImage->bindParam(':mediaPath', $mediaPath);
+            // insère dans la table images
+            $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
+            $query_image->bindParam(':description', $description);
+            $query_image->bindParam(':mediaPath', $mediaPath);
 
-            $query2 = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
+            // Récupère l'id du touit et de l'image pour les insérer dans la table touitesimages et touitesutilisateur
+            $query_recup_idTouite =  $connection->prepare('SELECT max(touiteID) + 1 as touiteID FROM touites');
+            $query_recup_idTouite->execute();
+            $touiteID = $query_recup_idTouite->fetch()['touiteID'];
 
-            $query3 = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
-            $query3->bindParam(':touiteID', $touiteID);
-            $query3->bindParam(':utilisateurID', $utilisateurID);
+            $query_recup_idImage =  $connection->prepare('SELECT max(imageID) + 1 as imageID FROM images');
+            $query_recup_idImage->execute();
+            $imageID = $query_recup_idImage->fetch()['imageID'];
+
+            // insère dans la table touitesimages
+            $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
+            $query_touite_image->bindParam(":touiteID", $touiteID);
+            $query_touite_image->bindParam(":imageID", $imageID);
+
+            // insère dans la table touitesutilisateurs
+            $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
+            $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
+            $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
 
             try {
-                $query->execute();
+                $query_touite->execute();
+                $query_image->execute();
+                $query_touite_image->execute();
+                $query_touite_utilisateur->execute();
                 // Redirection ou affichage d'un message de succès
                 $post_touite_html .= "<p>Touite publié avec succès !</p>";
             } catch (\PDOException $e) {
