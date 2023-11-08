@@ -154,46 +154,54 @@ class ProfileUserAction extends Action
                                                           HTML;
             } else {
                 if ($existingRelation === 0) {
+                    $follow=0;
                     $pageContent .= <<<HTML
-                                                                  <div class="profile-container">
-                                                                      <div class="profile-header">
+                                                              <div class="profile-container">
+                                                                   <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
                                                                           <form method="post" class="follow-form">
                                                                               <input type="hidden" name="user_id" value="$userID">
+                                                                              <input type="hidden" name="follow" value="$follow">
                                                                               <input type="submit" class="follow-btn" value="Suivre cet utilisateur">
                                                                           </form>
                                                                           <br>
                                                                           $scoremoyen
                                                                           <br>
                                                                           <p class="followers-count">$listefollowers</p>
-                                                                      </div>
-                                                                      <div class="tweets-container">
+                                                                   </div>
+                                                                   <div class="tweets-container">
                                                                           <h2>Liste des tweets de l'utilisateur :</h2>
                                                                           <div class="tweets-list">
                                                                               $tweets
                                                                           </div>
-                                                                      </div>
-                                                                  </div>
+                                                                   </div>
+                                                               </div>
 
                                                           HTML;
                 } else {
+                    $follow=1;
                     $pageContent .= <<<HTML
                                                               <div class="profile-container">
-                                                                      <div class="profile-header">
+                                                                   <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
                                                                           <p>Vous suivez déjà cet utilisateur.</p>
+                                                                          <form method="post" class="follow-form">
+                                                                             <input type="hidden" name="user_id" value="$userID">
+                                                                             <input type="hidden" name="follow" value="$follow">
+                                                                             <input type="submit" class="follow-btn" value="Ne plus suivre cet utilisateur">
+                                                                          </form>
                                                                           <br>
                                                                           $scoremoyen
                                                                           <br>
                                                                           <p class="followers-count">$listefollowers</p>
-                                                                      </div>
-                                                                      <div class="tweets-container">
+                                                                   </div>
+                                                                   <div class="tweets-container">
                                                                           <h2>Liste des tweets de l'utilisateur :</h2>
                                                                           <div class="tweets-list">
                                                                               $tweets
                                                                           </div>
-                                                                      </div>
-                                                                  </div>
+                                                                   </div>
+                                                               </div>
                                                           HTML;
                 }
             }
@@ -201,28 +209,53 @@ class ProfileUserAction extends Action
             return $pageContent;
         } else if ($this->http_method === 'POST') {
             $userID = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
+            $follow = isset($_POST['follow']) ? intval($_POST['follow']) : null;
             $pageContent = '';
 
-            if ($userID !== null) {
-                // La relation n'existe pas, vous pouvez effectuer l'insertion.
-                $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
-                $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-                $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-                $insertQuery->execute();
+            if($follow===0) {
+                if ($userID !== null) {
+                                // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                                $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
+                                $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+                                $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+                                $insertQuery->execute();
 
-                $pageContent = <<<HTML
-                                                            <header>
-                                                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
-                                                                <nav class="menu">
-                                                                    <ul>
-                                                                        <li><a href="?action=add-user">S'inscrire</a></li>
-                                                                        <li><a href="?action=signin">Se connecter</a></li>
-                                                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                                                                    </ul>
-                                                                </nav>
-                                                            </header>
-                                                            <p> Vous suivez maintenant l'utilisateur $userName !</p>
-                    HTML;
+                                $pageContent = <<<HTML
+                                                                            <header>
+                                                                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
+                                                                                <nav class="menu">
+                                                                                    <ul>
+                                                                                        <li><a href="?action=add-user">S'inscrire</a></li>
+                                                                                        <li><a href="?action=signin">Se connecter</a></li>
+                                                                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
+                                                                                    </ul>
+                                                                                </nav>
+                                                                            </header>
+                                                                            <p> Vous suivez maintenant l'utilisateur $userName !</p>
+                                    HTML;
+                }
+            } else if($follow===1) {
+                if ($userID !== null) {
+                                // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                                $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+                                $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+                                $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+                                $deleteQuery->execute();
+
+                                $pageContent = <<<HTML
+                                                                            <header>
+                                                                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
+                                                                                <nav class="menu">
+                                                                                    <ul>
+                                                                                        <li><a href="?action=add-user">S'inscrire</a></li>
+                                                                                        <li><a href="?action=signin">Se connecter</a></li>
+                                                                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
+                                                                                    </ul>
+                                                                                </nav>
+                                                                            </header>
+                                                                            <p> Vous ne suivez plus l'utilisateur $userName !</p>
+                                    HTML;
+                }
             }
         }
         return $pageContent;
