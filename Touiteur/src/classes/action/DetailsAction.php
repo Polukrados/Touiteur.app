@@ -43,9 +43,9 @@ class DetailsAction extends Action
                 // Touit long
                 $tweetHTML = <<<HTML
                             <div class="tweet-detail">
-                            <div class="user">Utilisateur: $userName</div>
-                            <div class="content">$content</div>
-                            <div class="timestamp">Publié le : $timestamp</div>
+                            <div class="user"><b>Utilisateur:</b> $userName</div>
+                            <div class="content"><b>Touite :</b><br>$content</div>
+                            <div class="timestamp"><b>Publié le :</b> $timestamp</div>
                             $imageHTML
                             <div class="score">Score : $score</div>
                             </div>
@@ -53,8 +53,10 @@ class DetailsAction extends Action
                 // Page
                 $pageContent = <<<HTML
                 <header>
-                    <a href="?action=default"><img src="images/retour_arriere.png" alt="Image associée au tweet"></a> 
-                    <p class="libelle_page_courante">Détails du Tweet</p>
+                    <p class="libelle_page_courante">        
+                        <a class="retour-arriere" href="?action=default"><img src="images/retour_arriere.png" alt="Flèche retour arrière"></a>       
+                        Détails du Tweet
+                    </p>
                 </header>
                 <div class="tweet-details">
                     $tweetHTML

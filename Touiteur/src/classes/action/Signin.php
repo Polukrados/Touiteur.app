@@ -22,16 +22,16 @@ class Signin extends Action
             $signin .= <<<HTML
                 <header> 
                   <p class ='libelle_page_courante'>Connexion</p> 
-                  <nav class="menu">
+                  <nav class="menu-nav">
                     <ul>
                       <li><a href="?action=accueil">Accueil</a></li>
                       <li><a href="?action=add-user">S'inscrire</a></li>
                     </ul>
                   </nav>
                 </header>
-                      <div class="password">
-                            <form class="login_form" action='?action=signin' method='post'>
-                                            <h1> Connecter-vous à Touiteur </h1>
+                      <div class="form-container">
+                            <form class="form" action='?action=signin' method='post'>
+                                            <h1> Connectez-vous à Touiteur </h1>
                             <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                             <input type='password' placeholder='Mot de passe' name='password' id='password' class='input-icon-password' required><br><br>
                             <input type='submit' value='Se connecter'>
@@ -50,7 +50,7 @@ class Signin extends Action
                 $signin .= <<<HTML
                             <header> 
                               <p class ='libelle_page_courante'>$pseudo</p> 
-                              <nav class="menu">
+                              <nav class="menu-nav">
                                 <ul>
                                   <li><a href="?action=post-touite">Publier un touite</a></li>
                                 </ul>
@@ -65,15 +65,15 @@ class Signin extends Action
                 $signin .= <<<HTML
                             <header> 
                               <p class ='libelle_page_courante'>Connexion</p> 
-                              <nav class="menu">
+                              <nav class="menu-nav">
                                 <ul>
                                   <li><a href="?action=accueil">Accueil</a></li>
                                   <li><a href="?action=add-user">S'inscrire</a></li>
                                 </ul>
                               </nav>
                             </header>
-                            <div class="password">
-                                <form class="login_form" action='?action=signin' method='post'>
+                            <div class="form-container">
+                                <form class="form" action='?action=signin' method='post'>
                                                     <h1> Connecter-vous à Touiteur </h1>
                                 <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                                 <input type='password' placeholder='Mot de passe' name='password' id='password' class='input-icon-password' required><br><br>

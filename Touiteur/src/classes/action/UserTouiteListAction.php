@@ -47,8 +47,8 @@ class UserTouiteListAction extends Action
 
                             // Tweet court avec un formulaire pour les détails
                             $tweetHTML = <<<HTML
-                        <div class="tweet">
-                            <div class="user">Utilisateur: $userName</div>
+                        <div class="template-feed">
+                            <div class="user">$userName</div>
                             <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                             <div class="timestamp">Publié le : $timestamp</div>
                             <img src="$imagePath" alt="Image associée au tweet">
@@ -65,12 +65,12 @@ class UserTouiteListAction extends Action
             // Page
             $pageContent = <<<HTML
         <header>
-            <p class="libelle_page_courante">Tweets de l'utilisateur : $userName</p>
-            <nav class="menu">
+            <p class="libelle_page_courante">Touites de $userName</p>
+            <nav class="menu-nav">
                 <ul>
                     <li><a href="?action=add-user">S'inscrire</a></li>
                     <li><a href="?action=signin">Se connecter</a></li>
-                    <li><a href="?action=default">Retour à l'accueil</a></li>
+                    <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
                 </ul>
             </nav>
         </header>

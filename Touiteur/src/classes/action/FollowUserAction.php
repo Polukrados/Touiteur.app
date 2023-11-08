@@ -57,7 +57,7 @@ class FollowUserAction extends Action
 
                                                             // Tweet court avec un formulaire pour les détails
                                                             $tweetHTML = <<<HTML
-                                                        <div class="tweet">
+                                                        <div class="template-feed">
                                                             <div class="user">Utilisateur: $userName</div>
                                                             <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                                                             <div class="timestamp">Publié le : $timestamp</div>

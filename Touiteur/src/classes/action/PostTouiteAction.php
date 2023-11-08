@@ -17,18 +17,21 @@ class PostTouiteAction extends Action
             $post_touite_html .= <<<HTML
                   <header> 
                     <p class ='libelle_page_courante'>Publier un nouveau Touite</p>
-                    <nav class="menu">
+                    <nav class="menu-nav">
                       <ul>
                         <li><a href="?action=default">Accueil</a></li>
                         <li><a href="?action=logout">Déconnexion</a></li>
                       </ul>
                     </nav>
                   </header>
-                  <div class="post-touite">
-                    <form class="post_touite_form" action='?action=post-touite' method='post' enctype="multipart/form-data">
+                  <div class="form-container">
+                    <form class="form" action='?action=post-touite' method='post' enctype="multipart/form-data">
                         <h1> Publier votre Touite </h1>
                         <textarea placeholder='Votre touite ici' name='texte' id='texte' required></textarea><br><br>
-                        <input type='file' name='media' id='media'><br><br>
+                        <label for="media" class="custom-file-upload">
+                          <i class="fa fa-cloud-upload"></i> Choisir un fichier
+                        </label>
+                        <input type='file' name='media' id='media' style="display: none;"><br><br>
                         <input type='submit' value='Publier'>
                     </form>
                   </div>

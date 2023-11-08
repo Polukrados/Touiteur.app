@@ -1,168 +1,548 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
 /************************************************************/
-/*                                                          */
-/*                      Page web                            */
-/*                                                          */
+/*                       Styles Globaux                     */
 /************************************************************/
+
 * {
     margin: 0;
     padding: 0;
     list-style: none;
     text-decoration: none;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
 }
 
-header {
-    width: 100%;
-    height: 80px;
-    background-color: rgb(209, 232, 252);
+body, html {
+    font-family: 'Arial', sans-serif;
+    background: #21252b;
+    color: #ffffff;
+}
+
+/* Barre de Navigation */
+.container {
+    position: relative;
+    z-index: 1000;
+}
+
+.menu {
+    position: fixed;
+    font-size: 1.3em;
+    bottom: 40px;
+    right: 40px;
+    border-radius: 50%;
+    background: #282c34;
+    text-align: center;
+    line-height: 60px;
+    transition: transform 0.2s ease;
+    transform: scale(0.8);
+    box-shadow: 0 2px 4px rgb(255, 77, 77);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    box-shadow: 0 16px 8px -9px rgba(191, 191, 191, 1);
-    margin-bottom: 2vh;
+    flex-direction: column;
+}
+
+.menu.active {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    padding: 10px;
 }
 
 .menu ul {
-    display: flex;
-    font-size: 1.5em;
-    color: #0b2447;
+    display: none;
 }
 
-.menu a {
-    display: block;
-    cursor: pointer;
-    color: black;
-    padding: 5px 20px;
-    margin: 0 5px;
-    transition: 0.2s;
-}
-
-.menu a:hover {
-    border-bottom: 2px solid #ff4983;
-}
-
-form {
-    width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    border: solid 2px black;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="text"],
-input[type="submit"] {
-    height: 50px;
-    width: 360px;
-    border-radius: 20px;
-    padding-left: 35px;
-    margin: 20px 0 0 0;
-}
-
-input[type="submit"] {
-    cursor: pointer;
-    background-color: rgb(209, 232, 252);
+.menu.active ul {
+    width: 200px;
+    border-radius: 15px;
+    background: #32363c;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    padding: 10px;
     text-align: center;
-    padding: 0;
-    margin: 20px 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(0%);
+    z-index: 1;
+}
+
+.menu.active ul li{
+    padding: 10px 0;
+}
+
+.menu.active ul li a:hover{
+    color: #ff4081;
+}
+
+.menu.active ul li a{
+    color: white;
+    position: relative;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 10px 0;
+}
+
+.menu.active ul li a::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    background-color: rgba(0, 123, 255, 0.6);
+    transition: width 0.2s ease-in-out;
+    transform: translateX(-50%);
+}
+
+.menu.active ul li a:hover::before {
+    width: 50%;
+}
+
+.menu .photo-profil a {
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    width: 160px; /* Même largeur que le bouton */
+    height: 160px; /* Même hauteur du bouton */
+    margin: 0 auto;
+    border: 2px solid #ff4081;
+    z-index: 2;
+}
+
+.menu.active .photo-profil a {
+    width: 160px;
+    height: 160px;
+    border: 2px solid #ff4081;
+    z-index: 2;
+    margin-bottom: 10px;
+}
+
+.menu .photo-profil a img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.menu:hover {
+    transform: translateX(0);
+    cursor: cell;
+}
+
+@media (max-width: 768px) {
+    .menu {
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+
+/************************************************************/
+/*                         Tweets                           */
+/************************************************************/
+
+.tweets {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.tweet {
+    background-color: #32363c;
+    padding: 40px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    color: #cccccc;
+    font-family: "JetBrains Mono Thin";
+}
+
+.tweet a {
+    color: #ff4081;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.tweet a:hover {
+    color: #cc3367;
+}
+
+.tweet .epingle-user img{
+    position: relative;
+    top: -50px;
+    left: 0;
+    width: 70px;
+    height: 70px;
+}
+
+.tweet .epingle-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.tweet .user {
+    color: #ffffff;
+    font-size: 1.3em;
+    margin-top: -50px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid rgba(26, 29, 31, 0.38);
+}
+
+.tweet .user a {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.tweet .user i.fa-user:hover{
+    color: #cc3367 !important;
+    cursor: pointer;
+}
+
+.tweet .content {
+    margin-top: 20px;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.tweet .content .hashtag {
+    color: #3bc9db;
+    font-style: italic;
+}
+
+.tweet .content .hashtag:hover {
+    color: #2ca9b8;
+}
+
+.tweet .timestamp {
+    font-size: 0.8em;
+    color: #999999;
+    margin-top: 55px;
+}
+
+.tweet .details-link {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: #5b5757;
+    color: lightgrey;
+    transition: background-color 0.3s ease;
+}
+
+.tweet .details-link:hover {
+    background-color: rgba(91, 87, 87, 0.48);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .tweet {
+        width: 90%;
+        margin-bottom: 15px;
+    }
 }
 
 /************************************************************/
-/*                                                          */
-/*                     Style icon                           */
-/*                                                          */
+/*                     Buttons and Icons                    */
 /************************************************************/
-.input-icon-email {
-    background-image: url("images/icon_mail.png");
-    background-size: 16px 16px;
-    background-position: 10px;
-    background-repeat: no-repeat;
+
+.button {
 }
 
-.input-icon-age {
-    background-image: url("images/age.png");
-    background-size: 16px 16px;
-    background-position: 10px;
-    background-repeat: no-repeat;
+.icon {
 }
 
-.input-icon-password {
-    background-image: url("images/icon_password.png");
-    background-size: 16px 16px;
-    background-position: 10px;
-    background-repeat: no-repeat;
+.icon svg {
+    fill: white;
+    width: 1em;
+    height: 1em;
 }
 
+
+
 /************************************************************/
-/*                                                          */
-/*                     Page courante                        */
-/*                                                          */
+/*                    Éléments Formulaires                  */
 /************************************************************/
+
 .libelle_page_courante {
-    font-size: 1.5em;
-    font-weight: 600;
-    color: #0b2447;
-    margin-left: 5%;
-}
-
-/************************************************************/
-/*                                                          */
-/*                     Page d'accueil                       */
-/*                                                          */
-/************************************************************/
-.bienvenue-message {
-    display: flex;
+    font-size: 2em;
+    margin: 20px auto;
+    border: 2px solid #999999;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
     justify-content: center;
     align-items: center;
-    height: 88vh;
-    font-size: 3em;
-    font-weight: bold;
-}
-
-/************************************************************/
-/*                                                          */
-/*                     Page d'inscription                   */
-/*                                                          */
-/************************************************************/
-h1 {
+    width: 50%;
     display: flex;
-    justify-content: center;
-    margin-bottom: 2%;
+    flex-direction: row;
 }
 
-.add-user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.add_user_form {
+.libelle_page_courante img{
+    width: 100px;
     height: auto;
 }
 
-/************************************************************/
-/*                                                          */
-/*                     Page infos utilisateur               */
-/*                                                          */
-/************************************************************/
-.style_infos_util {
+.libelle_page_courante .retour-arriere{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: whitesmoke;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid 2px black;
-    width: 400px;
+}
+
+.libelle_page_courante .retour-arriere:hover{
+    scale: 1.05;
+    cursor: move;
+}
+
+.libelle_page_courante .retour-arriere img{
+    width: 30px;
+    height: 30px;
+}
+
+.menu-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    font-size: 1.5em;
+    justify-content: center;
+}
+
+.menu-nav li {
+    margin: 0 15px;
+}
+
+.menu-nav a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.59);
+    font-weight: bold;
+}
+
+.menu-nav a:hover {
+    text-decoration: dashed underline;
+    color: white;
+}
+
+.form-container {
+    background-color: #32363c;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55);
+    border-radius: 20px;
+}
+
+.form h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.form input[type=text],
+.form input[type=email],
+.form input[type=password],
+.form input[type=file]{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #006bff;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+.form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    resize: none;
+}
+
+.form input[type=submit] {
+    width: 100%;
+    padding: 15px;
+    background-color: rgba(204, 51, 103, 0.83);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form input[type=submit]:hover {
+    background-color: #ff4081;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu ul {
+        flex-direction: column;
+    }
+
+    .menu li {
+        margin: 10px 0;
+    }
+}
+
+
+/************************************************************/
+/*                    Template Feed                         */
+/*                Profil, Feed, Touite, ...                 */
+/************************************************************/
+
+.template-feed {
+    background-color: #32363c;
+    color: #fff;
+    border-radius: 10px;
+    padding: 20px;
     margin: auto;
+    width: 70%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.erreur_authentification {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid rgb(209, 232, 252);
+.template-feed .user {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
+.template-feed .user a {
+    color: rgba(0, 123, 255, 0.64);
+    text-decoration: none;
+}
+
+.template-feed .user a:hover {
+    color: rgb(0, 166, 255);
+}
+
+.template-feed .content {
+    font-size: 1em;
+    margin-bottom: 10px;
+    background-color: #40454f;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.template-feed .content a {
+    color: #ff4081;
+    text-decoration: none;
+}
+
+.template-feed .content a:hover {
+    text-decoration: underline;
+}
+
+.template-feed .timestamp {
+    font-size: 0.8em;
+    color: #999999;
+    margin-bottom: 10px;
+}
+
+.template-feed img {
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.template-feed input[type=submit] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.template-feed input[type=submit]:hover {
+    background-color: #0056b3;
+}
+
+
+/************************************************************/
+/*                    Suivi Tags                            */
+/************************************************************/
+
+.tweet-detail {
+    background-color: #32363c;
+    color: #ffffff;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tweet-detail .user,
+.tweet-detail .content,
+.tweet-detail .timestamp,
+.tweet-detail .score {
+    margin-bottom: 15px;
+}
+
+.tweet-detail .score {
+    font-weight: bold;
+    color: #ff4081;
+}
+
+.tweet-detail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/************************************************************/
+/*                         Footer                           */
+/************************************************************/
+
+footer {
+    background-color: #ffffff;
+    padding: 10px 0;
+    border-top: 1px solid #eaeaea;
+    text-align: center;
+    font-size: 0.8em;
+    color: #999;
+}
