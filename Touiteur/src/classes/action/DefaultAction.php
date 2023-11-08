@@ -13,7 +13,7 @@ class DefaultAction extends Action
         parent::__construct();
     }
 
-    private function texte($text, $maxLength = 50, $suffix = '...'): string
+    private function texte($text, $maxLength = 200, $suffix = '...'): string
     {
         if (strlen($text) > $maxLength) {
             $text = substr($text, 0, $maxLength) . $suffix;
@@ -44,6 +44,7 @@ class DefaultAction extends Action
             $query->bindParam(':limit', $touitesParPages, PDO::PARAM_INT);
             $query->bindParam(':offset', $offset, PDO::PARAM_INT);
             $query->execute();
+
             $tweets = '';
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $tweetID = $row['touiteID'];
