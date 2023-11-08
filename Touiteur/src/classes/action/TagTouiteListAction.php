@@ -60,10 +60,7 @@ class TagTouiteListAction extends Action
 
                 // Touit court
                 $tweets .= <<<HTML
-            <div class="tweet">
-                <div class="epingle-user">
-                    <img src="images/epingle_user_rouge.png" alt="Image description" />  
-                </div>
+            <div class="template-feed">
                 <div class="user">
                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
                      <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
@@ -79,6 +76,17 @@ class TagTouiteListAction extends Action
             }
 
             $countQuery = $db->query("SELECT COUNT(*) as total FROM Touites");
+                            // Tweet court avec un formulaire pour les détails
+            $imagePath = "images/placeholder.png";
+            $tweetHTML = <<<HTML
+                        <div class="template-feed">
+                            <div class="user"><a href='?action=user-touite-list&user_id=$userID'>$userName</a></div>
+                            <div class="content">$content $libelle</div>
+                            <div class="timestamp">Publié le : $timestamp</div>
+                            <img src="$imagePath" alt="Image associée au tweet">
+                            <a class="details-link" href='?action=details&tweet_id=$tweetID'>Voir les détails</a>
+                        </div>
+                    HTML;
 
             $totalTouites = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
             $totalPages = ceil($totalTouites / $touitesParPages);

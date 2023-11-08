@@ -30,6 +30,9 @@ class PostTouiteAction extends Action
                         <label for="media" class="custom-file-upload">
                           <i class="fa fa-cloud-upload"></i> Choisir un fichier
                         </label>
+                        <label for="media" class="custom-file-upload">
+                          <i class="fa fa-cloud-upload"></i> Choisir un fichier
+                        </label>
                         <input type='file' name='media' id='media' style="display: none;"><br><br>
                         <input type='submit' value='Publier'>
                     </form>
