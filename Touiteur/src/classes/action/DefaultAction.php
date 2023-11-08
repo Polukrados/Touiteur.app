@@ -13,6 +13,13 @@ class DefaultAction extends Action
         parent::__construct();
     }
 
+    private function texte($text, $maxLength = 200, $suffix = '...'): string
+    {
+        if (strlen($text) > $maxLength) {
+            $text = substr($text, 0, $maxLength) . $suffix;
+        }
+        return $text;
+    }
 
     public function execute(): string
     {
@@ -43,7 +50,7 @@ class DefaultAction extends Action
                 $tweetID = $row['touiteID'];
                 $userID = $row['utilisateurID'];
                 $userName = $row['prenom'] . '_' . $row['nom'];
-                $content = parent::texte($row['texte']);
+                $content = $this->texte($row['texte']);
                 $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
@@ -51,24 +58,10 @@ class DefaultAction extends Action
                 // Touit court
                 $tweets .= <<<HTML
             <div class="tweet">
-                <div class="epingle-user">
-                    <img src="images/epingle_user_rouge.png" alt="Image description" />  
-                </div>
-                <div class="user">
-                    <a href='?action=user-touite-list&user_id=$userID'>
-                        <i class="fa-solid fa-user" style="color: whitesmoke;"></i>
-                    </a>
-                    <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
-                    <a class="suivre" href='?action=follow-user&user_id=$userID'>
-                        <i class="fa-solid fa-plus" id="follow-icon"></i>
-                    </a>
-                </div>
-                <div class="content">
-                    $content 
-                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
-                </div>
+                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a> - <a href='?action=follow-user&user_id=$userID'>Profil</a></div>
+                <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                 <div class="timestamp">Publié le : $timestamp</div>
-                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                <a href="?action=details&tweet_id=$tweetID">Voir les détails</a>
             </div>
         HTML;
             }
@@ -87,38 +80,23 @@ class DefaultAction extends Action
 
             // Page
             $pageContent = <<<HTML
-            <header>
-                <p class="libelle_page_courante">        
-                    <a class="logo_touiteur" href="?action=default"><img src="images/logo_touiteur.png" alt="Logo de Touiteur"></a>       
-                    Bienvenue sur Touiteur et pas Tracteur       
-                </p>
-                        <nav class="menu-nav">
-                            <ul>
-                                <li><a href="?action=add-user">S'inscrire</a></li>
-                                <li><a href="?action=signin">Se connecter</a></li>
-                                <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                            </ul>
-                        </nav>
-                <nav class="menu">
-                    <div class="photo-profil">
-                        <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                            <img src="images/gaetan.png" alt="Icône de profil">
-                        </a>
-                    </div>
-                    <ul>
-                        <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
-                        <li><a href="?action=add-user">S'inscrire</a></li>
-                        <li><a href="?action=signin">Se connecter</a></li>
-                    </ul>
-                </nav>
-            </header>
-            <div class="tweets">
-                $tweets
-            </div>
-            <div class="pagination">
-                $paginationLinks
-            </div>
-HTML;
+        <header>
+            <p class="libelle_page_courante">Accueil</p>
+            <nav class="menu">
+                <ul>
+                    <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
+                    <li><a href="?action=add-user">S'inscrire</a></li>
+                    <li><a href="?action=signin">Se connecter</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="tweets">
+            $tweets
+        </div>
+        <div class="pagination">
+            $paginationLinks
+        </div>
+    HTML;
         }
         return $pageContent;
     }

@@ -6,7 +6,7 @@ use iutnc\touiteur\action\Action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
-class FollowUserAction extends Action
+class ProfileUserAction extends Action
 {
     public function __construct()
     {
@@ -17,21 +17,35 @@ class FollowUserAction extends Action
     {
         $db = ConnectionFactory::makeConnection();
 
-        $userID="";
+        $userID;
 
         if (isset($_GET['user_id'])) {
-            $userID = intval($_GET['user_id']);
+                                $userID = intval($_GET['user_id']);
 
-            $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
-            $query->bindParam(':id', $userID, PDO::PARAM_INT);
-            $query->execute();
+                                $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
+                                $query->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $query->execute();
 
-            $row = $query->fetch(PDO::FETCH_ASSOC);
-            $prenom = $row['prenom'];
-            $nom = $row['nom'];
-            $pseudo = $prenom . '_' . $nom;
+                                $row = $query->fetch(PDO::FETCH_ASSOC);
+                                $prenom = $row['prenom'];
+                                $nom = $row['nom'];
+                                $pseudo = $prenom.'_'.$nom;
 
-            $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier
+                                $listefollowers = 'Liste des utilisateurs qui suivent cette personne :<br><br>';
+                                $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom
+                                                    FROM Utilisateurs
+                                                    INNER JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suivreID
+                                                    WHERE suiviID = :id");
+
+                                $query->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $query->execute();
+                                while($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                                    $prenomfollower = $row['prenom'];
+                                    $nomfollower = $row['nom'];
+                                    $listefollowers.=$prenomfollower.'_'.$nomfollower.'<br>';
+                                }
+
+                                $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier
                                                     FROM Touites
                                                     LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                                                     LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
@@ -42,21 +56,21 @@ class FollowUserAction extends Action
                                                     WHERE Utilisateurs.utilisateurID = :user_id
                                                     ORDER BY Touites.datePublication DESC");
 
-            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
-            $query->execute();
+                                            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
+                                            $query->execute();
 
-            $tweets = '';
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $tweetID = $row['touiteID'];
-                $userName = $row['prenom'] . '_' . $row['nom'];
-                $content = $row['texte'];
-                $tagID = $row['tagID'];
-                $libelle = $row['libelle'];
-                $timestamp = $row['datePublication'];
-                $imagePath = $row['cheminFichier'];
+                                            $tweets = '';
+                                            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                                                            $tweetID = $row['touiteID'];
+                                                            $userName = $row['prenom'] . '_' . $row['nom'];
+                                                            $content = $row['texte'];
+                                                            $tagID = $row['tagID'];
+                                                            $libelle = $row['libelle'];
+                                                            $timestamp = $row['datePublication'];
+                                                            $imagePath = $row['cheminFichier'];
 
-                // Tweet court avec un formulaire pour les détails
-                $tweetHTML = <<<HTML
+                                                            // Tweet court avec un formulaire pour les détails
+                                                            $tweetHTML = <<<HTML
                                                         <div class="template-feed">
                                                             <div class="user">Utilisateur: $userName</div>
                                                             <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
@@ -69,11 +83,11 @@ class FollowUserAction extends Action
                                                         </div>
                                                     HTML;
 
-                $tweets .= $tweetHTML;
-            }
+                                                $tweets .= $tweetHTML;
+                                                }
 
-            // Page
-            $pageContent = <<<HTML
+                                // Page
+                                $pageContent = <<<HTML
                             <header>
                                 <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
                                 <nav class="menu">
@@ -89,14 +103,14 @@ class FollowUserAction extends Action
 
         if ($this->http_method === 'GET') {
             // Vérifie si un utilisateur a été sélectionné
-            $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
-            $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-            $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-            $checkQuery->execute();
-            $existingRelation = $checkQuery->fetchColumn();
+           $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+           $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+           $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+           $checkQuery->execute();
+           $existingRelation = $checkQuery->fetchColumn();
 
-            if ($existingRelation === 0) {
-                $pageContent .= <<<HTML
+                                            if($existingRelation===0) {
+                                                $pageContent.= <<<HTML
                                                 <div class="profil">
                                                                     <h3>Nom : $nom</h3>
                                                                     <h3>Prénom : $prenom</h3>
@@ -104,6 +118,8 @@ class FollowUserAction extends Action
                                                                         <input type="hidden" name="user_id" value="$userID">
                                                                         <input type="submit" value="Suivre cet utilisateur">
                                                                     </form>
+                                                                    <br>
+                                                                    $listefollowers
                                                                     </div>
                                                                     <div class="tweets">
                                                                     <br>
@@ -112,12 +128,14 @@ class FollowUserAction extends Action
                                                                         $tweets
                                                                     </div>
                                             HTML;
-            } else {
-                $pageContent .= <<<HTML
+                                            } else {
+                                                $pageContent.= <<<HTML
                                                 <div class="profil">
                                                                     <h3>Nom : $nom</h3>
                                                                     <h3>Prénom : $prenom</h3>
                                                                     <p>Vous suivez cet utilisateur.</p>
+                                                                    <br>
+                                                                    $listefollowers
                                                                     </div>
                                                                     <div class="tweets">
                                                                     <br>
@@ -126,21 +144,21 @@ class FollowUserAction extends Action
                                                                         $tweets
                                                                     </div>
                                             HTML;
-            }
+                                            }
 
-            return $pageContent;
+                return $pageContent;
         } else if ($this->http_method === 'POST') {
             $userID = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
             $pageContent = '';
 
             if ($userID !== null) {
-                // La relation n'existe pas, vous pouvez effectuer l'insertion.
-                $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
-                $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-                $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-                $insertQuery->execute();
+                    // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                    $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
+                    $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+                    $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+                    $insertQuery->execute();
 
-                $pageContent = <<<HTML
+                    $pageContent = <<<HTML
                                                             <header>
                                                                 <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
                                                                 <nav class="menu">
@@ -155,8 +173,7 @@ class FollowUserAction extends Action
                     HTML;
             }
 
-
+            return $pageContent;
         }
-        return $pageContent;
     }
 }
