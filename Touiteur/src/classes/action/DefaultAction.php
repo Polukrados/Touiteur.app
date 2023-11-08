@@ -13,14 +13,6 @@ class DefaultAction extends Action
         parent::__construct();
     }
 
-    public function texte($text, $maxLength = 200, $suffix = '...'): string
-    {
-        if (strlen($text) > $maxLength) {
-            $text = substr($text, 0, $maxLength) . $suffix;
-        }
-        return $text;
-    }
-
     public function execute(): string
     {
         $pageContent = "";
@@ -50,7 +42,7 @@ class DefaultAction extends Action
                 $tweetID = $row['touiteID'];
                 $userID = $row['utilisateurID'];
                 $userName = $row['prenom'] . '_' . $row['nom'];
-                $content = $this->texte($row['texte']);
+                $content = parent::texte($row['texte']);
                 $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
