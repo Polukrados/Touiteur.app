@@ -13,7 +13,7 @@ class DefaultAction extends Action
         parent::__construct();
     }
 
-    private function texte($text, $maxLength = 200, $suffix = '...'): string
+    public function texte($text, $maxLength = 200, $suffix = '...'): string
     {
         if (strlen($text) > $maxLength) {
             $text = substr($text, 0, $maxLength) . $suffix;
@@ -58,7 +58,7 @@ class DefaultAction extends Action
                 // Touit court
                 $tweets .= <<<HTML
             <div class="tweet">
-                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a> - <a href='?action=follow-user&user_id=$userID'>Profil</a></div>
+                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a> - <a href='?action=profile-user&user_id=$userID'>Profil</a></div>
                 <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                 <div class="timestamp">Publié le : $timestamp</div>
                 <a href="?action=details&tweet_id=$tweetID">Voir les détails</a>
