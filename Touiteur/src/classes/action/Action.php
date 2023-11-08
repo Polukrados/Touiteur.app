@@ -78,15 +78,26 @@ abstract class Action
         HTML;
             }else {
                 $tweets .= <<<HTML
-            <div class="tweet">
-            <div class="epingle-user">
-                    <img src="images/epingle_user_rouge.png" alt="Image description" />  
-                </div>
-                <div class="user">Utilisateur: <a href='?action=user-touite-list&user_id=$userID'>$userName</a> - <a href='?action=profile-user&user_id=$userID'>Profil</a></div>
-                <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
-                <div class="timestamp">Publié le : $timestamp</div>
-                <a href="?action=details&tweet_id=$tweetID">Voir les détails</a>
-            </div>
+                            <div class="tweet">
+                                <div class="epingle-user">
+                                    <img src="images/epingle_user_rouge.png" alt="Image description" />  
+                                </div>
+                                <div class="user">
+                                    <a href='?action=user-touite-list&user_id=$userID'>
+                                        <i class="fa-solid fa-user" style="color: whitesmoke;"></i>
+                                    </a>
+                                    <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                    <a class="suivre" href='?action=profile-user&user_id=$userID'>
+                                        <i class="fa-solid fa-plus" id="follow-icon"></i>
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    $content 
+                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                </div>
+                                <div class="timestamp">Publié le : $timestamp</div>
+                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                            </div>
         HTML;
             }
         }

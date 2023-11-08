@@ -138,7 +138,7 @@ class ProfileUserAction extends Action
                                                               <div class="profile-container">
                                                                       <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
-                                                                          <p style="color: #14171a">C'est vous.</p>
+                                                                          <p>C'est vous.</p>
                                                                           <br>
                                                                           $scoremoyen
                                                                           <br>
@@ -181,7 +181,7 @@ class ProfileUserAction extends Action
                                                               <div class="profile-container">
                                                                       <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
-                                                                          <p style="color: #14171a">Vous suivez déjà cet utilisateur.</p>
+                                                                          <p>Vous suivez déjà cet utilisateur.</p>
                                                                           <br>
                                                                           $scoremoyen
                                                                           <br>
