@@ -13,13 +13,7 @@ class UserTouiteListAction extends Action
         parent::__construct();
     }
 
-    private function texte($text, $maxLength = 200, $suffix = '...'): string
-    {
-        if (strlen($text) > $maxLength) {
-            $text = substr($text, 0, $maxLength) . $suffix;
-        }
-        return $text;
-    }
+
 
     public function execute(): string
     {
@@ -49,11 +43,10 @@ class UserTouiteListAction extends Action
             $query->execute();
 
             $tweets = '';
-            $userName="";
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $tweetID = $row['touiteID'];
                 $userName = $row['prenom'] . ' ' . $row['nom'];
-                $content = $row['texte'];
+                $content = parent::texte($row['texte']);
                 $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];

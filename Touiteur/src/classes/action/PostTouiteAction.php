@@ -14,27 +14,27 @@ class PostTouiteAction extends Action
 
         if ($this->http_method == "GET") {
             $post_touite_html .= <<<HTML
-                  <header> 
-                    <p class ='libelle_page_courante'>Publier un nouveau Touite</p>
-                    <nav class="menu-nav">
-                      <ul>
-                        <li><a href="?action=default">Accueil</a></li>
-                        <li><a href="?action=logout">Déconnexion</a></li>
-                      </ul>
-                    </nav>
-                  </header>
-                  <div class="form-container">
-                    <form class="form" action='?action=post-touite' method='post' enctype="multipart/form-data">
-                        <h1> Publier votre Touite </h1>
-                        <textarea placeholder='Votre touite ici' name='texte' id='texte' required></textarea><br><br>
-                        <label for="media" class="custom-file-upload">
-                          <i class="fa fa-cloud-upload"></i> Choisir un fichier
-                        </label>
-                        <input type='file' name='media' id='media' style="display: none;"><br><br>
-                        <input type='submit' value='Publier'>
-                    </form>
-                  </div>
-                  HTML;
+              <header> 
+                <p class ='libelle_page_courante'>Publier un nouveau Touite</p>
+                <nav class="menu-nav">
+                  <ul>
+                    <li><a href="?action=default">Accueil</a></li>
+                    <li><a href="?action=logout">Déconnexion</a></li>
+                  </ul>
+                </nav>
+              </header>
+              <div class="form-container">
+                <form class="form" action='?action=post-touite' method='post' enctype="multipart/form-data">
+                    <h1> Publier votre Touite </h1>
+                    <textarea placeholder='Votre touite ici' name='texte' id='texte' required></textarea><br><br>
+                    <label for="media" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Choisir un fichier
+                    </label>
+                    <input type='file' name='media' id='media' style="display: none;"><br><br>
+                    <input type='submit' value='Publier'>
+                </form>
+              </div>
+              HTML;
         } else if ($this->http_method == "POST") {
             $connection = ConnectionFactory::makeConnection();
 
@@ -50,7 +50,7 @@ class PostTouiteAction extends Action
             $mediaPath = null;
             if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
                 // fichier uploader
-                $mediaPath = 'images/' . basename($_FILES['media']['name']);
+                $mediaPath = basename($_FILES['media']['name']);
                 move_uploaded_file($_FILES['media']['tmp_name'], $mediaPath);
             }
 
@@ -92,7 +92,8 @@ class PostTouiteAction extends Action
                 $query_touite_image->execute();
                 $query_touite_utilisateur->execute();
                 // Redirection ou affichage d'un message de succès
-                $post_touite_html .= "<p>Touite publié avec succès !</p>";
+                header('Location: ?action=default');
+                exit;
             } catch (\PDOException $e) {
                 // Gérer l'erreur
                 $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";

@@ -16,5 +16,13 @@ abstract class Action
         $this->script_name = $_SERVER['SCRIPT_NAME'];
     }
 
+    public function texte($text, $maxLength = 200, $suffix = '...'): string
+    {
+        if (strlen($text) > $maxLength) {
+            $text = substr($text, 0, $maxLength) . $suffix;
+        }
+        return $text;
+    }
+
     abstract public function execute(): string;
 }
