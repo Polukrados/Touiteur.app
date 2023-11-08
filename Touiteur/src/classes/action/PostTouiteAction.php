@@ -50,67 +50,73 @@ class PostTouiteAction extends Action
             // Valeurs du touite
             $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_SPECIAL_CHARS);
             $description = $_POST['texte'];
+            $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
+            /*********************************************
+             *                                           *
+             *      INSERTION DES DONNEES DANS LA BD     *
+             *                                           *
+             *********************************************/
+            // insertion dans la table touites
+            $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
+            $query_touite->bindParam(':texte', $texte);
+            $query_touite->bindParam(':datePublication', $datePublication);
+
+            // Récupère l'id du touit et de l'image pour les insérer dans la table touitesimages et touitesutilisateur
+            $query_recup_idTouite = $connection->prepare('SELECT max(touiteID) + 1 as touiteID FROM touites');
+            $query_recup_idTouite->execute();
+            $touiteID = $query_recup_idTouite->fetch()['touiteID'];
+
+            // insertion dans la table touitesutilisateurs
+            $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
+            $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
+            $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
+
+            try {
+                $query_touite->execute();
+                $query_touite_utilisateur->execute();
+            } catch (\PDOException $e) {
+                // Gérer l'erreur
+                $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
+            }
             $mediaPath = null;
             $track_name = $_FILES['media']['name'];
             // Gérer le téléchargement du fichier (si un fichier est ajouté et vérifie son extension)
-            if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK && (substr($track_name, -4) === '.jpg' || substr($track_name, -5) === '.jpeg' || substr($track_name, -4) === '.png')) {
-                // fichier uploader
-                $mediaPath = basename($_FILES['media']['name']);
-                move_uploaded_file($_FILES['media']['tmp_name'], 'images/' . $mediaPath);
+            if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
+                if(substr($track_name, -4) === '.jpg' || substr($track_name, -5) === '.jpeg' || substr($track_name, -4) === '.png') {
+                    // fichier uploader
+                    $mediaPath = basename($track_name);
+                    move_uploaded_file($_FILES['media']['tmp_name'], 'images/' . $mediaPath);
 
+                    // insertion dans la table images
+                    $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
+                    $query_image->bindParam(':description', $description);
+                    $query_image->bindParam(':mediaPath', $mediaPath);
 
-                $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
+                    $query_recup_idImage = $connection->prepare('SELECT max(imageID) + 1 as imageID FROM images');
+                    $query_recup_idImage->execute();
+                    $imageID = $query_recup_idImage->fetch()['imageID'];
 
-                /*********************************************
-                 *                                           *
-                 *      INSERTION DES DONNEES DANS LA BD     *
-                 *                                           *
-                 *********************************************/
-                // insertion dans la table touites
-                $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
-                $query_touite->bindParam(':texte', $texte);
-                $query_touite->bindParam(':datePublication', $datePublication);
+                    // insertion dans la table touitesimages
+                    $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
+                    $query_touite_image->bindParam(":touiteID", $touiteID);
+                    $query_touite_image->bindParam(":imageID", $imageID);
 
-                // insertion dans la table images
-                $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
-                $query_image->bindParam(':description', $description);
-                $query_image->bindParam(':mediaPath', $mediaPath);
-
-                // Récupère l'id du touit et de l'image pour les insérer dans la table touitesimages et touitesutilisateur
-                $query_recup_idTouite = $connection->prepare('SELECT max(touiteID) + 1 as touiteID FROM touites');
-                $query_recup_idTouite->execute();
-                $touiteID = $query_recup_idTouite->fetch()['touiteID'];
-
-                $query_recup_idImage = $connection->prepare('SELECT max(imageID) + 1 as imageID FROM images');
-                $query_recup_idImage->execute();
-                $imageID = $query_recup_idImage->fetch()['imageID'];
-
-                // insertion dans la table touitesimages
-                $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
-                $query_touite_image->bindParam(":touiteID", $touiteID);
-                $query_touite_image->bindParam(":imageID", $imageID);
-
-                // insertion dans la table touitesutilisateurs
-                $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
-                $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
-                $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
-
-                try {
-                    $query_touite->execute();
-                    $query_image->execute();
-                    $query_touite_image->execute();
-                    $query_touite_utilisateur->execute();
-                    // Redirection ou affichage d'un message de succès
-                    header('Location: ?action=default');
-                    exit;
-                } catch (\PDOException $e) {
-                    // Gérer l'erreur
-                    $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
+                    try {
+                        $query_image->execute();
+                        $query_touite_image->execute();
+                    } catch (\PDOException $e) {
+                        // Gérer l'erreur
+                        $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
+                    }
+                } else {
+                    $post_touite_html .= "<p>Fichier interdit</p>";
                 }
-            } else {
-                $post_touite_html .= "<p>Fichier non autorisé</p>";
             }
+
+            // Redirection vers la page d'accueil
+            header('Location: ?action=default');
+            exit;
         }
 
         return $post_touite_html;
