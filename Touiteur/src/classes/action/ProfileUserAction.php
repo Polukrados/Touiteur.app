@@ -20,55 +20,57 @@ class ProfileUserAction extends Action
         $userID = "";
         $pageContent="";
 
+        $userID;
+
         if (isset($_GET['user_id'])) {
-            $userID = intval($_GET['user_id']);
+                                $userID = intval($_GET['user_id']);
 
-            $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
-            $query->bindParam(':id', $userID, PDO::PARAM_INT);
-            $query->execute();
+                                $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
+                                $query->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $query->execute();
 
-            $row = $query->fetch(PDO::FETCH_ASSOC);
-            $prenom = $row['prenom'];
-            $nom = $row['nom'];
-            $pseudo = $prenom . '_' . $nom;
+                                $row = $query->fetch(PDO::FETCH_ASSOC);
+                                $prenom = $row['prenom'];
+                                $nom = $row['nom'];
+                                $pseudo = $prenom.'_'.$nom;
 
-            $scoremoyen = 'Score moyen de l\'utilisateur : ';
-            $query = $db->prepare("SELECT AVG(note) FROM Evaluations
+                                $scoremoyen = 'Score moyen de l\'utilisateur : ';
+                                $query = $db->prepare("SELECT AVG(note) FROM Evaluations
                                                     INNER JOIN TouitesUtilisateurs ON Evaluations.touiteID = TouitesUtilisateurs.TouiteID
                                                     WHERE TouitesUtilisateurs.utilisateurID = :id");
-            $query->bindParam(':id', $userID, PDO::PARAM_INT);
-            $query->execute();
-            $score = $query->fetchColumn();
+                                $query->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $query->execute();
+                                $score = $query->fetchColumn();
 
-            $count = $db->prepare("SELECT * FROM TouitesUtilisateurs WHERE utilisateurID = :id");
-            $count->bindParam(':id', $userID, PDO::PARAM_INT);
-            $count->execute();
+                                $count = $db->prepare("SELECT * FROM TouitesUtilisateurs WHERE utilisateurID = :id");
+                                $count->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $count->execute();
 
-            if ($score == null) {
-                if ($count->fetchColumn() == null) {
-                    $scoremoyen .= 'Cet utilisateur n\'a pas encore envoyé de touite.';
-                } else {
-                    $scoremoyen .= 'Les touites de cet utilisateur n\'ont pas encore été notés.';
-                }
-            } else {
-                $scoremoyen .= $score;
-            }
+                                if($score==null) {
+                                    if($count->fetchColumn()==null) {
+                                        $scoremoyen.= 'Cet utilisateur n\'a pas encore envoyé de touite.';
+                                    } else {
+                                        $scoremoyen.= 'Les touites de cet utilisateur n\'ont pas encore été notés.';
+                                    }
+                                } else {
+                                    $scoremoyen.=$score;
+                                }
 
-            $listefollowers = 'Liste des utilisateurs qui suivent cette personne :<br><br>';
-            $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom
+                                $listefollowers = 'Liste des utilisateurs qui suivent cette personne :<br><br>';
+                                $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom
                                                     FROM Utilisateurs
                                                     INNER JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suivreID
                                                     WHERE suiviID = :id");
 
-            $query->bindParam(':id', $userID, PDO::PARAM_INT);
-            $query->execute();
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $prenomfollower = $row['prenom'];
-                $nomfollower = $row['nom'];
-                $listefollowers .= $prenomfollower . '_' . $nomfollower . '<br>';
-            }
+                                $query->bindParam(':id', $userID, PDO::PARAM_INT);
+                                $query->execute();
+                                while($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                                    $prenomfollower = $row['prenom'];
+                                    $nomfollower = $row['nom'];
+                                    $listefollowers.=$prenomfollower.'_'.$nomfollower.'<br>';
+                                }
 
-            $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier
+                                $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier
                                                     FROM Touites
                                                     LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                                                     LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
@@ -79,21 +81,21 @@ class ProfileUserAction extends Action
                                                     WHERE Utilisateurs.utilisateurID = :user_id
                                                     ORDER BY Touites.datePublication DESC");
 
-            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
-            $query->execute();
+                                            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
+                                            $query->execute();
 
-            $tweets = '';
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $tweetID = $row['touiteID'];
-                $userName = $row['prenom'] . '_' . $row['nom'];
-                $content = $row['texte'];
-                $tagID = $row['tagID'];
-                $libelle = $row['libelle'];
-                $timestamp = $row['datePublication'];
-                $imagePath = $row['cheminFichier'];
+                                            $tweets = '';
+                                            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                                                            $tweetID = $row['touiteID'];
+                                                            $userName = $row['prenom'] . '_' . $row['nom'];
+                                                            $content = $row['texte'];
+                                                            $tagID = $row['tagID'];
+                                                            $libelle = $row['libelle'];
+                                                            $timestamp = $row['datePublication'];
+                                                            $imagePath = $row['cheminFichier'];
 
-                // Tweet court avec un formulaire pour les détails
-                $tweetHTML = <<<HTML
+                                                            // Tweet court avec un formulaire pour les détails
+                                                            $tweetHTML = <<<HTML
                                                         <div class="template-feed">
                                                             <div class="user">Utilisateur: $userName</div>
                                                             <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
@@ -106,8 +108,8 @@ class ProfileUserAction extends Action
                                                         </div>
                                                     HTML;
 
-                $tweets .= $tweetHTML;
-            }
+                                                $tweets .= $tweetHTML;
+                                                }
 
             // Page
             $pageContent = <<<HTML
@@ -125,56 +127,76 @@ class ProfileUserAction extends Action
         }
 
         if ($this->http_method === 'GET') {
-            // Vérifie si un utilisateur a été sélectionné
-            $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
-            $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-            $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-            $checkQuery->execute();
-            $existingRelation = $checkQuery->fetchColumn();
+           $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+           $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+           $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+           $checkQuery->execute();
+           $existingRelation = $checkQuery->fetchColumn();
 
-            if ($existingRelation === 0) {
-                $pageContent .= <<<HTML
-                                                    <div class="profile-container">
-                                                        <div class="profile-header">
-                                                            <h1>$nom $prenom</h1>
-                                                            <form method="post" class="follow-form">
-                                                                <input type="hidden" name="user_id" value="$userID">
-                                                                <input type="submit" class="follow-btn" value="Suivre cet utilisateur">
-                                                            </form>
-                                                            <br>
-                                                            $scoremoyen
-                                                            <br>
-                                                            <p class="followers-count">$listefollowers</p>
-                                                        </div>
-                                                        <div class="tweets-container">
-                                                            <h2>Liste des tweets de l'utilisateur :</h2>
-                                                            <div class="tweets-list">
-                                                                $tweets
-                                                            </div>
-                                                        </div>
-                                                    </div>
+           if($userID==$_SESSION['utilisateur']['userID']) {
+              $pageContent .= <<<HTML
+                                                              <div class="profile-container">
+                                                                      <div class="profile-header">
+                                                                          <h1>$nom $prenom</h1>
+                                                                          <p style="color: #14171a">C'est vous.</p>
+                                                                          <br>
+                                                                          $scoremoyen
+                                                                          <br>
+                                                                          <p class="followers-count">$listefollowers</p>
+                                                                      </div>
+                                                                      <div class="tweets-container">
+                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
+                                                                          <div class="tweets-list">
+                                                                              $tweets
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+                                                          HTML;
+           } else {
+              if ($existingRelation === 0) {
+                              $pageContent .= <<<HTML
+                                                                  <div class="profile-container">
+                                                                      <div class="profile-header">
+                                                                          <h1>$nom $prenom</h1>
+                                                                          <form method="post" class="follow-form">
+                                                                              <input type="hidden" name="user_id" value="$userID">
+                                                                              <input type="submit" class="follow-btn" value="Suivre cet utilisateur">
+                                                                          </form>
+                                                                          <br>
+                                                                          $scoremoyen
+                                                                          <br>
+                                                                          <p class="followers-count">$listefollowers</p>
+                                                                      </div>
+                                                                      <div class="tweets-container">
+                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
+                                                                          <div class="tweets-list">
+                                                                              $tweets
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
 
-                                            HTML;
-            } else {
-                $pageContent .= <<<HTML
-                                                <div class="profile-container">
-                                                        <div class="profile-header">
-                                                            <h1>$nom $prenom</h1>
-                                                            <p style="color: #14171a">Vous suivez déjà cet utilisateur.</p>
-                                                            <br>
-                                                            $scoremoyen
-                                                            <br>
-                                                            <p class="followers-count">$listefollowers</p>
-                                                        </div>
-                                                        <div class="tweets-container">
-                                                            <h2>Liste des tweets de l'utilisateur :</h2>
-                                                            <div class="tweets-list">
-                                                                $tweets
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                            HTML;
-            }
+                                                          HTML;
+                          } else {
+                              $pageContent .= <<<HTML
+                                                              <div class="profile-container">
+                                                                      <div class="profile-header">
+                                                                          <h1>$nom $prenom</h1>
+                                                                          <p style="color: #14171a">Vous suivez déjà cet utilisateur.</p>
+                                                                          <br>
+                                                                          $scoremoyen
+                                                                          <br>
+                                                                          <p class="followers-count">$listefollowers</p>
+                                                                      </div>
+                                                                      <div class="tweets-container">
+                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
+                                                                          <div class="tweets-list">
+                                                                              $tweets
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+                                                          HTML;
+                          }
+           }
 
             return $pageContent;
         } else if ($this->http_method === 'POST') {
