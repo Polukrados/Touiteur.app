@@ -453,24 +453,20 @@ body, html {
     color: rgb(0, 166, 255);
 }
 
-.template-feed .suivre {
-    transition: transform 0.3s ease-in-out;
-    display: inline-block;
+.suivre {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
 }
 
-/* Ajoutez des classes pour les états de l'icône */
-.icon-follow {
-    /* Icône "+" */
+.suivre .fa-plus {
+    transition: transform 0.3s ease;
 }
 
-.icon-validate {
-    /* Icône "v" (valider), par exemple, fa-check de Font Awesome */
-    display: none; /* Cachez cette icône par défaut */
-}
-
-/* Style pour l'icône lorsqu'elle est tournée */
-.rotated-icon {
+.suivre .fa-plus:hover {
     transform: rotate(180deg);
+    scale: 1.2;
 }
 
 .template-feed .content {

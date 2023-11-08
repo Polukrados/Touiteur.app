@@ -55,7 +55,7 @@ class TagTouiteListAction extends Action
                 <div class="user">
                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
                      <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
-                </div>  
+                </div>
                 <div class="content">
                     $content 
                     <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
