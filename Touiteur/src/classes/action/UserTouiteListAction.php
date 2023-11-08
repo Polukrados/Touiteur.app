@@ -38,7 +38,7 @@ class UserTouiteListAction extends Action
             $tweets = '';
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                             $tweetID = $row['touiteID'];
-                            $userName = $row['prenom'] . ' ' . $row['nom'];
+                            $userName = $row['prenom'] . '_' . $row['nom'];
                             $content = $row['texte'];
                             $tagID = $row['tagID'];
                             $libelle = $row['libelle'];
