@@ -553,27 +553,37 @@ body, html {
     border-radius: 10px 10px 0 0;
     padding: 20px;
     text-align: center;
+    align-items: center;
+    justify-content: center;
     border-bottom: 1px solid #999999;
     margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-header h1 {
-    font-size: 24px;
+    font-family: "Book Antiqua", cursive;
+    font-size: 70px;
     font-weight: bold;
     color: #fff;
     margin: 0;
 }
 
-.profile-header p {
+.profile-header .suivi{
     font-size: 16px;
     color: #d0d0d0;
     margin: 0 0 30px;
+    border: 1px solid #999999;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: auto;
+    background-color: rgba(153, 153, 153, 0.12);
 }
 
-.follow-form {
+.profile-header .follow-form {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin: 10px 0;
 }
 

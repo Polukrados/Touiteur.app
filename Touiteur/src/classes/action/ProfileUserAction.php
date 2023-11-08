@@ -184,7 +184,7 @@ class ProfileUserAction extends Action
                                                               <div class="profile-container">
                                                                    <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
-                                                                          <p>Vous suivez déjà cet utilisateur.</p>
+                                                                          <p class="suivi">Vous suivez déjà cet utilisateur</p>
                                                                           <form method="post" class="follow-form">
                                                                              <input type="hidden" name="user_id" value="$userID">
                                                                              <input type="hidden" name="follow" value="$follow">
