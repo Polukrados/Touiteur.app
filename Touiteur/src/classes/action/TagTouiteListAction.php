@@ -67,7 +67,7 @@ class TagTouiteListAction extends Action
             }
 
             $countQuery = $db->query("SELECT COUNT(*) as total FROM Touites");
-                            // Tweet court avec un formulaire pour les détails
+            // Tweet court avec un formulaire pour les détails
             $imagePath = "images/placeholder.png";
             $tweetHTML = <<<HTML
                         <div class="template-feed">
