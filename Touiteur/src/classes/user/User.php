@@ -84,7 +84,7 @@ class User{
             $st = $db->prepare($query);
             $st->bindParam(':touit', $touit);
 
-            $touits_follow = $this->generateTweetHTML($st);
+            $touits_follow .= $this->generateTweetHTML($st);
         }
         return $touits_follow;
     }
@@ -154,7 +154,7 @@ class User{
             $st = $db->prepare($query);
             $st->bindParam(':$touit_tag', $touit_tag);
 
-            $touits_tag_follow = $this->generateTweetHTML($st);
+            $touits_tag_follow .= $this->generateTweetHTML($st);
         }
         return $touits_tag_follow;
     }

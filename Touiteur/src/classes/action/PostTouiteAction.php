@@ -53,7 +53,8 @@ class PostTouiteAction extends Action
 
             // Gérer le téléchargement du fichier
             $mediaPath = null;
-            if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
+            $track_name = $_FILES['media']['name'];
+            if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK && substr($track_name, -4) === '.jpg' && substr($track_name, -5) === '.jpeg' && substr($track_name, -4) === '.png') {
                 // fichier uploader
                 $mediaPath = basename($_FILES['media']['name']);
                 move_uploaded_file($_FILES['media']['tmp_name'], 'images/'.$mediaPath);
