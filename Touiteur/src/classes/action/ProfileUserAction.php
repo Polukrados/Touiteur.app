@@ -92,7 +92,7 @@ class ProfileUserAction extends Action
                 $tagID = $row['tagID'];
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
-                $imagePath = 'images/'.$row['cheminFichier'];
+                $imagePath = 'images/' . $row['cheminFichier'];
 
                 // Tweet court avec un formulaire pour les détails
                 $tweetHTML = <<<HTML

@@ -5,15 +5,15 @@ namespace iutnc\touiteur\user;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
-class User{
-    // Attributs utilisateur
+class User
+{
     private int $userID;
     private string $pseudo;
     private string $email;
     private string $mdp;
 
-    // Constructeur
-    public function __construct(int $userID, string $nom, string $prenom, string $email, string $mdp){
+    public function __construct(int $userID, string $nom, string $prenom, string $email, string $mdp)
+    {
         $this->userID = $userID;
         $this->pseudo = $prenom . "_" . $nom;
         $this->email = $email;
@@ -26,7 +26,8 @@ class User{
      *                                                         *
      **********************************************************/
     // Récupère les id des utilisateurs abonné par l'utilisateur
-    public function getFollowedUserID(): array{
+    public function getFollowedUserID(): array
+    {
         $db = ConnectionFactory::makeConnection();
         $query = 'SELECT suiviID 
                   FROM suivi 
@@ -35,10 +36,9 @@ class User{
         $st->bindParam(":suiveur", $_SESSION['utilisateur']['userID']);
         $st->execute();
         $tabTagFollow = [];
-        while ($data = $st->fetch()){
+        while ($data = $st->fetch()) {
             $tabTagFollow[] = $data['suiviID'];
         }
-
         return $tabTagFollow;
     }
 
@@ -57,7 +57,7 @@ class User{
             $st = $db->prepare($query);
             $st->bindParam(":followID", $follow);
             $st->execute();
-            while($data = $st->fetch()) {
+            while ($data = $st->fetch()) {
                 $tabTouitFollow[] = $data['TouiteID'];
             }
         }
@@ -65,7 +65,8 @@ class User{
     }
 
     // Récupère les touites de de follows de l'utilisateur
-    public function getTouitsFromFollowedUsers(): string{
+    public function getTouitsFromFollowedUsers(): string
+    {
         $tab_touites_follow = $this->getTouitIDFromFollowedUsers();
         $touits_follow = "";
 
@@ -96,7 +97,8 @@ class User{
      *                                                                         *
      ***************************************************************************/
     // Récupère les tag follow par l'utilisateur
-    public function getFollowedTagID() :array{
+    public function getFollowedTagID(): array
+    {
         $db = ConnectionFactory::makeConnection();
         $query = 'SELECT tagID 
                   FROM abonnementtags 
@@ -105,7 +107,7 @@ class User{
         $st->bindParam(":utilisateurID", $_SESSION['utilisateur']['userID']);
         $st->execute();
         $tabFollow = [];
-        while ($data = $st->fetch()){
+        while ($data = $st->fetch()) {
             $tabFollow[] = $data['tagID'];
         }
 
@@ -127,7 +129,7 @@ class User{
             $st = $db->prepare($query);
             $st->bindParam(":followTagID", $tag_follow);
             $st->execute();
-            while($data = $st->fetch()) {
+            while ($data = $st->fetch()) {
                 $tabTouitIdTagFollow[] = $data['TouiteID'];
             }
         }
@@ -135,7 +137,8 @@ class User{
     }
 
     // Récupère les touites de de follows de l'utilisateur
-    public function getTouitTagFollow(): string{
+    public function getTouitTagFollow(): string
+    {
         $tab_tag_touites_follow = $this->getTouitIDFromFollowedTag();
         $touits_tag_follow = "";
 
@@ -160,7 +163,8 @@ class User{
     }
 
     // Fonction pour générer le code HTML d'un touit
-    public function generateTweetHTML(\PDOStatement $st): string{
+    public function generateTweetHTML(\PDOStatement $st): string
+    {
         $touits_followed = "";
         if ($st->execute()) {
             while ($data = $st->fetch()) {
@@ -185,7 +189,8 @@ class User{
     }
 
     // GETTERS
-    public function getPseudo(): string {
+    public function getPseudo(): string
+    {
         return $this->pseudo;
     }
 }

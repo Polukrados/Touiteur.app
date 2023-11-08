@@ -3,9 +3,6 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
-use iutnc\touiteur\exception\AuthException;
-use iutnc\touiteur\exception\LoginException;
-use iutnc\touiteur\exception\RegisterException;
 use iutnc\touiteur\user\User;
 
 class Signin extends Action
@@ -38,7 +35,6 @@ class Signin extends Action
                       </div>
               HTML;
         } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Valeurs de l'utilisateur
             $email = $_POST["email"];
             $mdp = $_POST["password"];
 
@@ -60,7 +56,7 @@ class Signin extends Action
                             </header>
                             <div class="tweets">
                                 $touits
-                            </div>                     
+                            </div>
                           HTML;
 
             } else { // Affiche une erreur si la connexion a échoué

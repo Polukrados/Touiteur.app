@@ -32,18 +32,16 @@ class AddUserAction extends Action
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
-            // valeurs
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $email = $_POST['email'];
             $passwd = $_POST['password'];
 
             $auth = new Auth();
-            // ajoute l'utilisateur dans la bd s'il n'existe pas déjà et si le mdp est assez fort
-            if ($auth->register($nom, $prenom, $email, $passwd)){
+            if ($auth->register($nom, $prenom, $email, $passwd)) {
                 header("Location: ?action=default");
                 exit;
-            } else { // Affiche une erreur si l'inscription a échoué
+            } else {
                 $add_user .= <<<HTML
                                 <header> 
                                   <p class ='libelle_page_courante'>Connexion</p> 
