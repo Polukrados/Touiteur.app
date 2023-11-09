@@ -53,7 +53,7 @@ abstract class Action
         $query->bindParam(':offset', $offset, PDO::PARAM_INT);
         $query->execute();
 
-        // Récupération des touites
+          // Récupération des touites
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             // Récupération des données
@@ -150,15 +150,13 @@ abstract class Action
          ******************************************************/
         if (isset($_SESSION['utilisateur'])) {
             $userID = $_SESSION['utilisateur']['userID'];
-            $userName = $_SESSION['utilisateur']['prenom'] . '_' . $_SESSION['utilisateur']['nom'];
 
             $pageContent = <<<HTML
                         $res 
                         <nav class="menu-nav">
                             <ul>
-                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
-                                <li><a href="?action=logout">Se déconnecter</a></li>
-                                <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
+                                <li><a href="?action=signin">Abonnement</a></li>
+                                <li><a href="?action=default">Pour toi</a></li>
                             </ul>
                         </nav>
                         <nav class="menu">
@@ -168,8 +166,10 @@ abstract class Action
                             </a>
                         </div>
                             <ul>
-                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
                                 <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
+                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
+                                <li><a href="?action=logout">Se déconnecter</a></li>
+                                
                             <ul>
                         </nav>
                         </header>
