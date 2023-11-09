@@ -152,10 +152,10 @@ class User
                       LEFT JOIN Images ON Images.ImageID=TouitesImages.ImageID
                       LEFT JOIN TouitesTags ON t.touiteID = TouitesTags.TouiteID
                       LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-                      WHERE t.touiteID = :$touit_tag
+                      WHERE t.touiteID = :touit_tag
                      ORDER BY t.datePublication DESC";
             $st = $db->prepare($query);
-            $st->bindParam(':$touit_tag', $touit_tag);
+            $st->bindParam(':touit_tag', $touit_tag);
 
             $touits_tag_follow .= $this->generateTweetHTML($st);
         }
