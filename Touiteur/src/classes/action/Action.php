@@ -37,7 +37,6 @@ abstract class Action
         $pageCourante = isset($_GET['page']) ? intval($_GET['page']) : 1;
         // Pagination
         $offset = ($pageCourante - 1) * $touitesParPages;
-        $pageContent = "";
 
         // Requête
         $query = $db->prepare($query);
@@ -53,7 +52,7 @@ abstract class Action
         $query->bindParam(':offset', $offset, PDO::PARAM_INT);
         $query->execute();
 
-          // Récupération des touites
+        // Récupération des touites
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             // Récupération des données
@@ -120,44 +119,33 @@ abstract class Action
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
 
-        if ($tag === true) {
-            $res = "<header>
-            <p class='libelle_page_courante'>$libelle</p>";
-        } else if ($listUser === true) {
-            $res = "<header>
-            <p class='libelle_page_courante'>Touites de $userName</p>";
-        } else if ($user === true) {
-            $res = <<<HTML
-                    <div class="tweets">
-                        $tweets
-                    </div>
-                    <div class="pagination">
-                        $paginationLinks
-                    </div>;
-                    HTML;
-        } else {
-            $res = "<header>
-                    <p class='libelle_page_courante'>        
-                        <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>       
-                        Bienvenue sur Touiteur et pas Tracteur       
-                    </p>";
-        }
-
-        /******************************************************
-         *                                                    *
-         *        Quand l'utilisateur est connecté            *
-         *                                                    *
-         ******************************************************/
+        $pasabo="<div class='tweets'>
+            $tweets
+                        </div>
+                        <div class='pagination'>
+            $paginationLinks
+                        </div>";
         if (isset($_SESSION['utilisateur'])) {
-            $userID = $_SESSION['utilisateur']['userID'];
-            $pageContent = <<<HTML
-                        $res 
-                        <nav class="menu-nav">
+
+            if ($tag === true) {
+                $res = "<header><p class='libelle_page_courante'>$libelle</p>";
+            } else if ($listUser === true) {
+                $res = "<header><p class='libelle_page_courante'>Touites de $userName</p>";
+            } else if ($user === true) {
+                $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
+                $pasabo="";
+            } else {
+                $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>
+                        <nav class='menu-nav'>
                             <ul>
-                                <li><a href="?action=display-abo">Abonnement</a></li>
-                                <li><a href="?action=default">Pour toi</a></li>
+                                <li><a href='?action=display-abo'>Abonnement</a></li>
+                                <li><a href='?action=default'>Pour toi</a></li>
                             </ul>
-                        </nav>
+                        </nav>";
+            }
+            return <<<HTML
+            $res
+            
                         <nav class="menu">
                         <div class="photo-profil">
                             <a href="#lien_vers_profil_peut_etre_pas_oblige">
@@ -168,24 +156,31 @@ abstract class Action
                                 <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
                                 <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
                                 <li><a href="?action=logout">Se déconnecter</a></li>
-                                
+
                             <ul>
                         </nav>
                         </header>
-                        <div class="tweets">    
-                            $tweets
-                        </div>
-                        <div class="pagination">
-                            $paginationLinks
-                        </div>
-                        HTML;
+                        $pasabo
+            HTML;
+        }
 
-            /******************************************************
-             *                                                    *
-             *        Quand l'utilisateur n'est pas connecté      *
-             *                                                    *
-             ******************************************************/
-        } else {
+        /******************************************************
+         *                                                    *
+         *        Quand l'utilisateur n'est pas connecté      *
+         *                                                    *
+         ******************************************************/
+        else {
+            if ($tag === true) {
+                $res = "<header><p class='libelle_page_courante'>$libelle</p>";
+            } else if ($listUser === true) {
+                $res = "<header><p class='libelle_page_courante'>Touites de $userName</p>";
+            } else if ($user === true) {
+                $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
+                $pasabo="";
+            } else {
+                $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>";
+            }
+
             if ($user === true) {
                 return $res;
             } else {
@@ -211,15 +206,11 @@ abstract class Action
                     </ul>
                     </nav>
                     </header>
-                    <div class="tweets">
-                        $tweets
-                    </div>
-                    <div class="pagination">
-                        $paginationLinks
-                    </div>
+                    $pasabo
                     HTML;
             }
         }
+
         return $pageContent;
     }
 

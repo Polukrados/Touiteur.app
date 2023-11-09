@@ -5,6 +5,7 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\action\Action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
+use PDOException;
 
 class ProfileUserAction extends Action
 {
@@ -16,6 +17,7 @@ class ProfileUserAction extends Action
     public function execute(): string
     {
         $db = ConnectionFactory::makeConnection();
+
         if (isset($_GET['user_id'])) {
             $userID = intval($_GET['user_id']);
 
@@ -26,7 +28,6 @@ class ProfileUserAction extends Action
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $prenom = $row['prenom'];
             $nom = $row['nom'];
-            //$pseudo = $prenom . '_' . $nom;
 
             $scoremoyen = 'Score moyen de l\'utilisateur : ';
             $query = $db->prepare("SELECT AVG(note) FROM Evaluations
@@ -85,16 +86,24 @@ class ProfileUserAction extends Action
             $checkQuery->execute();
             $existingRelation = $checkQuery->fetchColumn();
 
+
             if ($userID == $_SESSION['utilisateur']['userID']) {
                 $pageContent = "<p>C'est vous.</p>";
             } else {
                 if ($existingRelation === 0) {
+
                     $follow = 0;
-                    $pageContent = "<form method='post' class='follow-form'>
-                                    <input type='hidden' name='user_id' value='$userID'>
-                                    <input type='hidden' name='follow' value='$follow'>
-                                    <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
-                                    </form>";
+                    if (!isset($_SESSION['utilisateur'])) {
+                        // Redirection vers la page de connexion
+                        header("Location: ?action=signin");
+                        exit();
+                    } else {
+                        $pageContent = "<form method='post' class='follow-form'>
+                        <input type='hidden' name='user_id' value='$userID'>
+                        <input type='hidden' name='follow' value='$follow'>
+                        <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
+                        </form>";
+                    }
 
                 } else {
                     $follow = 1;
@@ -135,14 +144,20 @@ class ProfileUserAction extends Action
                     $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
                     $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-                    $insertQuery->execute();
-
-                    $pageContent = "<p class='suivi'>Vous suivez déjà cet utilisateur</p>
+                    try {
+                        $insertQuery->execute();
+                        $pageContent = "<p class='suivi'>Vous suivez déjà cet utilisateur</p>
                             <form method='post' class='follow-form'>
                                 <input type='hidden' name='user_id' value='$userID'>
                                 <input type='hidden' name='follow' value='1'>
                                 <input type='submit' class='follow-btn' value='Ne plus suivre cet utilisateur'>
                             </form>";
+                    } catch (PDOException $e) {
+                        header("Location: ?action=signin");
+                        exit();
+                    }
+
+
                 }
             } else if ($follow === 1) {
                 if ($userID !== null) {
