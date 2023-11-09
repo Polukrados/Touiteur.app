@@ -16,7 +16,6 @@ class ProfileUserAction extends Action
     public function execute(): string
     {
         $db = ConnectionFactory::makeConnection();
-        $userID = "";
         if (isset($_GET['user_id'])) {
             $userID = intval($_GET['user_id']);
 
@@ -126,7 +125,7 @@ class ProfileUserAction extends Action
                                                                </div>
 
                                                           HTML;
-        } else if ($this->http_method === 'POST') {
+        } else {
             $userID = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
             $follow = isset($_POST['follow']) ? intval($_POST['follow']) : null;
             $pageContent = '';
@@ -139,19 +138,12 @@ class ProfileUserAction extends Action
                     $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     $insertQuery->execute();
 
-                    $pageContent = <<<HTML
-                                                                            <header>
-                                                                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
-                                                                                <nav class="menu">
-                                                                                    <ul>
-                                                                                        <li><a href="?action=add-user">S'inscrire</a></li>
-                                                                                        <li><a href="?action=signin">Se connecter</a></li>
-                                                                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                                                                                    </ul>
-                                                                                </nav>
-                                                                            </header>
-                                                                            <p> Vous suivez maintenant l'utilisateur $userName !</p>
-                                    HTML;
+                    $pageContent = "<p class='suivi'>Vous suivez déjà cet utilisateur</p>
+                            <form method='post' class='follow-form'>
+                                <input type='hidden' name='user_id' value='$userID'>
+                                <input type='hidden' name='follow' value='1'>
+                                <input type='submit' class='follow-btn' value='Ne plus suivre cet utilisateur'>
+                            </form>";
                 }
             } else if ($follow === 1) {
                 if ($userID !== null) {
@@ -161,22 +153,30 @@ class ProfileUserAction extends Action
                     $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     $deleteQuery->execute();
 
-                    $pageContent = <<<HTML
-                                                                            <header>
-                                                                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
-                                                                                <nav class="menu">
-                                                                                    <ul>
-                                                                                        <li><a href="?action=add-user">S'inscrire</a></li>
-                                                                                        <li><a href="?action=signin">Se connecter</a></li>
-                                                                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                                                                                    </ul>
-                                                                                </nav>
-                                                                            </header>
-                                                                            <p> Vous ne suivez plus l'utilisateur $userName !</p>
-                                    HTML;
+                    $pageContent = "<form method='post' class='follow-form'>
+                                <input type='hidden' name='user_id' value='$userID'>
+                                <input type='hidden' name='follow' value='0'>
+                                <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
+                            </form>";
                 }
             }
+            return <<<HTML
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>$nom $prenom</h1>
+                $pageContent
+                <br>
+                $scoremoyen
+                <br>
+                <p class="followers-count">$listefollowers</p>
+            </div>
+            <div class="tweets-container">
+                <div class="tweets-list">
+                    $tweets
+                </div>
+            </div>
+        </div>
+    HTML;
         }
-        return $pageContent;
     }
 }
