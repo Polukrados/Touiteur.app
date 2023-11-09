@@ -74,7 +74,7 @@ class ProfileUserAction extends Action
                                                     LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
                                                     WHERE Utilisateurs.utilisateurID = :user_id
                                                     ORDER BY Touites.datePublication DESC
-                                                    LIMIT :limit OFFSET :offset", false ,false,true);
+                                                    LIMIT :limit OFFSET :offset", false, false, true);
 
         }
 
@@ -108,23 +108,22 @@ class ProfileUserAction extends Action
             }
 
             return <<<HTML
-                                                                    <div class="profile-container">
-                                                                   <div class="profile-header">
-                                                                          <h1>$nom $prenom</h1>
-                                                                          $pageContent
-                                                                          <br>
-                                                                          $scoremoyen
-                                                                          <br>
-                                                                          <p class="followers-count">$listefollowers</p>
-                                                                   </div>
-                                                                   <div class="tweets-container">
-                                                                          <div class="tweets-list">
-                                                                              $tweets
-                                                                          </div>
-                                                                   </div>
-                                                               </div>
-
-                                                          HTML;
+                    <div class="profile-container">
+                   <div class="profile-header">
+                          <h1>$nom $prenom</h1>
+                          $pageContent
+                          <br>
+                          $scoremoyen
+                          <br>
+                          <p class="followers-count">$listefollowers</p>
+                   </div>
+                   <div class="tweets-container">
+                          <div class="tweets-list">
+                              $tweets
+                          </div>
+                   </div>
+               </div>
+               HTML;
         } else {
             $userID = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
             $follow = isset($_POST['follow']) ? intval($_POST['follow']) : null;

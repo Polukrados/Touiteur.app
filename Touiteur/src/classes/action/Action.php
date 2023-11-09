@@ -120,11 +120,6 @@ abstract class Action
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
 
-        /******************************************************
-         *                                                    *
-         *        Quand l'utilisateur est connecté            *
-         *                                                    *
-         ******************************************************/
         if ($tag === true) {
             $res = "<header>
             <p class='libelle_page_courante'>$libelle</p>";
@@ -134,55 +129,100 @@ abstract class Action
         } else if ($user === true) {
             $res = <<<HTML
                     <div class="tweets">
-            $tweets
-            </div>
-            <div class="pagination">
-            $paginationLinks
-            </div>;
-            HTML;
-
+                        $tweets
+                    </div>
+                    <div class="pagination">
+                        $paginationLinks
+                    </div>;
+                    HTML;
         } else {
             $res = "<header>
-            <p class='libelle_page_courante'>        
-                    <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>       
-                    Bienvenue sur Touiteur et pas Tracteur       
-                </p>";
+                    <p class='libelle_page_courante'>        
+                        <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>       
+                        Bienvenue sur Touiteur et pas Tracteur       
+                    </p>";
         }
-        if ($user === true) {
-            return $res;
-        } else {
-            return <<<HTML
-                        $res
+
+        /******************************************************
+         *                                                    *
+         *        Quand l'utilisateur est connecté            *
+         *                                                    *
+         ******************************************************/
+        if (isset($_SESSION['utilisateur'])) {
+            $userID = $_SESSION['utilisateur']['userID'];
+            $userName = $_SESSION['utilisateur']['prenom'] . '_' . $_SESSION['utilisateur']['nom'];
+
+            $pageContent = <<<HTML
+                        $res 
                         <nav class="menu-nav">
                             <ul>
-                                <li><a href="?action=add-user">S'inscrire</a></li>
-                                <li><a href="?action=signin">Se connecter</a></li>
+                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
+                                <li><a href="?action=logout">Se déconnecter</a></li>
                                 <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
                             </ul>
                         </nav>
-            <nav class="menu">
-            <div class="photo-profil">
+                        <nav class="menu">
+                        <div class="photo-profil">
+                            <a href="#lien_vers_profil_peut_etre_pas_oblige">
+                                <img src="images/gaetan.png" alt="Icône de profil">
+                            </a>
+                        </div>
+                            <ul>
+                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
+                                <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
+                            <ul>
+                        </nav>
+                        </header>
+                        <div class="tweets">    
+                            $tweets
+                        </div>
+                        <div class="pagination">
+                            $paginationLinks
+                        </div>
+                        HTML;
+
+            /******************************************************
+             *                                                    *
+             *        Quand l'utilisateur n'est pas connecté      *
+             *                                                    *
+             ******************************************************/
+        } else {
+            if ($user === true) {
+                return $res;
+            } else {
+                return <<<HTML
+                    $res
+                    <nav class="menu-nav">
+                        <ul>
+                            <li><a href="?action=add-user">S'inscrire</a></li>
+                            <li><a href="?action=signin">Se connecter</a></li>
+                            <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
+                        </ul>
+                    </nav>
+                    <nav class="menu">
+                    <div class="photo-profil">
                         <a href="#lien_vers_profil_peut_etre_pas_oblige">
                             <img src="images/gaetan.png" alt="Icône de profil">
                         </a>
                     </div>
-                <ul>
-                    <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
-                    <li><a href="?action=add-user">S'inscrire</a></li>
-                    <li><a href="?action=signin">Se connecter</a></li>
-                </ul>
-            </nav>
-        </header>
-        <div class="tweets">
-            $tweets
-        </div>
-        <div class="pagination">
-            $paginationLinks
-        </div>
-    HTML;
+                    <ul>
+                        <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
+                        <li><a href="?action=add-user">S'inscrire</a></li>
+                        <li><a href="?action=signin">Se connecter</a></li>
+                    </ul>
+                    </nav>
+                    </header>
+                    <div class="tweets">
+                        $tweets
+                    </div>
+                    <div class="pagination">
+                        $paginationLinks
+                    </div>
+                    HTML;
+            }
         }
+        return $pageContent;
     }
 
     abstract public function execute(): string;
-
 }
