@@ -87,79 +87,45 @@ class ProfileUserAction extends Action
             $existingRelation = $checkQuery->fetchColumn();
 
             if ($userID == $_SESSION['utilisateur']['userID']) {
-                $pageContent = <<<HTML
-                                                              <div class="profile-container">
-                                                                      <div class="profile-header">
-                                                                          <h1>$nom $prenom</h1>
-                                                                          <p>C'est vous.</p>
-                                                                          <br>
-                                                                          $scoremoyen
-                                                                          <br>
-                                                                          <p class="followers-count">$listefollowers</p>
-                                                                      </div>
-                                                                      <div class="tweets-container">
-                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
-                                                                          <div class="tweets-list">
-                                                                              $tweets
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                          HTML;
+                $pageContent = "<p>C'est vous.</p>";
             } else {
                 if ($existingRelation === 0) {
                     $follow = 0;
-                    $pageContent = <<<HTML
-                                                              <div class="profile-container">
-                                                                   <div class="profile-header">
-                                                                          <h1>$nom $prenom</h1>
-                                                                          <form method="post" class="follow-form">
-                                                                              <input type="hidden" name="user_id" value="$userID">
-                                                                              <input type="hidden" name="follow" value="$follow">
-                                                                              <input type="submit" class="follow-btn" value="Suivre cet utilisateur">
-                                                                          </form>
-                                                                          <br>
-                                                                          $scoremoyen
-                                                                          <br>
-                                                                          <p class="followers-count">$listefollowers</p>
-                                                                   </div>
-                                                                   <div class="tweets-container">
-                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
-                                                                          <div class="tweets-list">
-                                                                              $tweets
-                                                                          </div>
-                                                                   </div>
-                                                               </div>
+                    $pageContent = "<form method='post' class='follow-form'>
+                                    <input type='hidden' name='user_id' value='$userID'>
+                                    <input type='hidden' name='follow' value='$follow'>
+                                    <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
+                                    </form>";
 
-                                                          HTML;
                 } else {
                     $follow = 1;
-                    $pageContent = <<<HTML
-                                                              <div class="profile-container">
-                                                                   <div class="profile-header">
-                                                                          <h1>$nom $prenom</h1>
-                                                                          <p class="suivi">Vous suivez déjà cet utilisateur</p>
-                                                                          <form method="post" class="follow-form">
-                                                                             <input type="hidden" name="user_id" value="$userID">
-                                                                             <input type="hidden" name="follow" value="$follow">
-                                                                             <input type="submit" class="follow-btn" value="Ne plus suivre cet utilisateur">
-                                                                          </form>
-                                                                          <br>
-                                                                          $scoremoyen
-                                                                          <br>
-                                                                          <p class="followers-count">$listefollowers</p>
-                                                                   </div>
-                                                                   <div class="tweets-container">
-                                                                          <h2>Liste des tweets de l'utilisateur :</h2>
-                                                                          <div class="tweets-list">
-                                                                              $tweets
-                                                                          </div>
-                                                                   </div>
-                                                               </div>
-                                                          HTML;
+                    $pageContent = "<p class='suivi'>Vous suivez déjà cet utilisateur</p>
+                                    <form method='post' class='follow-form'>
+                                     <input type='hidden' name='user_id' value='$userID'>
+                                     <input type='hidden' name='follow' value='$follow'>
+                                     <input type='submit' class='follow-btn' value='Ne plus suivre cet utilisateur'>
+                                     </form>";
                 }
             }
 
-            return $pageContent;
+            return <<<HTML
+                                                                    <div class="profile-container">
+                                                                   <div class="profile-header">
+                                                                          <h1>$nom $prenom</h1>
+                                                                          $pageContent
+                                                                          <br>
+                                                                          $scoremoyen
+                                                                          <br>
+                                                                          <p class="followers-count">$listefollowers</p>
+                                                                   </div>
+                                                                   <div class="tweets-container">
+                                                                          <div class="tweets-list">
+                                                                              $tweets
+                                                                          </div>
+                                                                   </div>
+                                                               </div>
+
+                                                          HTML;
         } else if ($this->http_method === 'POST') {
             $userID = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
             $follow = isset($_POST['follow']) ? intval($_POST['follow']) : null;
@@ -167,7 +133,7 @@ class ProfileUserAction extends Action
 
             if ($follow === 0) {
                 if ($userID !== null) {
-                    // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                    // La relation n'existe pas alors on fait l'insertion dans la table
                     $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
                     $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
@@ -189,7 +155,7 @@ class ProfileUserAction extends Action
                 }
             } else if ($follow === 1) {
                 if ($userID !== null) {
-                    // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                    // On supprime, on veut plus le suivre
                     $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
                     $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);

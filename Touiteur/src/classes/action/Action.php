@@ -118,8 +118,15 @@ abstract class Action
             $res = "<header>
             <p class='libelle_page_courante'>Touites de $userName</p>";
         } else if ($user === true) {
-            $res = "<header>
-                   <p class='libelle_page_courante'>Profil de l'utilisateur : $userName</p>";
+            $res = <<<HTML
+                    <div class="tweets">
+            $tweets
+            </div>
+            <div class="pagination">
+            $paginationLinks
+            </div>;
+            HTML;
+
         } else {
             $res = "<header>
             <p class='libelle_page_courante'>        
@@ -127,7 +134,10 @@ abstract class Action
                     Bienvenue sur Touiteur et pas Tracteur       
                 </p>";
         }
-        $pageContent = <<<HTML
+        if ($user===true){
+            $pageContent=$res;
+        }else {
+            $pageContent = <<<HTML
                         $res
                         <nav class="menu-nav">
                             <ul>
@@ -156,6 +166,7 @@ abstract class Action
             $paginationLinks
         </div>
     HTML;
+        }
         return $pageContent;
 
     }
