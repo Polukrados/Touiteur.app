@@ -93,14 +93,18 @@ class ProfileUserAction extends Action
                 $libelle = $row['libelle'];
                 $timestamp = $row['datePublication'];
                 $imagePath = 'images/' . $row['cheminFichier'];
-
+                $img = "";
+                // Si le touit contient une image on l'affiche sinon on fait rien
+                if ($imagePath !== "images/"){
+                    $img = "<img src='$imagePath' alt='Image associée au touit'>";
+                }
                 // Tweet court avec un formulaire pour les détails
                 $tweetHTML = <<<HTML
                                                         <div class="template-feed">
                                                             <div class="user">Utilisateur: $userName</div>
                                                             <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
                                                             <div class="timestamp">Publié le : $timestamp</div>
-                                                            <img src="$imagePath" alt="Image associée au tweet">
+                                                            $img
                                                             <form method="post" action="?action=default">
                                                                 <input type="hidden" name="tweet_id" value="$tweetID">
                                                                 <input type="submit" value="Voir les détails">

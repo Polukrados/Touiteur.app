@@ -63,19 +63,19 @@ abstract class Action
                 // Touit court
             if($tag===true || $listUser===true){
                 $tweets.=<<<HTML
-            <div class="template-feed">
-                <div class="user">
-                     <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
-                     <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
-                </div>  
-                <div class="content">
-                    $content 
-                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
-                </div>
-                <div class="timestamp">Publié le : $timestamp</div>
-                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
-            </div>
-        HTML;
+                            <div class="template-feed">
+                                <div class="user">
+                                     <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
+                                     <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                </div>  
+                                <div class="content">
+                                    $content 
+                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                </div>
+                                <div class="timestamp">Publié le : $timestamp</div>
+                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                            </div>
+                        HTML;
             }else {
                 $tweets .= <<<HTML
                             <div class="tweet">
@@ -127,8 +127,7 @@ abstract class Action
                 </p>";
         }
         $pageContent = <<<HTML
-            $res
-                
+                        $res
                         <nav class="menu-nav">
                             <ul>
                                 <li><a href="?action=add-user">S'inscrire</a></li>
