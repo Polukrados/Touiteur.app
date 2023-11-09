@@ -10,39 +10,21 @@ class DisplayAbonnementTouitesAction extends Action
 
     public function execute(): string
     {
-        $signin = "";
         if ($this->http_method == "GET"){
-            $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
-            $userID = $_SESSION['utilisateur']['userID'];
-            $pseudo = $user->getPseudo();
-            $touits = $user->getTouitsFromFollowedUsers();
-            $touits .= $user->getTouitTagFollow();
-            $signin .= <<<HTML
-                            <header> 
-                              <p class ='libelle_page_courante'>$pseudo</p> 
-                              <nav class="menu-nav">
-                                <ul>
-                                  <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
-                                  <li><a href="?action=post-touite">Publier un touite</a></li>
-                                  <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                                </ul>
-                              </nav>
-                              <nav class="menu">
-                                <div class="photo-profil">
-                                    <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                                        <img src="images/gaetan.png" alt="Icône de profil">
-                                    </a>
-                                </div>
-                                <ul>
-                                    <li><a href="?action=logout">Déconnexion</a></li>
-                                <ul>
-                              </nav>
-                            </header>
-                            <div class="tweets">
-                                $touits
-                            </div>
-                          HTML;
+            $pageContent = parent::generationAction("SELECT t.touiteID, t.texte, u.utilisateurID, u.nom, u.prenom, t.datePublication, Tags.tagID, Tags.libelle
+FROM Touites t
+LEFT JOIN TouitesUtilisateurs ON t.touiteID = TouitesUtilisateurs.TouiteID
+LEFT JOIN Utilisateurs u ON TouitesUtilisateurs.utilisateurID = u.utilisateurID
+LEFT JOIN TouitesTags ON t.touiteID = TouitesTags.TouiteID
+LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
+LEFT JOIN abonnementtags ON Tags.tagID = abonnementtags.tagID
+LEFT JOIN suivi ON u.utilisateurID = suivi.suiviID
+WHERE (abonnementtags.utilisateurID = :user_id1 OR suivi.suivreID = :user_id2)
+ORDER BY t.datePublication DESC
+LIMIT :limit OFFSET :offset;
+",false,false,false,true);
+
         }
-        return $signin;
+        return $pageContent;
     }
 }

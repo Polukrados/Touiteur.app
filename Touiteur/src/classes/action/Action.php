@@ -27,7 +27,7 @@ abstract class Action
         return $text;
     }
 
-    protected function generationAction($query, $tag = false, $listUser = false, $user = false): string
+    protected function generationAction($query, $tag = false, $listUser = false, $user = false, $display = false): string
     {
         // Connexion à la base de données
         $db = ConnectionFactory::makeConnection();
@@ -44,9 +44,16 @@ abstract class Action
             $tagID = intval($_GET['tag_id']);
             $query->bindParam(':tag_id', $tagID, PDO::PARAM_INT);
         }
-        if ($listUser === true || $user === true) {
-            $userID = intval($_GET['user_id']);
-            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
+        if ($listUser === true || $user === true||$display===true) {
+            $userID = $_SESSION['utilisateur']['userID'];
+
+            if($display===true){
+                $query->bindParam(':user_id1', $userID, PDO::PARAM_INT);
+                $query->bindParam(':user_id2', $userID, PDO::PARAM_INT);
+
+            }else{
+                $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
+            }
         }
         $query->bindParam(':limit', $touitesParPages, PDO::PARAM_INT);
         $query->bindParam(':offset', $offset, PDO::PARAM_INT);
@@ -119,13 +126,13 @@ abstract class Action
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
 
-        $pasabo="<div class='tweets'>
+        $pasabo = "<div class='tweets'>
             $tweets
                         </div>
                         <div class='pagination'>
             $paginationLinks
                         </div>";
-        $logo="<a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>";
+        $logo = "<a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>";
         if (isset($_SESSION['utilisateur'])) {
 
             if ($tag === true) {
@@ -134,12 +141,12 @@ abstract class Action
                 $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
-                $pasabo="";
+                $pasabo = "";
             } else {
                 $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>
                         <nav class='menu-nav'>
                             <ul>
-                                <li><a href='?action=display-abo'>Abonnement</a></li>
+                                <li><a href='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}'>Abonnement</a></li>
                                 <li><a href='?action=default'>Pour toi</a></li>
                             </ul>
                         </nav>";
@@ -163,9 +170,7 @@ abstract class Action
                         </header>
                         $pasabo
             HTML;
-        }
-
-        /******************************************************
+        } /******************************************************
          *                                                    *
          *        Quand l'utilisateur n'est pas connecté      *
          *                                                    *
@@ -177,7 +182,7 @@ abstract class Action
                 $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
-                $pasabo="";
+                $pasabo = "";
             } else {
                 $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>";
             }
