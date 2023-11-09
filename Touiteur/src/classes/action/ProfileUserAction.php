@@ -126,6 +126,7 @@ class ProfileUserAction extends Action
                           <br>
                           <p class="followers-count">$listefollowers</p>
                    </div>
+                   <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>
                    <div class="tweets-container">
                           <div class="tweets-list">
                               $tweets
@@ -184,6 +185,7 @@ class ProfileUserAction extends Action
                 <br>
                 <p class="followers-count">$listefollowers</p>
             </div>
+            <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>
             <div class="tweets-container">
                 <div class="tweets-list">
                     $tweets

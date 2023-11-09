@@ -125,12 +125,13 @@ abstract class Action
                         <div class='pagination'>
             $paginationLinks
                         </div>";
+        $logo="<a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>";
         if (isset($_SESSION['utilisateur'])) {
 
             if ($tag === true) {
-                $res = "<header><p class='libelle_page_courante'>$libelle</p>";
+                $res = "<header><p class='libelle_page_courante'>$logo $libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header><p class='libelle_page_courante'>Touites de $userName</p>";
+                $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo="";
@@ -171,9 +172,9 @@ abstract class Action
          ******************************************************/
         else {
             if ($tag === true) {
-                $res = "<header><p class='libelle_page_courante'>$libelle</p>";
+                $res = "<header><p class='libelle_page_courante'>$logo $libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header><p class='libelle_page_courante'>Touites de $userName</p>";
+                $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo="";
