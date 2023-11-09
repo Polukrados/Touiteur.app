@@ -27,7 +27,7 @@ abstract class Action
         return $text;
     }
 
-    protected function generationAction($query,$tag=false,$listUser=false) :string
+    protected function generationAction($query, $tag = false, $listUser = false, $user = false): string
     {
         $db = ConnectionFactory::makeConnection();
         $touitesParPages = 10;
@@ -35,11 +35,11 @@ abstract class Action
         $offset = ($pageCourante - 1) * $touitesParPages;
 
         $query = $db->prepare($query);
-        if($tag===true){
+        if ($tag === true) {
             $tagID = intval($_GET['tag_id']);
             $query->bindParam(':tag_id', $tagID, PDO::PARAM_INT);
         }
-        if($listUser===true){
+        if ($listUser === true || $user === true) {
             $userID = intval($_GET['user_id']);
             $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
         }
@@ -51,18 +51,16 @@ abstract class Action
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $tweetID = $row['touiteID'];
-            if($listUser===false){
-                $userID = $row['utilisateurID'];
-            }
+            $userID = $row['utilisateurID'];
             $userName = $row['prenom'] . '_' . $row['nom'];
             $content = $this->texte($row['texte']);
             $tagID = $row['tagID'];
             $libelle = $row['libelle'];
             $timestamp = $row['datePublication'];
 
-                // Touit court
-            if($tag===true || $listUser===true){
-                $tweets.=<<<HTML
+            // Touit court
+            if ($tag === true || $listUser === true||$user===true) {
+                $tweets .= <<<HTML
             <div class="template-feed">
                 <div class="user">
                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
@@ -76,7 +74,7 @@ abstract class Action
                 <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
             </div>
         HTML;
-            }else {
+            } else {
                 $tweets .= <<<HTML
                             <div class="tweet">
                                 <div class="epingle-user">
@@ -113,14 +111,17 @@ abstract class Action
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
 
-        if ($tag===true){
-            $res="<header>
+        if ($tag === true) {
+            $res = "<header>
             <p class='libelle_page_courante'>$libelle</p>";
-        }else if($listUser===true){
-            $res="<header>
+        } else if ($listUser === true) {
+            $res = "<header>
             <p class='libelle_page_courante'>Touites de $userName</p>";
-        }else{
-            $res="<header>
+        } else if ($user === true) {
+            $res = "<header>
+                   <p class='libelle_page_courante'>Profil de l'utilisateur : $userName</p>";
+        } else {
+            $res = "<header>
             <p class='libelle_page_courante'>        
                     <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>       
                     Bienvenue sur Touiteur et pas Tracteur       

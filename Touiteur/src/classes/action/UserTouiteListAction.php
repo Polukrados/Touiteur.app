@@ -19,7 +19,7 @@ class UserTouiteListAction extends Action
     {
         $pageContent = "";
         if ($this->http_method === 'GET') {
-            $pageContent = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle
+            $pageContent = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Utilisateurs.utilisateurID, Touites.datePublication, Tags.tagID, Tags.libelle
                     FROM Touites
                     LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                     LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID

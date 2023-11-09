@@ -16,12 +16,7 @@ class ProfileUserAction extends Action
     public function execute(): string
     {
         $db = ConnectionFactory::makeConnection();
-
         $userID = "";
-        $pageContent = "";
-
-        $userID;
-
         if (isset($_GET['user_id'])) {
             $userID = intval($_GET['user_id']);
 
@@ -32,7 +27,7 @@ class ProfileUserAction extends Action
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $prenom = $row['prenom'];
             $nom = $row['nom'];
-            $pseudo = $prenom . '_' . $nom;
+            //$pseudo = $prenom . '_' . $nom;
 
             $scoremoyen = 'Score moyen de l\'utilisateur : ';
             $query = $db->prepare("SELECT AVG(note) FROM Evaluations
@@ -70,7 +65,7 @@ class ProfileUserAction extends Action
                 $listefollowers .= $prenomfollower . '_' . $nomfollower . '<br>';
             }
 
-            $query = $db->prepare("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Images.cheminFichier
+            $tweets = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Utilisateurs.utilisateurID
                                                     FROM Touites
                                                     LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                                                     LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
@@ -79,51 +74,9 @@ class ProfileUserAction extends Action
                                                     LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
                                                     LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
                                                     WHERE Utilisateurs.utilisateurID = :user_id
-                                                    ORDER BY Touites.datePublication DESC");
+                                                    ORDER BY Touites.datePublication DESC
+                                                    LIMIT :limit OFFSET :offset", false ,false,true);
 
-            $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
-            $query->execute();
-
-            $tweets = '';
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $tweetID = $row['touiteID'];
-                $userName = $row['prenom'] . '_' . $row['nom'];
-                $content = $row['texte'];
-                $tagID = $row['tagID'];
-                $libelle = $row['libelle'];
-                $timestamp = $row['datePublication'];
-                $imagePath = 'images/' . $row['cheminFichier'];
-
-                // Tweet court avec un formulaire pour les détails
-                $tweetHTML = <<<HTML
-                                                        <div class="template-feed">
-                                                            <div class="user">Utilisateur: $userName</div>
-                                                            <div class="content">$content <a href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a></div>
-                                                            <div class="timestamp">Publié le : $timestamp</div>
-                                                            <img src="$imagePath" alt="Image associée au tweet">
-                                                            <form method="post" action="?action=default">
-                                                                <input type="hidden" name="tweet_id" value="$tweetID">
-                                                                <input type="submit" value="Voir les détails">
-                                                            </form>
-                                                        </div>
-                                                    HTML;
-
-                $tweets .= $tweetHTML;
-            }
-
-            // Page
-            $pageContent = <<<HTML
-                            <header>
-                                <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
-                                <nav class="menu-nav">
-                                    <ul>
-                                        <li><a href="?action=add-user">S'inscrire</a></li>
-                                        <li><a href="?action=signin">Se connecter</a></li>
-                                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                                    </ul>
-                                </nav>
-                            </header>
-                            HTML;
         }
 
         if ($this->http_method === 'GET') {
@@ -134,7 +87,7 @@ class ProfileUserAction extends Action
             $existingRelation = $checkQuery->fetchColumn();
 
             if ($userID == $_SESSION['utilisateur']['userID']) {
-                $pageContent .= <<<HTML
+                $pageContent = <<<HTML
                                                               <div class="profile-container">
                                                                       <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
@@ -154,8 +107,8 @@ class ProfileUserAction extends Action
                                                           HTML;
             } else {
                 if ($existingRelation === 0) {
-                    $follow=0;
-                    $pageContent .= <<<HTML
+                    $follow = 0;
+                    $pageContent = <<<HTML
                                                               <div class="profile-container">
                                                                    <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
@@ -179,8 +132,8 @@ class ProfileUserAction extends Action
 
                                                           HTML;
                 } else {
-                    $follow=1;
-                    $pageContent .= <<<HTML
+                    $follow = 1;
+                    $pageContent = <<<HTML
                                                               <div class="profile-container">
                                                                    <div class="profile-header">
                                                                           <h1>$nom $prenom</h1>
@@ -212,15 +165,15 @@ class ProfileUserAction extends Action
             $follow = isset($_POST['follow']) ? intval($_POST['follow']) : null;
             $pageContent = '';
 
-            if($follow===0) {
+            if ($follow === 0) {
                 if ($userID !== null) {
-                                // La relation n'existe pas, vous pouvez effectuer l'insertion.
-                                $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
-                                $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-                                $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-                                $insertQuery->execute();
+                    // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                    $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
+                    $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+                    $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+                    $insertQuery->execute();
 
-                                $pageContent = <<<HTML
+                    $pageContent = <<<HTML
                                                                             <header>
                                                                                 <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
                                                                                 <nav class="menu">
@@ -234,15 +187,15 @@ class ProfileUserAction extends Action
                                                                             <p> Vous suivez maintenant l'utilisateur $userName !</p>
                                     HTML;
                 }
-            } else if($follow===1) {
+            } else if ($follow === 1) {
                 if ($userID !== null) {
-                                // La relation n'existe pas, vous pouvez effectuer l'insertion.
-                                $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
-                                $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
-                                $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
-                                $deleteQuery->execute();
+                    // La relation n'existe pas, vous pouvez effectuer l'insertion.
+                    $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+                    $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
+                    $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
+                    $deleteQuery->execute();
 
-                                $pageContent = <<<HTML
+                    $pageContent = <<<HTML
                                                                             <header>
                                                                                 <p class="libelle_page_courante">Profil de l'utilisateur : $userName</p>
                                                                                 <nav class="menu">
