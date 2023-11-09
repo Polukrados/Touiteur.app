@@ -125,9 +125,6 @@ abstract class Action
          *        Quand l'utilisateur est connecté            *
          *                                                    *
          ******************************************************/
-        if (isset($_SESSION['utilisateur'])) {
-            $userID = $_SESSION['utilisateur']['userID'];
-            $userName = $_SESSION['utilisateur']['prenom'] . '_' . $_SESSION['utilisateur']['nom'];
         if ($tag === true) {
             $res = "<header>
             <p class='libelle_page_courante'>$libelle</p>";
@@ -151,9 +148,9 @@ abstract class Action
                     Bienvenue sur Touiteur et pas Tracteur       
                 </p>";
         }
-        if ($user===true){
+        if ($user === true) {
             return $res;
-        }else {
+        } else {
             return <<<HTML
                         $res
                         <nav class="menu-nav">
@@ -183,59 +180,8 @@ abstract class Action
             $paginationLinks
         </div>
     HTML;
-    }/******************************************************
-             *                                                    *
-             *        Quand l'utilisateur n'est pas connecté      *
-             *                                                    *
-             ******************************************************/
-        } else {
-            if ($tag === true) {
-                $res = "<header>
-                    <p class='libelle_page_courante'>$libelle</p>";
-            } else if ($listUser === true) {
-                $res = "<header>
-                    <p class='libelle_page_courante'>Touites de $userName</p>";
-            } else if ($user === true) {
-                $res = "<header>
-                   <p class='libelle_page_courante'>Profil de l'utilisateur : $userName</p>";
-            } else {
-                $res = "<header>
-                    <p class='libelle_page_courante'>        
-                        <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>       
-                        Bienvenue sur Touiteur et pas Tracteur       
-                    </p>";
-            }
-            $pageContent = <<<HTML
-                        $res
-                        <nav class="menu-nav">
-                            <ul>
-                                <li><a href="?action=add-user">S'inscrire</a></li>
-                                <li><a href="?action=signin">Se connecter</a></li>
-                                <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
-                            </ul>
-                        </nav>
-                        <nav class="menu">
-                        <div class="photo-profil">
-                                    <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                                        <img src="images/gaetan.png" alt="Icône de profil">
-                                    </a>
-                                </div>
-                            <ul>
-                                <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
-                                <li><a href="?action=add-user">S'inscrire</a></li>
-                                <li><a href="?action=signin">Se connecter</a></li>
-                            </ul>
-                        </nav>
-                    </header>
-                    <div class="tweets">
-                        $tweets
-                    </div>
-                    <div class="pagination">
-                        $paginationLinks
-                    </div>
-                HTML;
         }
-
+    }
 
     abstract public function execute(): string;
 
