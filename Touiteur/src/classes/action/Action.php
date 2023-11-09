@@ -150,12 +150,11 @@ abstract class Action
          ******************************************************/
         if (isset($_SESSION['utilisateur'])) {
             $userID = $_SESSION['utilisateur']['userID'];
-
             $pageContent = <<<HTML
                         $res 
                         <nav class="menu-nav">
                             <ul>
-                                <li><a href="?action=signin">Abonnement</a></li>
+                                <li><a href="?action=display-abo">Abonnement</a></li>
                                 <li><a href="?action=default">Pour toi</a></li>
                             </ul>
                         </nav>

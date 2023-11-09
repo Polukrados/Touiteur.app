@@ -5,18 +5,19 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\action\Action;
 use iutnc\touiteur\user\User;
 
-class DisplayAbonnementTouites extends Action
+class DisplayAbonnementTouitesAction extends Action
 {
 
     public function execute(): string
     {
         $signin = "";
-        $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
-        $userID = $_SESSION['utilisateur']['userID'];
-        $pseudo = $user->getPseudo();
-        $touits = $user->getTouitsFromFollowedUsers();
-        $touits .= $user->getTouitTagFollow();
-        $signin .= <<<HTML
+        if ($this->http_method == "GET"){
+            $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
+            $userID = $_SESSION['utilisateur']['userID'];
+            $pseudo = $user->getPseudo();
+            $touits = $user->getTouitsFromFollowedUsers();
+            $touits .= $user->getTouitTagFollow();
+            $signin .= <<<HTML
                             <header> 
                               <p class ='libelle_page_courante'>$pseudo</p> 
                               <nav class="menu-nav">
@@ -41,7 +42,7 @@ class DisplayAbonnementTouites extends Action
                                 $touits
                             </div>
                           HTML;
-
+        }
         return $signin;
     }
 }

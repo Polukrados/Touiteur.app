@@ -42,6 +42,9 @@ class Dispatcher
             case 'logout':
                 $requete = new action\LogoutAction();
                 break;
+            case 'display-abo':
+                $requete = new action\DisplayAbonnementTouitesAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;
