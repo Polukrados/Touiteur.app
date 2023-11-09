@@ -59,7 +59,7 @@ abstract class Action
             $timestamp = $row['datePublication'];
 
             // Touit court
-            if ($tag === true || $listUser === true||$user===true) {
+            if ($tag === true || $listUser === true || $user === true) {
                 $tweets .= <<<HTML
             <div class="template-feed">
                 <div class="user">
@@ -128,8 +128,7 @@ abstract class Action
                 </p>";
         }
         $pageContent = <<<HTML
-            $res
-                
+                        $res
                         <nav class="menu-nav">
                             <ul>
                                 <li><a href="?action=add-user">S'inscrire</a></li>

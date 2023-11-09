@@ -51,6 +51,7 @@ class Signin extends Action
                                 <ul>
                                   <li><a href="?action=post-touite">Publier un touite</a></li>
                                   <li><a href="?action=accueil">Accueil</a></li>
+                                  <li><a href="?action=logout">Déconnexion</a></li>
                                 </ul>
                               </nav>
                             </header>
