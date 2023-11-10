@@ -62,17 +62,19 @@ class ProfileUserAction extends Action
                 $pseudo = $prenomfollower.'_'.$nomfollower;
                 $followerID = $row['utilisateurID']; // L'identifiant unique de l'utilisateur suiveur
                 // Ajoutez une condition pour exclure l'utilisateur actuel de la liste des followers
+                if (isset($_SESSION['utilisateur']['userID'])) {
                     if ($followerID != $_SESSION['utilisateur']['userID']) {
-                        $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
-                        $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
-                        $pseudo = $prenomfollower . '_' . $nomfollower;
+                                            $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
+                                            $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
+                                            $pseudo = $prenomfollower . '_' . $nomfollower;
 
-                        $listefollowers .= "<div class='follower-item'>
-                            <a href='?action=profile&user_id=$followerID' class='follower-link'>
-                                <div class='follower-name'><i class='fa fa-user-circle'></i> $pseudo </div>
-                            </a>
-                        </div>";
-                    }
+                                            $listefollowers .= "<div class='follower-item'>
+                                                <a href='?action=profile&user_id=$followerID' class='follower-link'>
+                                                    <div class='follower-name'><i class='fa fa-user-circle'></i> $pseudo </div>
+                                                </a>
+                                            </div>";
+                                        }
+                 }
             }
 
             $tweets = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Utilisateurs.utilisateurID

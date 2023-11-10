@@ -45,6 +45,9 @@ class Dispatcher
             case 'display-abo':
                 $requete = new action\DisplayAbonnementTouitesAction();
                 break;
+            case 'delete':
+                $requete = new action\DeleteTouiteAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;

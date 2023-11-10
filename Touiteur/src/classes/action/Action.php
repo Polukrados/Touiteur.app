@@ -70,96 +70,144 @@ abstract class Action
             $timestamp = $row['datePublication'];
 
             // Touit court
-            if ($tag === true || $listUser === true || $user === true) {
-                $tweets .= <<<HTML
-                            <div class="template-all">
-                                <div class="user">
-                                     <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
-                                     <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
-                                </div>  
-                                <div class="content">
-                                    $content 
-                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
-                                </div>
-                                <div class="timestamp">Publié le : $timestamp</div>
-                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
-                                <div class="tweet-actions">
-                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
-                                        <i class="fa-solid fa-thumbs-up"></i>
-                                    </a>
-                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
-                                        <i class="fa-solid fa-thumbs-down"></i>
-                                    </a>
-                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
-                                        <i class="fa-solid fa-retweet"></i>
-                                    </a>
-                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
-                                        <i class="fa-solid fa-reply"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            HTML;
-            } else {
-                $tweets .= <<<HTML
-                            <div class="tweet">
-                                <div class="epingle-user">
-                                    <img src="images/epingle_user_rouge.png" alt="Image description" />  
-                                </div>
-                                <div class="user">
-                                    <a href='?action=user-touite-list&user_id=$userID'>
-                                        <i class="fa-solid fa-user" style="color: whitesmoke;"></i>
-                                    </a>
-                                    <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
-                                    <a class="suivre" href='?action=profile-user&user_id=$userID'>
-                                        <i class="fa-solid fa-plus" id="follow-icon"></i>
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    $content
-                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
-                                </div>
-                                <div class="timestamp">Publié le : $timestamp</div>
-                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
-                            HTML;
-                if($_SESSION['utilisateur']['userID'] == $userID) {
-                    $tweets.= <<<HTML
-                                                              <div class="tweet-actions">
-                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
-                                                                      <i class="fa-solid fa-thumbs-up"></i>
-                                                                  </a>
-                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
-                                                                      <i class="fa-solid fa-thumbs-down"></i>
-                                                                  </a>
-                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
-                                                                      <i class="fa-solid fa-retweet"></i>
-                                                                  </a>
-                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
-                                                                      <i class="fa-solid fa-reply"></i>
-                                                                  </a>
-                                                                  <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
-                                                                      <i class="fa-solid fa-trash"></i>
-                                                                  </a>
-                                                              </div>
-                                                          </div>
-                                                          HTML;
+            if (isset($_SESSION['utilisateur'])) {
+                if ($tag === true || $listUser === true || $user === true) {
+                                $tweets .= <<<HTML
+                                            <div class="template-all">
+                                                <div class="user">
+                                                     <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
+                                                     <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                                </div>
+                                                <div class="content">
+                                                    $content
+                                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                                </div>
+                                                <div class="timestamp">Publié le : $timestamp</div>
+                                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                                <div class="tweet-actions">
+                                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                        <i class="fa-solid fa-thumbs-up"></i>
+                                                    </a>
+                                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                        <i class="fa-solid fa-thumbs-down"></i>
+                                                    </a>
+                                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                        <i class="fa-solid fa-retweet"></i>
+                                                    </a>
+                                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                        <i class="fa-solid fa-reply"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            HTML;
                 } else {
-                    $tweets.= <<<HTML
-                                                              <div class="tweet-actions">
-                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
-                                                                      <i class="fa-solid fa-thumbs-up"></i>
-                                                                  </a>
-                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
-                                                                      <i class="fa-solid fa-thumbs-down"></i>
-                                                                  </a>
-                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
-                                                                      <i class="fa-solid fa-retweet"></i>
-                                                                  </a>
-                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
-                                                                      <i class="fa-solid fa-reply"></i>
-                                                                  </a>
-                                                              </div>
-                                                          </div>
-                                                          HTML;
+                                $tweets .= <<<HTML
+                                            <div class="tweet">
+                                                <div class="epingle-user">
+                                                    <img src="images/epingle_user_rouge.png" alt="Image description" />
+                                                </div>
+                                                <div class="user">
+                                                    <a href='?action=user-touite-list&user_id=$userID'>
+                                                        <i class="fa-solid fa-user" style="color: whitesmoke;"></i>
+                                                    </a>
+                                                    <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                                    <a class="suivre" href='?action=profile-user&user_id=$userID'>
+                                                        <i class="fa-solid fa-plus" id="follow-icon"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="content">
+                                                    $content
+                                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                                </div>
+                                                <div class="timestamp">Publié le : $timestamp</div>
+                                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                                                              <div class="tweet-actions">
+                                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                                                      <i class="fa-solid fa-thumbs-up"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                                                      <i class="fa-solid fa-thumbs-down"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                                                      <i class="fa-solid fa-retweet"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                                                      <i class="fa-solid fa-reply"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
+                                                                                      <i class="fa-solid fa-trash"></i>
+                                                                                  </a>
+                                                                              </div>
+                                                                          </div>
+                                HTML;
+                }
+            } else {
+                if ($tag === true || $listUser === true || $user === true) {
+                                $tweets .= <<<HTML
+                                            <div class="template-all">
+                                                <div class="user">
+                                                     <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
+                                                     <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                                </div>
+                                                <div class="content">
+                                                    $content
+                                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                                </div>
+                                                <div class="timestamp">Publié le : $timestamp</div>
+                                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                                <div class="tweet-actions">
+                                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                        <i class="fa-solid fa-thumbs-up"></i>
+                                                    </a>
+                                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                        <i class="fa-solid fa-thumbs-down"></i>
+                                                    </a>
+                                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                        <i class="fa-solid fa-retweet"></i>
+                                                    </a>
+                                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                        <i class="fa-solid fa-reply"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            HTML;
+                } else {
+                                $tweets .= <<<HTML
+                                            <div class="tweet">
+                                                <div class="epingle-user">
+                                                    <img src="images/epingle_user_rouge.png" alt="Image description" />
+                                                </div>
+                                                <div class="user">
+                                                    <a href='?action=user-touite-list&user_id=$userID'>
+                                                        <i class="fa-solid fa-user" style="color: whitesmoke;"></i>
+                                                    </a>
+                                                    <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
+                                                    <a class="suivre" href='?action=profile-user&user_id=$userID'>
+                                                        <i class="fa-solid fa-plus" id="follow-icon"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="content">
+                                                    $content
+                                                    <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
+                                                </div>
+                                                <div class="timestamp">Publié le : $timestamp</div>
+                                                <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                                                              <div class="tweet-actions">
+                                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                                                      <i class="fa-solid fa-thumbs-up"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                                                      <i class="fa-solid fa-thumbs-down"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                                                      <i class="fa-solid fa-retweet"></i>
+                                                                                  </a>
+                                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                                                      <i class="fa-solid fa-reply"></i>
+                                                                                  </a>
+                                                                              </div>
+                                                                          </div>
+                HTML;
                 }
             }
         }
@@ -199,7 +247,7 @@ abstract class Action
                             <div class='container-titre'>
                                 <p id='touiteur' class='libelle_page_courante'></p>
                             </div>
-                            
+
                         <nav class='menu-nav'>
                             <ul>
                                 <li><a href='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}'>Abonnement</a></li>
@@ -222,7 +270,7 @@ abstract class Action
                             </form>
                         </div>
                         <div class='separator'></div>
-                        <h2 style='text-align: center'>Liste des Touites dans lesquels vos Abonnements Tags apparaissent !</h2>
+                        <h2 style='text-align: center'>Liste des touites des personnes ou des tags que vous suivez :</h2>
                     ";
             }
             return <<<HTML
@@ -298,9 +346,6 @@ abstract class Action
 
         return $pageContent;
     }
-
-
-
 
     abstract public function execute(): string;
 }
