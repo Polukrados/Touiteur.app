@@ -46,7 +46,6 @@ abstract class Action
         }
         if ($listUser === true || $user === true||$display===true) {
             $userID = $_SESSION['utilisateur']['userID'];
-
             if($display===true){
                 $query->bindParam(':user_id1', $userID, PDO::PARAM_INT);
                 $query->bindParam(':user_id2', $userID, PDO::PARAM_INT);
@@ -162,7 +161,7 @@ abstract class Action
                         </div>
                             <ul>
                                 <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
-                                <li><a href="?action=profile-user&user_id=$userID">Mon profil</a></li>
+                                <li><a href="?action=profile-user&user_id={$_SESSION['utilisateur']['userID']}">Mon profil</a></li>
                                 <li><a href="?action=logout">Se déconnecter</a></li>
 
                             <ul>

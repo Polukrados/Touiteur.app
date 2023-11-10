@@ -19,8 +19,7 @@ class ProfileUserAction extends Action
         $db = ConnectionFactory::makeConnection();
 
         if (isset($_GET['user_id'])) {
-            $userID = intval($_GET['user_id']);
-
+            $userID = $_GET['user_id'];
             $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
             $query->bindParam(':id', $userID, PDO::PARAM_INT);
             $query->execute();
