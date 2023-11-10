@@ -6,7 +6,6 @@ use PDO;
 
 class ConnectionFactoryAdmin
 {
-
     private static $tableau = [];
 
     public static function setConfig($file)

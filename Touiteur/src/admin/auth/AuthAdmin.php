@@ -6,7 +6,6 @@ use iutnc\admin\db;
 
 class AuthAdmin
 {
-    // fonction pour se connecter
     public static function authenticate(string $email, string $mdp): bool
     {
         $db = db\ConnectionFactoryAdmin::makeConnection();
@@ -32,5 +31,4 @@ class AuthAdmin
         }
         return false;
     }
-
 }

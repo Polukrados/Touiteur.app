@@ -51,13 +51,11 @@ class DispatcherAdmin
                   <body>
                   HTML;
 
-        // Contenu HTML de fin
         $html_fin = <<<HTML
                 </body>
                 </html>
                 HTML;
 
-        // Contenu HTML complet
         $html_complet = $html_debut . $content . $html_fin;
         echo $html_complet;
     }
