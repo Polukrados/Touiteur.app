@@ -35,9 +35,9 @@ abstract class Action
         $touitesParPages = 10;
         // Page courante
         $pageCourante = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        // Pagination
+        $userName = '';
+        $libelle = '';
         $offset = ($pageCourante - 1) * $touitesParPages;
-
         // Requête
         $query = $db->prepare($query);
         if ($tag === true) {
@@ -60,11 +60,11 @@ abstract class Action
         // Récupération des touites
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-            // Récupération des données
+            // Récupération des données pour chaque touite
             $tweetID = $row['touiteID'];
             $userID = $row['utilisateurID'];
-            $userName = $row['prenom'] . '_' . $row['nom'];
             $content = $this->texte($row['texte']);
+            $userName = $row['prenom'] . '_' . $row['nom'];
             $tagID = $row['tagID'];
             $libelle = $row['libelle'];
             $timestamp = $row['datePublication'];
@@ -72,7 +72,7 @@ abstract class Action
             // Touit court
             if ($tag === true || $listUser === true || $user === true) {
                 $tweets .= <<<HTML
-                            <div class="template-feed">
+                            <div class="template-all">
                                 <div class="user">
                                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
                                      <a href='?action=user-touite-list&user_id=$userID'>$userName</a>
@@ -83,6 +83,20 @@ abstract class Action
                                 </div>
                                 <div class="timestamp">Publié le : $timestamp</div>
                                 <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                <div class="tweet-actions">
+                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </a>
+                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                        <i class="fa-solid fa-thumbs-down"></i>
+                                    </a>
+                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                        <i class="fa-solid fa-retweet"></i>
+                                    </a>
+                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                        <i class="fa-solid fa-reply"></i>
+                                    </a>
+                                </div>
                             </div>
                             HTML;
             } else {
@@ -101,16 +115,29 @@ abstract class Action
                                     </a>
                                 </div>
                                 <div class="content">
-                                    $content 
+                                    $content
                                     <a class="hashtag" href='?action=tag-touite-list&tag_id=$tagID'>$libelle</a>
                                 </div>
                                 <div class="timestamp">Publié le : $timestamp</div>
                                 <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
+                                <div class="tweet-actions">
+                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </a>
+                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                        <i class="fa-solid fa-thumbs-down"></i>
+                                    </a>
+                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                        <i class="fa-solid fa-retweet"></i>
+                                    </a>
+                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                        <i class="fa-solid fa-reply"></i>
+                                    </a>
+                                </div>
                             </div>
                             HTML;
             }
         }
-
         // Nombre total de touites
         $countQuery = $db->query("SELECT COUNT(*) as total FROM Touites");
 
@@ -123,25 +150,30 @@ abstract class Action
         for ($i = 1; $i <= $totalPages; $i++) {
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
-
+        $res = "";
         $pasabo = "<div class='tweets'>
             $tweets
                         </div>
                         <div class='pagination'>
             $paginationLinks
                         </div>";
+
         $logo = "<a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>";
         if (isset($_SESSION['utilisateur'])) {
-
             if ($tag === true) {
-                $res = "<header><p class='libelle_page_courante'>$logo $libelle</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo = "";
             } else {
-                $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>
+                $res = "<header>
+                                $logo
+                            <div class='container-titre'>
+                                <p id='touiteur' class='libelle_page_courante'></p>
+                            </div>
+                            
                         <nav class='menu-nav'>
                             <ul>
                                 <li><a href='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}'>Abonnement</a></li>
@@ -162,20 +194,18 @@ abstract class Action
                     <br>";
             }
             return <<<HTML
-            $res
-            
+                        $res
                         <nav class="menu">
-                        <div class="photo-profil">
-                            <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                                <img src="images/gaetan.png" alt="Icône de profil">
-                            </a>
-                        </div>
+                            <div class="photo-profil">
+                                <a href="#lien_vers_profil_peut_etre_pas_oblige">
+                                    <img src="images/gaetan.png" alt="Icône de profil">
+                                </a>
+                            </div>
                             <ul>
                                 <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
                                 <li><a href="?action=profile-user&user_id={$_SESSION['utilisateur']['userID']}">Mon profil</a></li>
                                 <li><a href="?action=logout">Se déconnecter</a></li>
-
-                            <ul>
+                            </ul>
                         </nav>
                         </header>
                         $pasabo
@@ -185,16 +215,23 @@ abstract class Action
          *        Quand l'utilisateur n'est pas connecté      *
          *                                                    *
          ******************************************************/
+
         else {
             if ($tag === true) {
-                $res = "<header><p class='libelle_page_courante'>$logo $libelle</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header><p class='libelle_page_courante'>$logo Touites de $userName</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>Touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo = "";
             } else {
-                $res = "<header><p class='libelle_page_courante'><a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>Bienvenue sur Touiteur et pas Tracteur</p>";
+                $res = "<header>
+                            <div class='container-titre'>
+                                <a class='logo_touiteur' href='?action=default'>
+                                    <img src='images/logo_touiteur.png' alt='Logo de Touiteur'>
+                                </a>
+                                <p id='touiteur' class='libelle_page_courante'></p>
+                            </div>";
             }
 
             if ($user === true) {
@@ -229,6 +266,7 @@ abstract class Action
 
         return $pageContent;
     }
+
 
 
 

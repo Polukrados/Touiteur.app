@@ -8,8 +8,17 @@ use PDO;
 class PostTouiteAction extends Action
 {
 
+    private function ensureUserIsLoggedIn()
+    {
+        if (!isset($_SESSION['utilisateur'])) {
+            header('Location: ?action=signin');
+            exit;
+        }
+    }
+
     public function execute(): string
     {
+        $this->ensureUserIsLoggedIn();
         $post_touite_html = "";
 
         if ($this->http_method == "GET") {
@@ -18,8 +27,7 @@ class PostTouiteAction extends Action
                     <p class ='libelle_page_courante'>Publier un nouveau Touite</p>
                     <nav class="menu-nav">
                       <ul>
-                        <li><a href="?action=default">Accueil</a></li>
-                        <li><a href="?action=logout">Déconnexion</a></li>
+                        <li><a href="?action=default"><i class="fa fa-home"></i></a></li>
                       </ul>
                     </nav>
                   </header>
@@ -37,7 +45,6 @@ class PostTouiteAction extends Action
                   HTML;
         } else if ($this->http_method == "POST") {
             $connection = ConnectionFactory::makeConnection();
-            
             // si l'utilisateur n'est pas connecté, alors on le redirige vers la page pour se connecter
             if (!isset($_SESSION['utilisateur'])) {
                 header('Location: ?action=signin');

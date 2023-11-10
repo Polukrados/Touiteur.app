@@ -16,7 +16,7 @@ class AddUserAction extends Action
                     <p class ='libelle_page_courante'>Rejoignez Touiteur dès maintenant !</p>
                     <nav class="menu-nav">
                       <ul>
-                        <li><a href="?action=accueil">Accueil</a></li>
+                        <li><a href="?action=accueil"><i class="fa fa-home"></i></a></li>
                         <li><a href="?action=signin">Se connecter</a></li>
                       </ul>
                     </nav>

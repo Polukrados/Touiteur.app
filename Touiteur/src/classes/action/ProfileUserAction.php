@@ -50,18 +50,23 @@ class ProfileUserAction extends Action
                 $scoremoyen .= $score;
             }
 
-            $listefollowers = 'Liste des utilisateurs qui suivent cette personne :<br><br>';
-            $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom
-                                                    FROM Utilisateurs
-                                                    INNER JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suivreID
-                                                    WHERE suiviID = :id");
+            $listefollowers = '';
+            $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom, Utilisateurs.utilisateurID
+                        FROM Utilisateurs
+                        INNER JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suivreID
+                        WHERE suiviID = :id");
 
             $query->bindParam(':id', $userID, PDO::PARAM_INT);
             $query->execute();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $prenomfollower = $row['prenom'];
-                $nomfollower = $row['nom'];
-                $listefollowers .= $prenomfollower . '_' . $nomfollower . '<br>';
+                $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
+                $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
+                $followerID = $row['utilisateurID']; // L'identifiant unique de l'utilisateur suiveur
+                $listefollowers .= "<div class='follower-item'>
+                            <a href='?action=profile&user_id=$followerID' class='follower-link'>
+                                <div class='follower-name'><i class='fa fa-user-circle'></i> $prenomfollower $nomfollower</div>
+                            </a>
+                        </div>";
             }
 
             $tweets = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Utilisateurs.utilisateurID
@@ -100,7 +105,7 @@ class ProfileUserAction extends Action
                         $pageContent = "<form method='post' class='follow-form'>
                         <input type='hidden' name='user_id' value='$userID'>
                         <input type='hidden' name='follow' value='$follow'>
-                        <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
+                        <input type='submit' class='follow-btn' value='+ Suivre +'>
                         </form>";
                     }
 
@@ -110,7 +115,7 @@ class ProfileUserAction extends Action
                                     <form method='post' class='follow-form'>
                                      <input type='hidden' name='user_id' value='$userID'>
                                      <input type='hidden' name='follow' value='$follow'>
-                                     <input type='submit' class='follow-btn' value='Ne plus suivre cet utilisateur'>
+                                     <input type='submit' class='follow-btn' value='- Ne plus suivre -'>
                                      </form>";
                 }
             }
@@ -121,9 +126,18 @@ class ProfileUserAction extends Action
                           <h1>$nom $prenom</h1>
                           $pageContent
                           <br>
-                          $scoremoyen
+                          <p style="color: var(--secondary-text-color);">$scoremoyen</p>
                           <br>
-                          <p class="followers-count">$listefollowers</p>
+                            <button class="modal-open">Voir les followers</button>
+                            <div id="followersModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close-modal"><i class="fa fa-close"></i></span>
+                                    <h2>Liste des followers</h2>
+                                       <div class="followers-list">
+                                            $listefollowers
+                                       </div>
+                                </div>
+                            </div>
                    </div>
                    <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>
                    <div class="tweets-container">
@@ -150,7 +164,7 @@ class ProfileUserAction extends Action
                             <form method='post' class='follow-form'>
                                 <input type='hidden' name='user_id' value='$userID'>
                                 <input type='hidden' name='follow' value='1'>
-                                <input type='submit' class='follow-btn' value='Ne plus suivre cet utilisateur'>
+                                <input type='submit' class='follow-btn' value='- Ne plus suivre -'>
                             </form>";
                     } catch (PDOException $e) {
                         header("Location: ?action=signin");
@@ -170,7 +184,7 @@ class ProfileUserAction extends Action
                     $pageContent = "<form method='post' class='follow-form'>
                                 <input type='hidden' name='user_id' value='$userID'>
                                 <input type='hidden' name='follow' value='0'>
-                                <input type='submit' class='follow-btn' value='Suivre cet utilisateur'>
+                                <input type='submit' class='follow-btn' value='+ Suivre +'>
                             </form>";
                 }
             }
@@ -180,9 +194,20 @@ class ProfileUserAction extends Action
                 <h1>$nom $prenom</h1>
                 $pageContent
                 <br>
-                $scoremoyen
+                <p style="color: var(--secondary-text-color);">$scoremoyen</p>
                 <br>
-                <p class="followers-count">$listefollowers</p>
+                <button class="modal-open">Voir les followers</button>
+                            <div id="followersModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close-modal"><i class="fa fa-close"></i></span>
+                                    <h2>Liste des followers</h2>
+                                    <div class="follower-item">
+                                        <div class="followers-list">
+                                            $listefollowers
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
             </div>
             <a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>
             <div class="tweets-container">

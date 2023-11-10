@@ -4,17 +4,114 @@
 /*                       Styles Globaux                     */
 /************************************************************/
 
+:root {
+    /* Couleurs de base */
+    --background-color: #1e2127;
+    --secondary-background-color: #2a2e35;
+    --background-color-tweet: #32363c;
+    --tag-color: #3bc9db;
+    --text-color: #fff;
+    --secondary-text-color: #aaa;
+    --text-color-lien: #ff4081;
+    --border-color: #343a40;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --button-color: #1684be;
+    --button-hover-color: rgba(22, 132, 190, 0.25);
+
+    /* Polices et bordures */
+    --primary-font: 'Muli', sans-serif;
+    --secondary-font: 'Quicksand', sans-serif;
+    --base-font-size: 18px;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Styles globaux */
 * {
     margin: 0;
     padding: 0;
-    list-style: none;
-    text-decoration: none;
+    box-sizing: border-box;
+    font-family: var(--primary-font);
 }
 
 body, html {
-    font-family: 'Arial', sans-serif;
-    background: #21252b;
-    color: #ffffff;
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: var(--base-font-size);
+    line-height: 1.6;
+}
+
+.container-titre {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    height: 20vh;
+    padding: 20px;
+}
+
+.logo_touiteur img {
+    height: auto;
+    width: 8vw;
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 10px;
+}
+
+#touiteur {
+    font-size: 5em;
+    line-height: 1em;
+    text-align: center;
+    position: relative;
+    top: 10vh;
+    transform: translateY(-10vh);
+    user-select: none;
+}
+#touiteur:hover {
+    cursor: cell;
+}
+
+#touiteur .wrapper {
+    display: inline-block;
+    position: relative;
+    height: 1em;
+    width: 1em;
+    transition: ease-in-out 0.3s;
+}
+#touiteur .wrapper span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: ease 0.3s;
+}
+#touiteur .wrapper span.letter-2 {
+    color: var(--text-color-lien);
+}
+#touiteur .wrapper span.letter-1 {
+    color: #FDF2E9;
+    z-index: 1;
+}
+#touiteur .wrapper span.letter-1:hover {
+    top: -2px;
+    right: -2px;
+}
+#touiteur .wrapper span.letter-1:hover ~ .letter-2 {
+    top: 2px;
+    right: 2px;
+}
+#touiteur .wrapper span.space {
+    padding: 0;
+    min-width: 30px;
+    display: inline-block;
+}
+
+/* Style de base pour les conteneurs */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Barre de Navigation */
@@ -43,20 +140,21 @@ body, html {
 
 .menu.active {
     transform: scale(1);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     padding: 10px;
 }
 
 .menu ul {
     display: none;
+    list-style: none;
 }
 
 .menu.active ul {
     width: 200px;
     border-radius: 15px;
     background: #32363c;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     padding: 10px;
     text-align: center;
     display: flex;
@@ -66,15 +164,15 @@ body, html {
     z-index: 1;
 }
 
-.menu.active ul li{
+.menu.active ul li {
     padding: 10px 0;
 }
 
-.menu.active ul li a:hover{
+.menu.active ul li a:hover {
     color: #ff4081;
 }
 
-.menu.active ul li a{
+.menu.active ul li a {
     color: white;
     position: relative;
     text-decoration: none;
@@ -147,33 +245,39 @@ body, html {
     justify-content: center;
     padding: 20px;
     margin-top: 50px;
+    gap: 10px;
+    border-radius: var(--border-radius);
+}
+
+.tweet:hover {
+    background-color: var(--secondary-background-color);
+    box-shadow: 0 8px 16px var(--shadow-color);
 }
 
 .tweet {
-    background-color: #32363c;
+    background-color: var(--background-color-tweet);
     padding: 40px;
     margin-bottom: 20px;
     width: 100%;
     max-width: 600px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    color: #cccccc;
-    font-family: "JetBrains Mono Thin";
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 0.1s ease;
+    color: var(--text-color);
     overflow-wrap: break-word;
 }
 
 .tweet a {
-    color: #ff4081;
+    color: var(--text-color-lien);
     text-decoration: none;
-    transition: color 0.3s;
+    transition: color 0.2s;
 }
 
 .tweet a:hover {
     color: #cc3367;
 }
 
-.tweet .epingle-user img{
+.tweet .epingle-user img {
     position: relative;
     top: -50px;
     left: 0;
@@ -189,14 +293,15 @@ body, html {
 }
 
 .tweet .user {
-    color: #ffffff;
+    color: var(--text-color);
+    font-weight: bold;
     font-size: 1.3em;
     margin-top: -50px;
     padding-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 2px solid rgba(26, 29, 31, 0.38);
+    border-bottom: 2px solid rgba(26, 29, 31, 0.8);
 }
 
 .tweet .user a {
@@ -205,17 +310,17 @@ body, html {
     margin-left: 10px;
 }
 
-.tweet .user i.fa-user:hover{
-    color: #cc3367 !important;
+.tweet .user i.fa-user:hover {
+    color: var(--text-color-lien) !important;
     cursor: pointer;
 }
 
-.tweet .user .suivre i{
+.tweet .user .suivre i {
     color: #ff4081;
     transition: transform 0.2s ease-in-out;
 }
 
-.tweet .user .suivre i:hover{
+.tweet .user .suivre i:hover {
     transform: rotate(180deg);
     scale: 1.3;
     cursor: cell;
@@ -228,17 +333,17 @@ body, html {
 }
 
 .tweet .content .hashtag {
-    color: #3bc9db;
+    color: var(--tag-color);
     font-style: italic;
 }
 
 .tweet .content .hashtag:hover {
-    color: #2ca9b8;
+    color: rgba(59, 201, 219, 0.7);
 }
 
 .tweet .timestamp {
     font-size: 0.8em;
-    color: #999999;
+    color: var(--secondary-text-color);
     margin-top: 55px;
 }
 
@@ -254,12 +359,52 @@ body, html {
     border-radius: 20px;
     background-color: #5b5757;
     color: lightgrey;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 .tweet .details-link:hover {
     background-color: rgba(91, 87, 87, 0.48);
-    color: white;
+    color: var(--text-color);
+}
+
+.tweet-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+    border-top: 2px solid rgba(26, 29, 31, 0.8);
+}
+
+.tweet-action {
+    color: var(--text-color);
+    font-size: 1.2em;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.tweet-action.like,
+.tweet-action.dislike,
+.tweet-action.retweet,
+.tweet-action.reply{
+    margin-top: 15px;
+    color: grey;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.tweet-action.like:hover {
+    color: lightgreen;
+}
+
+.tweet-action.dislike:hover {
+    color: indianred;
+}
+
+.tweet-action.retweet:hover {
+    color: #0056b3;
+}
+
+.tweet-action.reply:hover {
+    color: #d9ce49;
 }
 
 @media (max-width: 768px) {
@@ -268,6 +413,68 @@ body, html {
         margin-bottom: 15px;
     }
 }
+
+/************************************************************/
+/*                     Profil                               */
+/************************************************************/
+
+/* En-tête du profil avec nom et bouton de suivi */
+.profile-header {
+    background: var(--secondary-background-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+}
+
+.profile-header h1 {
+    font-family: var(--secondary-font);
+    font-size: 70px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+    text-shadow:0 1px 0 #ccc,
+    0 2px 0 #c9c9c9,
+    0 3px 0 #bbb,
+    0 4px 0 #b9b9b9,
+    0 5px 0 #aaa,
+    0 6px 1px rgba(0,0,0,.1),
+    0 0 5px rgba(0,0,0,.1),
+    0 1px 3px rgba(0,0,0,.3),
+    0 3px 5px rgba(0,0,0,.2),
+    0 5px 10px rgba(0,0,0,.25),
+    0 10px 10px rgba(0,0,0,.2),
+    0 20px 20px rgba(0,0,0,.15);
+}
+
+/* Bouton de suivi */
+.follow-btn {
+    background-color: var(--button-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.follow-btn:hover {
+    background-color: var(--button-hover-color);
+}
+
+.suivi{
+    color: var(--secondary-text-color);
+}
+
+.followers-count,
+.scoremoyen {
+    color: var(--secondary-text-color) !important;
+    margin-top: 10px;
+}
+
+
+
 
 /************************************************************/
 /*                     Buttons and Icons                    */
@@ -286,31 +493,42 @@ body, html {
 }
 
 
-
 /************************************************************/
 /*                    Éléments Formulaires                  */
 /************************************************************/
 
 .libelle_page_courante {
-    font-size: 2em;
-    margin: 20px auto;
-    border: 2px solid #999999;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    display: flex;
-    flex-direction: row;
+    font-size: 2em; /* Taille de police conséquente pour l'importance */
+    margin: 20px auto; /* Centrage horizontal */
+    border: 2px solid var(--border-color); /* Utilisation de la couleur de bordure définie dans :root */
+    padding: 10px; /* Espacement intérieur */
+    border-radius: var(--border-radius); /* Bordures arrondies à partir de la variable :root */
+    text-align: center; /* Texte centré */
+    justify-content: center; /* Centrage du contenu flex en horizontal */
+    align-items: center; /* Centrage du contenu flex en vertical */
+    width: 50%; /* Largeur de l'élément */
+    background-color: var(--secondary-background-color); /* Couleur d'arrière-plan secondaire */
+    color: var(--text-color); /* Couleur du texte */
+    box-shadow: var(--box-shadow); /* Ombre portée pour un effet de profondeur */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition pour les effets de survol */
 }
 
-.libelle_page_courante img{
+.libelle_page_courante:hover {
+    transform: translateY(-3px); /* Légère élévation au survol */
+    box-shadow: 0 6px 12px var(--shadow-color); /* Ombre portée plus prononcée au survol */
+}
+
+.libelle_page_courante img {
     width: 100px;
     height: auto;
 }
 
-.libelle_page_courante .retour-arriere{
+.libelle_page_courante a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.retour-arriere {
     position: absolute;
     left: 0;
     top: 0;
@@ -324,12 +542,12 @@ body, html {
     align-items: center;
 }
 
-.libelle_page_courante .retour-arriere:hover{
+.retour-arriere:hover {
     scale: 1.05;
     cursor: move;
 }
 
-.libelle_page_courante .retour-arriere img{
+.retour-arriere img {
     width: 30px;
     height: 30px;
 }
@@ -376,13 +594,26 @@ body, html {
 .form input[type=text],
 .form input[type=email],
 .form input[type=password],
-.form input[type=file]{
+.form input[type=file] {
     box-sizing: border-box;
     width: 100%;
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 20px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 15px;
+    cursor: pointer;
+    color: #232222 !important;
 }
 
 .custom-file-upload {
@@ -440,10 +671,10 @@ body, html {
 
 /************************************************************/
 /*                    Template Feed                         */
-/*                Profil, Feed, Touite, ...                 */
+/*                Profil, Touite Details, ...               */
 /************************************************************/
 
-.template-feed {
+.template-all {
     background-color: #32363c;
     color: #fff;
     border-radius: 10px;
@@ -455,23 +686,23 @@ body, html {
 
 }
 
-.template-feed .user {
+.template-all .user {
     font-size: 1.2em;
     font-weight: bold;
     color: #007bff;
     margin-bottom: 10px;
 }
 
-.template-feed .user a {
+.template-all .user a {
     color: rgba(0, 123, 255, 0.64);
     text-decoration: none;
 }
 
-.template-feed .user a:hover {
+.template-all .user a:hover {
     color: rgb(0, 166, 255);
 }
 
-.template-feed .suivre {
+.template-all .suivre {
     transition: transform 0.3s ease-in-out;
     display: inline-block;
 }
@@ -484,7 +715,7 @@ body, html {
     transform: rotate(180deg);
 }
 
-.template-feed .content {
+.template-all .content {
     font-size: 1em;
     margin-bottom: 10px;
     background-color: #40454f;
@@ -492,22 +723,22 @@ body, html {
     border-radius: 6px;
 }
 
-.template-feed .content a {
+.template-all .content a {
     color: #ff4081;
     text-decoration: none;
 }
 
-.template-feed .content a:hover {
+.template-all .content a:hover {
     text-decoration: underline;
 }
 
-.template-feed .timestamp {
+.template-all .timestamp {
     font-size: 0.8em;
     color: #999999;
     margin-bottom: 10px;
 }
 
-.template-feed .details-link{
+.template-all .details-link {
     font-size: 0.9em;
     margin-top: 10px;
     padding: 5px 10px;
@@ -515,16 +746,17 @@ body, html {
     background-color: #5b5757;
     color: lightgrey;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
-.template-feed img {
+.template-all img {
     width: 50%;
     height: 50%;
     border-radius: 10px;
     margin-top: 10px;
 }
 
-.template-feed input[type=submit] {
+.template-all input[type=submit] {
     padding: 10px 20px;
     background-color: #007bff;
     border: none;
@@ -535,89 +767,34 @@ body, html {
     transition: background-color 0.3s ease;
 }
 
-.template-feed input[type=submit]:hover {
+.template-all input[type=submit]:hover {
     background-color: #0056b3;
 }
 
-
-/* PROFIL */
-
-.profile-container {
+.pagination{
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    max-width: 600px;
-    padding: 20px;
-    border: 1px dashed #999999;
+    border-top: 2px solid rgba(74, 81, 86, 0.5);
+    border-bottom: 2px solid rgba(74, 81, 86, 0.5);
+    padding: 10px 0;
+    gap: 10px;
+    width: 30%;
     margin: 20px auto;
-    background-color: #232222;
+}
+
+.pagination a{
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.41);
+    background-color: var(--button-hover-color);
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
 }
 
-.profile-header {
-    border-radius: 10px 10px 0 0;
-    padding: 20px;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #999999;
-    margin-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-header h1 {
-    font-family: "Book Antiqua", cursive;
-    font-size: 70px;
-    font-weight: bold;
-    color: #fff;
-    margin: 0;
-}
-
-.profile-header .suivi{
-    font-size: 16px;
-    color: #d0d0d0;
-    margin: 0 0 30px;
-    border: 1px solid #999999;
-    padding: 10px 20px;
-    border-radius: 20px;
-    width: auto;
-    background-color: rgba(153, 153, 153, 0.12);
-}
-
-.profile-header .follow-form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-.follow-btn {
-    background-color: #0a95e1;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-}
-
-.follow-btn:hover {
-    background-color: #0082ca;
-}
-
-.followers-count {
-    color: #d0d0d0;
-    font-size: 14px;
-}
-
-.tweets-container {
-    padding: 20px;
-    border-radius: 0 0 10px 10px;
+.pagination a:hover{
+    background-color: var(--button-color);
 }
 
 
@@ -634,7 +811,7 @@ body, html {
     margin: 20px auto;
     max-width: 600px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--secondary-font);
 }
 
 .tweet-detail .user,
@@ -667,4 +844,174 @@ footer {
     text-align: center;
     font-size: 0.8em;
     color: #999;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Boîte modale */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 10, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #232222;
+    border-radius: 10px;
+    width: 50%;
+    height: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.modal-content h2 {
+    font-size: 1.5em;
+    text-align: center;
+    color: darkorange;
+    border-bottom: rgba(255, 255, 255, 0.51) 2px solid;
+}
+
+.follower-item {
+    background-color: #1c1c1c;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.follower-item:hover {
+    background-color: #282828;
+}
+
+.follower-link {
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.follower-link:hover .follower-name {
+    text-decoration: none;
+}
+
+.follower-name {
+    margin-left: 10px;
+    font-size: 1rem;
+}
+
+.follower-name i {
+    color: #676767;
+    margin-right: 10px;
+}
+
+.close-modal {
+    font-size: 36px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 50px;
+    cursor: pointer;
+    color: #707070;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #FE665A;
+}
+
+.modal-open {
+    margin-top: 10px;
+    font-size: 1em;
+    padding: 10px 20px;
+    background-color: #7391b2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.modal-open:hover {
+    background-color: rgba(48, 120, 241, 0.82);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.modal-open:focus {
+    outline: none;
+}
+
+.modal-open:active {
+    background-color: #1650AA;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(1px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .close-modal-icon {
+        top: 5px;
+        right: 5px;
+        font-size: 28px;
+    }
 }

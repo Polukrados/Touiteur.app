@@ -53,8 +53,8 @@ class DetailsAction extends Action
                 // Page
                 $pageContent = <<<HTML
                 <header>
-                    <p class="libelle_page_courante">        
-                        <a class="retour-arriere" href="?action=default"><img src="images/retour_arriere.png" alt="Flèche retour arrière"></a>       
+                    <a class="retour-arriere" href="?action=default"><img src="images/retour_arriere.png" alt="Flèche retour arrière"></a>
+                    <p class="libelle_page_courante">       
                         Détails du Tweet
                     </p>
                 </header>
