@@ -86,6 +86,7 @@ abstract class Action
             $timestamp = $row['datePublication'];
 
             // Touit court
+            // Si l'utilisateur est connecté, on affiche les touites avec les actions possibles.
             if (isset($_SESSION['utilisateur'])) {
                 if ($tag === true || $listUser === true || $user === true) {
                     $tweets .= <<<HTML
@@ -114,6 +115,7 @@ abstract class Action
                                                         <i class="fa-solid fa-reply"></i>
                                                     </a>
                                             HTML;
+                    // Si l'utilisateur est l'auteur du touite, on affiche l'action de suppression.
                     if ($_SESSION['utilisateur']['userID'] == $userID) {
                         $tweets .= <<<HTML
                                                             <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
@@ -125,6 +127,7 @@ abstract class Action
                                                 </div>
                                             </div>
                                             HTML;
+                    // Sinon, on affiche les touites sans les actions.
                 } else {
                     $tweets .= <<<HTML
                                             <div class="tweet">
@@ -160,6 +163,7 @@ abstract class Action
                                                                                       <i class="fa-solid fa-reply"></i>
                                                                                   </a>
                                  HTML;
+                    // Si l'utilisateur est l'auteur du touite, on affiche l'action de suppression.
                     if ($_SESSION['utilisateur']['userID'] == $userID) {
                         $tweets .= <<<HTML
                                                                                          <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
@@ -172,6 +176,7 @@ abstract class Action
                                                                           </div>
                                                                           HTML;
                 }
+                // Sinon, on affiche les touites sans les actions.
             } else {
                 if ($tag === true || $listUser === true || $user === true) {
                     $tweets .= <<<HTML
@@ -268,6 +273,7 @@ abstract class Action
          *        Quand l'utilisateur est connecté            *
          *                                                    *
          ******************************************************/
+        // Si l'utilisateur est connecté, on affiche le menu de navigation avec les actions possibles.
         if (isset($_SESSION['utilisateur'])) {
             if ($tag === true) {
                 $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
@@ -290,6 +296,7 @@ abstract class Action
                             </ul>
                         </nav>";
             }
+            // Affichage des tags que l'utilisateur suit.
             if ($display === true) {
                 $res .= "
                         <div class='form-container'>
