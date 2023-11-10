@@ -131,11 +131,13 @@ class PostTouiteAction extends Action
                     exit;
                 } catch (\PDOException $e) {
                     // Gérer l'erreur
+                    echo "test";
                     $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
 
 
                 } catch (\Exception $e) {
                     // Gérer l'erreur
+                    echo "touit";
                     $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
 
                 }
@@ -208,9 +210,8 @@ class PostTouiteAction extends Action
             }
         } catch (\Exception $e) {
             // Gérer l'erreur
-            echo 'Erreur lors de l\'association du tag avec le touite : ' . $e->getMessage();
+            return 'Erreur lors de l\'association du tag avec le touite : ' . $e->getMessage();
         }
     }
 
 }
-?>

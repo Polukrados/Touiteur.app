@@ -3,7 +3,7 @@ RewriteEngine On
 #
 # RewriteBase indispensable sur webetu :
 # pour un projet sur webetu dans ~/www/repertoire-projet
-RewriteBase /www/dziezuk2u/Touiteur.app-main
+RewriteBase /www/dziezuk2u/Touiteur.app-main/Touiteur
 
 
 #

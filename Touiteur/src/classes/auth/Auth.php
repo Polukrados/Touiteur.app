@@ -71,7 +71,7 @@ class Auth
             $userData = $st->fetch();
 
             $_SESSION['utilisateur'] = [
-                'userID' => $userData['utilisateurID'],
+                'userID' => $db->lastInsertId(),
                 'nom' => $userData['nom'],
                 'prenom' => $userData['prenom'],
                 'email' => $userData['email'],
