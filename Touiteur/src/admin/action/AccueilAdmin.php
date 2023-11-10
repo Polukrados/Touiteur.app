@@ -12,21 +12,19 @@ class AccueilAdmin extends ActionAdmin
     public function execute(): string
     {
         $pageContent = "";
-        if ($this->http_method === 'GET') {
-            $pageContent .= <<<HTML
+            $pageContent = <<<HTML
                 <header> 
-                  <p class ='libelle_page_courante'>Acuueil Admin</p> 
+                  <p class ='libelle_page_courante'>Accueil Admin</p> 
                   <nav class="menu-nav">
                   </nav>
                 </header>
                       <div class="buttons-container">
-                            <a href="admin.php?action=influenceur" class="btn-influenceurs">Voir les Influenceurs</a>
+                            <a href="?action=influenceursadmin" class="btn-influenceurs">Voir les Influenceurs</a>
 
-                            <a href="admin.php?action=tendance" class="btn-tendances">Voir les Tendances</a>
+                            <a href="?action=tendancesadmin" class="btn-tendances">Voir les Tendances</a>
                         </div>
               HTML;
 
-        }
         return $pageContent;
     }
 }

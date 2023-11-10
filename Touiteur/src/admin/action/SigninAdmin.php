@@ -25,7 +25,7 @@ class SigninAdmin extends ActionAdmin
                   </nav>
                 </header>
                       <div class="form-container">
-                            <form class="form" action='?action=signin' method='post'>
+                            <form class="form" action='?action=defaultadmin' method='get'>
                             <h1> Connectez-vous au back-office </h1>
                             <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                             <div class="password-container">
@@ -41,11 +41,9 @@ class SigninAdmin extends ActionAdmin
             $mdp = $_POST["password"];
 
             // vérifie si le compte existe et si c'est le cas, affiche les touites de ses abonnements
-            if (AuthAdmin::authenticate($email, $mdp)) {
-                if ($_SESSION['utilisateur']['email']=="root@gmail.com" && $_SESSION['utilisateur']['mdp']=="rootrootroot") {
-                    header("Location: ?action=defaultadmin");
-                    exit();
-                }
+            if (AuthAdmin::authenticate($email, $mdp) && $_SESSION['utilisateur']['email'] == "root@gmail.com" && $_SESSION['utilisateur']['mdp'] == "rootrootroot") {
+                header("Location: ?action=defaultadmin");
+                exit();
             } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
                                                 <header> 
@@ -54,7 +52,7 @@ class SigninAdmin extends ActionAdmin
                                                 </nav>
                                                 </header>
                                                 <div class="form-container">
-                                                <form class="form" action='?action=signin' method='post'>
+                                                <form class="form" action='?action=defaultadmin' method='get'>
                                                 <h1> Connectez-vous au back-office </h1>
                                                 <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                                                 <div class="password-container">
