@@ -451,6 +451,8 @@ body, html {
     margin: auto;
     width: 70%;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow-wrap: break-word;
+
 }
 
 .template-feed .user {
