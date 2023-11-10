@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 07 nov. 2023 à 08:32
+-- Généré le : ven. 10 nov. 2023 à 14:26
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -43,6 +43,16 @@ INSERT INTO `abonnementtags` (`utilisateurID`, `tagID`) VALUES
                                                             (4, 4);
 
 -- --------------------------------------------------------
+
+--
+-- Structure de la table `evaluations`
+--
+
+CREATE TABLE `evaluations` (
+                               `utilisateurID` int(11) NOT NULL,
+                               `TouiteID` int(11) NOT NULL,
+                               `evalue` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -127,10 +137,10 @@ CREATE TABLE `touites` (
 --
 
 INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`, `note`) VALUES
-                                                                   (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00', 0),
-                                                                   (2, 'Un autre touite avec un', '2023-11-06 11:00:00', 0),
-                                                                   (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00', 0),
-                                                                   (4, 'Je suis d’accord avec ça', '2023-11-06 13:00:00', 0);
+                                                                           (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00', 0),
+                                                                           (2, 'Un autre touite avec un', '2023-11-06 11:00:00', 0),
+                                                                           (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00', 0),
+                                                                           (4, 'Je suis d’accord avec ça', '2023-11-06 13:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -188,9 +198,9 @@ CREATE TABLE `touitesutilisateurs` (
 
 INSERT INTO `touitesutilisateurs` (`TouiteID`, `utilisateurID`) VALUES
                                                                     (1, 4),
-																	(2, 3),
-                                                                    (4, 1),
-                                                                    (3, 2);
+                                                                    (2, 3),
+                                                                    (3, 2),
+                                                                    (4, 1);
 
 -- --------------------------------------------------------
 
@@ -211,30 +221,31 @@ CREATE TABLE `utilisateurs` (
 --
 
 INSERT INTO `utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VALUES
-                                                                                  (1, 'Dupont', 'Alice', 'alice.dupont@gmail.com', 'jaimemonchat'),
-                                                                                  (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', 'durandbob'),
-                                                                                  (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', 'azertyuiop'),
-                                                                                  (4, 'Moreau', 'Diana', 'diana.moreau@gmail.com', 'diana357');
-  
-  
-  -- --------------------------------------------------------
+                                                                                  (1, 'Dupont', 'Alice', 'alice.dupont@gmail.com', '5107c5cf30b123dc47a7507d9d0bc3555ae3f63c21a9a9ee8f2edaa94c010866'),
+                                                                                  (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', 'c10e33b15f2f71aa51e2387004f4b200932d4de1fe131e3aad1f85a4fc17152d'),
+                                                                                  (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', 'aa3d2fe4f6d301dbd6b8fb2d2fddfb7aeebf3bec53ffff4b39a0967afa88c609'),
+                                                                                  (4, 'Moreau', 'Diana', 'diana.moreau@gmail.com', '38a07fb0e6267efe37d852b659d33452f5a0701f80b9cb47fef46d25e8a6e068'),
+                                                                                  (5, 'Root', 'Root', 'root@gmail.com', 'f1b4c643c271b741267fa544d2e7831f7ffbd3451b5b96efa66237ac6ce1175d');
 
 --
--- Structure de la table `evaluations`
+-- Index pour les tables déchargées
 --
-CREATE TABLE `evaluations` (
-                                 `utilisateurID` int(11) NOT NULL,
-                                 `TouiteID` int(11) NOT NULL,
-								  `evalue` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-                                                                                  
+--
 -- Index pour la table `abonnementtags`
 --
 ALTER TABLE `abonnementtags`
     ADD PRIMARY KEY (`utilisateurID`,`tagID`),
   ADD KEY `utilisateurID` (`utilisateurID`),
   ADD KEY `tagID` (`tagID`);
+
+--
+-- Index pour la table `evaluations`
+--
+ALTER TABLE `evaluations`
+    ADD PRIMARY KEY (`utilisateurID`,`TouiteID`),
+  ADD KEY `TouiteID` (`TouiteID`);
+
 --
 -- Index pour la table `images`
 --
@@ -317,7 +328,7 @@ ALTER TABLE `touites`
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-    MODIFY `utilisateurID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+    MODIFY `utilisateurID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Contraintes pour les tables déchargées
@@ -331,6 +342,12 @@ ALTER TABLE `abonnementtags`
   ADD CONSTRAINT `abonnementtags_ibfk_2` FOREIGN KEY (`tagID`) REFERENCES `tags` (`tagID`);
 
 --
+-- Contraintes pour la table `evaluations`
+--
+ALTER TABLE `evaluations`
+    ADD CONSTRAINT `evaluations_ibfk_1` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`),
+  ADD CONSTRAINT `evaluations_ibfk_2` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`);
+
 --
 -- Contraintes pour la table `suivi`
 --
@@ -359,15 +376,6 @@ ALTER TABLE `touitesutilisateurs`
     ADD CONSTRAINT `touitesutilisateurs_ibfk_1` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `touitesutilisateurs_ibfk_2` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`);
 COMMIT;
-
---
--- Contraintes pour la table `evaluations`
---
-ALTER TABLE evaluations ADD CONSTRAINT PK_key PRIMARY KEY (utilisateurID, touiteID);
-
-ALTER TABLE evaluations ADD FOREIGN KEY (utilisateurID) REFERENCES utilisateurs(utilisateurID);
-
-ALTER TABLE evaluations ADD FOREIGN KEY (touiteID) REFERENCES touites(touiteID);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
