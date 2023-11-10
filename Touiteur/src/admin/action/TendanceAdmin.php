@@ -17,7 +17,7 @@ class TendanceAdmin extends ActionAdmin{
                              FROM touitestags
                              JOIN tags ON touitestags.TagID = tags.tagID
                              GROUP BY touitestags.TagID
-                             ORDER BY count ASC");
+                             ORDER BY count desc");
 
         // Récupération des tendances
         $trendingTags = '';
