@@ -84,15 +84,16 @@ class PostTouiteAction extends Action
 
                     // Analyser le texte pour extraire les tags
                     preg_match_all('/#([a-zA-Z0-9_]+)/', $texte, $matches);
-                    $first = array_shift($matches[1]);
                     $tags = $matches[1];
 
                     // Insérer les nouveaux tags dans la base de données
                     foreach ($tags as $tag) {
                         $tag = '#' . $tag;
-                        $this->insertTagIfNotExists($tag);
-                        $tagID = $this->getTagID($tag);
-                        $this->associateTagWithTouite($touiteID, $tagID);
+                        if($tag != '#39') {
+                            $this->insertTagIfNotExists($tag);
+                            $tagID = $this->getTagID($tag);
+                            $this->associateTagWithTouite($touiteID, $tagID);
+                        }
                     }
 
                     $mediaPath = null;
