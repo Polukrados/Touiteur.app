@@ -29,27 +29,25 @@ abstract class Action
 
     protected function generationAction($query, $tag = false, $listUser = false, $user = false, $display = false): string
     {
-        // Connexion à la base de données
+        //Pagination
         $db = ConnectionFactory::makeConnection();
-        // Nombre de touites par page
         $touitesParPages = 10;
-        // Page courante
         $pageCourante = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $offset = ($pageCourante - 1) * $touitesParPages;
+
         $userName = '';
         $libelle = '';
-        $offset = ($pageCourante - 1) * $touitesParPages;
-        // Requête
         $query = $db->prepare($query);
         if ($tag === true) {
             $tagID = intval($_GET['tag_id']);
             $query->bindParam(':tag_id', $tagID, PDO::PARAM_INT);
         }
-        if ($listUser === true || $user === true||$display===true) {
+        if ($listUser === true || $user === true || $display === true) {
             $userID = $_GET['user_id'];
-            if($display===true){
+            if ($display === true) {
                 $query->bindParam(':user_id1', $userID, PDO::PARAM_INT);
                 $query->bindParam(':user_id2', $userID, PDO::PARAM_INT);
-            }else{
+            } else {
                 $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
             }
         }
@@ -72,7 +70,7 @@ abstract class Action
             // Touit court
             if (isset($_SESSION['utilisateur'])) {
                 if ($tag === true || $listUser === true || $user === true) {
-                                $tweets .= <<<HTML
+                    $tweets .= <<<HTML
                                             <div class="template-all">
                                                 <div class="user">
                                                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
@@ -98,19 +96,19 @@ abstract class Action
                                                         <i class="fa-solid fa-reply"></i>
                                                     </a>
                                             HTML;
-                                            if ($_SESSION['utilisateur']['userID'] == $userID) {
-                                                $tweets.= <<<HTML
+                    if ($_SESSION['utilisateur']['userID'] == $userID) {
+                        $tweets .= <<<HTML
                                                             <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
                                                                 <i class="fa-solid fa-trash"></i>
                                                             </a>
                                                 HTML;
-                                            }
-                                            $tweets.= <<<HTML
+                    }
+                    $tweets .= <<<HTML
                                                 </div>
                                             </div>
                                             HTML;
                 } else {
-                                $tweets .= <<<HTML
+                    $tweets .= <<<HTML
                                             <div class="tweet">
                                                 <div class="epingle-user">
                                                     <img src="images/epingle_user_rouge.png" alt="Image description" />
@@ -144,21 +142,21 @@ abstract class Action
                                                                                       <i class="fa-solid fa-reply"></i>
                                                                                   </a>
                                  HTML;
-                                                                              if ($_SESSION['utilisateur']['userID'] == $userID) {
-                                                                                $tweets.= <<<HTML
+                    if ($_SESSION['utilisateur']['userID'] == $userID) {
+                        $tweets .= <<<HTML
                                                                                          <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
                                                                                             <i class="fa-solid fa-trash"></i>
                                                                                          </a>
                                                                                 HTML;
-                                                                              }
-                                                                              $tweets.= <<<HTML
+                    }
+                    $tweets .= <<<HTML
                                                                               </div>
                                                                           </div>
                                                                           HTML;
                 }
             } else {
                 if ($tag === true || $listUser === true || $user === true) {
-                                $tweets .= <<<HTML
+                    $tweets .= <<<HTML
                                             <div class="template-all">
                                                 <div class="user">
                                                      <a href='?action=user-touite-list&user_id=$userID'><i class="fa-solid fa-user" style="color: whitesmoke;"></i></a>
@@ -187,7 +185,7 @@ abstract class Action
                                             </div>
                                             HTML;
                 } else {
-                                $tweets .= <<<HTML
+                    $tweets .= <<<HTML
                                             <div class="tweet">
                                                 <div class="epingle-user">
                                                     <img src="images/epingle_user_rouge.png" alt="Image description" />
@@ -239,7 +237,6 @@ abstract class Action
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
 
-        $res = "";
         $pasabo = "<div class='tweets'>
             $tweets
                         </div>
@@ -248,6 +245,11 @@ abstract class Action
                         </div>";
 
         $logo = "<a class='logo_touiteur' href='?action=default'><img src='images/logo_touiteur.png' alt='Logo de Touiteur'></a>";
+        /******************************************************
+         *                                                    *
+         *        Quand l'utilisateur est connecté            *
+         *                                                    *
+         ******************************************************/
         if (isset($_SESSION['utilisateur'])) {
             if ($tag === true) {
                 $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
@@ -270,8 +272,8 @@ abstract class Action
                             </ul>
                         </nav>";
             }
-            if($display===true){
-                $res.="
+            if ($display === true) {
+                $res .= "
                         <div class='form-container'>
                             <h2 style='text-align: center'>Tags</h2>
                             <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
@@ -358,8 +360,6 @@ abstract class Action
                     HTML;
             }
         }
-
-        return $pageContent;
     }
 
     abstract public function execute(): string;

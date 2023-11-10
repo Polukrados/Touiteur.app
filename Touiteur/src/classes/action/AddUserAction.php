@@ -11,7 +11,7 @@ class AddUserAction extends Action
     {
         $add_user = "";
         if ($this->http_method == "GET") {
-            $add_user .= <<<HTML
+            $add_user = <<<HTML
                   <header> 
                     <p class ='libelle_page_courante'>Rejoignez Touiteur dès maintenant !</p>
                     <nav class="menu-nav">

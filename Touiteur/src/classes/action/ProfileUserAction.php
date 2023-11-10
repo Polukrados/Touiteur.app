@@ -2,7 +2,6 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\action\Action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 use PDOException;
@@ -59,9 +58,7 @@ class ProfileUserAction extends Action
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
                 $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
-                $pseudo = $prenomfollower.'_'.$nomfollower;
-                $followerID = $row['utilisateurID']; // L'identifiant unique de l'utilisateur suiveur
-                // Ajoutez une condition pour exclure l'utilisateur actuel de la liste des followers
+                $followerID = $row['utilisateurID'];
                 if (isset($_SESSION['utilisateur']['userID'])) {
                     if ($followerID != $_SESSION['utilisateur']['userID']) {
                                             $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
@@ -106,7 +103,6 @@ class ProfileUserAction extends Action
 
                     $follow = 0;
                     if (!isset($_SESSION['utilisateur'])) {
-                        // Redirection vers la page de connexion
                         header("Location: ?action=signin");
                         exit();
                     } else {
@@ -177,8 +173,6 @@ class ProfileUserAction extends Action
                         header("Location: ?action=signin");
                         exit();
                     }
-
-
                 }
             } else if ($follow === 1) {
                 if ($userID !== null) {

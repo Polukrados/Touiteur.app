@@ -2,7 +2,6 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\action\Action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
@@ -30,7 +29,6 @@ class DetailsAction extends Action
             $query->execute();
 
             $row = $query->fetch(PDO::FETCH_ASSOC);
-
             if ($row) {
                 $userName = $row['prenom'] . ' ' . $row['nom'];
                 $content = $row['texte'];
@@ -66,7 +64,6 @@ class DetailsAction extends Action
                 return $pageContent;
             }
         }
-
         return 'Touit non trouvé.';
     }
 }

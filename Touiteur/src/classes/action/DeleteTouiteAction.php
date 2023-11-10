@@ -21,7 +21,6 @@ class DeleteTouiteAction extends Action
         $delete_touite_html = "";
 
         try {
-            // Vérifiez les identifiants de connexion et affichez des messages de débogage en cas d'erreur
             $connection = ConnectionFactory::makeConnection();
         } catch (\PDOException $e) {
             die('Erreur de connexion à la base de données : ' . $e->getMessage());
@@ -49,7 +48,7 @@ class DeleteTouiteAction extends Action
                     $checktouitestags = $connection->prepare("SELECT count(*) AS count FROM touitestags WHERE touiteID = :touiteID");
                     $checktouitestags->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
                     $checktouitestags->execute();
-                    if($checktouitestags->fetchColumn() != 0) {
+                    if ($checktouitestags->fetchColumn() != 0) {
                         // Suppression des tags associés au touite
                         $delete_touite = $connection->prepare("DELETE FROM touitestags WHERE touiteID = :touiteID");
                         $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
@@ -59,31 +58,31 @@ class DeleteTouiteAction extends Action
                     $checktouitesutilisateurs = $connection->prepare("SELECT count(*) AS count FROM touitesutilisateurs WHERE touiteID = :touiteID");
                     $checktouitesutilisateurs->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
                     $checktouitesutilisateurs->execute();
-                        if($checktouitesutilisateurs->fetchColumn() != 0) {
-                            // Suppression des tags associés au touite
-                            $delete_touite = $connection->prepare("DELETE FROM touitesutilisateurs WHERE touiteID = :touiteID");
-                            $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
-                            $delete_touite->execute();
+                    if ($checktouitesutilisateurs->fetchColumn() != 0) {
+                        // Suppression des tags associés au touite
+                        $delete_touite = $connection->prepare("DELETE FROM touitesutilisateurs WHERE touiteID = :touiteID");
+                        $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
+                        $delete_touite->execute();
                     }
 
                     $checktouitesimages = $connection->prepare("SELECT count(*) AS count FROM touitesimages WHERE touiteID = :touiteID");
                     $checktouitesimages->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
                     $checktouitesimages->execute();
-                        if($checktouitesimages->fetchColumn() != 0) {
-                            // Suppression des tags associés au touite
-                            $delete_touite = $connection->prepare("DELETE FROM touitesimages WHERE touiteID = :touiteID");
-                            $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
-                            $delete_touite->execute();
+                    if ($checktouitesimages->fetchColumn() != 0) {
+                        // Suppression des tags associés au touite
+                        $delete_touite = $connection->prepare("DELETE FROM touitesimages WHERE touiteID = :touiteID");
+                        $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
+                        $delete_touite->execute();
                     }
 
                     $checkevaluations = $connection->prepare("SELECT count(*) AS count FROM evaluations WHERE touiteID = :touiteID");
                     $checkevaluations->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
                     $checkevaluations->execute();
-                        if($checkevaluations->fetchColumn() != 0) {
-                            // Suppression des tags associés au touite
-                            $delete_touite = $connection->prepare("DELETE FROM evaluations WHERE touiteID = :touiteID");
-                            $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
-                            $delete_touite->execute();
+                    if ($checkevaluations->fetchColumn() != 0) {
+                        // Suppression des tags associés au touite
+                        $delete_touite = $connection->prepare("DELETE FROM evaluations WHERE touiteID = :touiteID");
+                        $delete_touite->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
+                        $delete_touite->execute();
                     }
 
                     // Suppression du touite lui-même

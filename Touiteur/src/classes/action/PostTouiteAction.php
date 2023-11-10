@@ -44,107 +44,86 @@ class PostTouiteAction extends Action
                   </div>
                   HTML;
         } else if ($this->http_method == "POST") {
-                $connection = ConnectionFactory::makeConnection();
+            $connection = ConnectionFactory::makeConnection();
 
-                // si l'utilisateur n'est pas connecté, alors on le redirige vers la page pour se connecter
-                if (!isset($_SESSION['utilisateur'])) {
-                    header('Location: ?action=signin');
-                    exit;
-                }
-
-                try {
-
-
-                    // ID de l'utilisateur de la session
-                    $utilisateurID = $_SESSION['utilisateur']['userID'];
-
-                    // Valeurs du touite
-                    $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_SPECIAL_CHARS);
-                    $description = $_POST['texte'];
-                    $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
-
-                    // insertion dans la table touites
-                    $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
-                    $query_touite->bindParam(':texte', $texte);
-                    $query_touite->bindParam(':datePublication', $datePublication);
-                    $query_touite->execute();
-
-                    // Ajoutez cette vérification
-                    if ($query_touite->rowCount() === 0) {
-                        throw new \Exception("Erreur lors de l'insertion dans la table touites.");
-                    }
-
-                    // Si l'insertion dans touites s'est bien déroulée, alors on peut insérer dans touitesutilisateurs
-                    $touiteID = $connection->lastInsertId();
-
-                    $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
-                    $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
-                    $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
-                    $query_touite_utilisateur->execute();
-
-                    // Analyser le texte pour extraire les tags
-                    preg_match_all('/#([a-zA-Z0-9_]+)/', $texte, $matches);
-                    $tags = $matches[1];
-
-                    // Insérer les nouveaux tags dans la base de données
-                    foreach ($tags as $tag) {
-                        $tag = '#' . $tag;
-                        // On vérifie que les tags générés par les caractères spéciaux ne s'ajoutent pas dans la base de données.
-                        if(($tag != '#39') && ($tag != '#38') && ($tag != '#34') && ($tag != '#60') && ($tag != '#62') && ($tag != '#13') && ($tag != '#10')) {
-                            $this->insertTagIfNotExists($tag);
-                            $tagID = $this->getTagID($tag);
-                            $this->associateTagWithTouite($touiteID, $tagID);
-                        }
-                    }
-
-                    $mediaPath = null;
-                    $track_name = $_FILES['media']['name'];
-                    // Gérer le téléchargement du fichier (si un fichier est ajouté et vérifie son extension)
-                    if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
-                        if (substr($track_name, -4) === '.jpg' || substr($track_name, -5) === '.jpeg' || substr($track_name, -4) === '.png') {
-                            // fichier uploader
-                            $mediaPath = basename($track_name);
-                            move_uploaded_file($_FILES['media']['tmp_name'], 'images/' . $mediaPath);
-
-                            // insertion dans la table images
-                            $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
-                            $query_image->bindParam(':description', $description);
-                            $query_image->bindParam(':mediaPath', $mediaPath);
-
-                            $query_image->execute();
-
-                            $imageID = $connection->lastInsertId(); // Récupérer l'ID de la dernière image insérée
-
-                            // insertion dans la table touitesimages
-                            $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
-                            $query_touite_image->bindParam(":touiteID", $touiteID);
-                            $query_touite_image->bindParam(":imageID", $imageID);
-                            $query_touite_image->execute();
-                        } else {
-                            $post_touite_html .= "<p>Fichier interdit</p>";
-                        }
-                    }
-
-
-                    // Redirection vers la page d'accueil
-                    header('Location: ?action=default');
-                    exit;
-                } catch (\PDOException $e) {
-                    // Gérer l'erreur
-                    echo "test";
-                    $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
-
-
-                } catch (\Exception $e) {
-                    // Gérer l'erreur
-                    echo "touit";
-                    $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
-
-                }
+            // si l'utilisateur n'est pas connecté, alors on le redirige vers la page pour se connecter
+            if (!isset($_SESSION['utilisateur'])) {
+                header('Location: ?action=signin');
+                exit;
             }
+            try {
+                $utilisateurID = $_SESSION['utilisateur']['userID'];
+                $texte = filter_input(INPUT_POST, 'texte', FILTER_SANITIZE_SPECIAL_CHARS);
+                $description = $_POST['texte'];
+                $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
-            return $post_touite_html;
+                // insertion dans la table touites
+                $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
+                $query_touite->bindParam(':texte', $texte);
+                $query_touite->bindParam(':datePublication', $datePublication);
+                $query_touite->execute();
+
+                if ($query_touite->rowCount() === 0) {
+                    throw new \Exception("Erreur lors de l'insertion dans la table touites.");
+                }
+
+                // Si l'insertion dans touites s'est bien déroulée, alors on peut insérer dans touitesutilisateurs
+                $touiteID = $connection->lastInsertId();
+
+                $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
+                $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
+                $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
+                $query_touite_utilisateur->execute();
+
+                preg_match_all('/#([a-zA-Z0-9_]+)/', $texte, $matches);
+                $tags = $matches[1];
+
+                foreach ($tags as $tag) {
+                    $tag = '#' . $tag;
+                    // On vérifie que les tags générés par les caractères spéciaux ne s'ajoutent pas dans la base de données.
+                    if (($tag != '#39') && ($tag != '#38') && ($tag != '#34') && ($tag != '#60') && ($tag != '#62') && ($tag != '#13') && ($tag != '#10')) {
+                        $this->insertTagIfNotExists($tag);
+                        $tagID = $this->getTagID($tag);
+                        $this->associateTagWithTouite($touiteID, $tagID);
+                    }
+                }
+
+                $track_name = $_FILES['media']['name'];
+                if (isset($_FILES['media']) && $_FILES['media']['error'] == UPLOAD_ERR_OK) {
+                    if (substr($track_name, -4) === '.jpg' || substr($track_name, -5) === '.jpeg' || substr($track_name, -4) === '.png') {
+                        // fichier uploader
+                        $mediaPath = basename($track_name);
+                        move_uploaded_file($_FILES['media']['tmp_name'], 'images/' . $mediaPath);
+
+                        // insertion dans la table images
+                        $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
+                        $query_image->bindParam(':description', $description);
+                        $query_image->bindParam(':mediaPath', $mediaPath);
+
+                        $query_image->execute();
+
+                        $imageID = $connection->lastInsertId();
+
+                        // insertion dans la table touitesimages
+                        $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
+                        $query_touite_image->bindParam(":touiteID", $touiteID);
+                        $query_touite_image->bindParam(":imageID", $imageID);
+                        $query_touite_image->execute();
+                    } else {
+                        $post_touite_html .= "<p>Fichier interdit</p>";
+                    }
+                }
+
+                header('Location: ?action=default');
+                exit;
+            } catch (\PDOException $e) {
+                $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
+            } catch (\Exception $e) {
+                $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
+            }
         }
+        return $post_touite_html;
+    }
 
     // Fonction pour insérer un tag s'il n'existe pas déjà
     private function insertTagIfNotExists($tag)
@@ -163,17 +142,14 @@ class PostTouiteAction extends Action
                 $insertTagQuery->bindParam(':description', $tag, PDO::PARAM_STR); // Utilisez le même libellé comme description temporaire
                 $insertTagQuery->execute();
 
-                // Ajoutez cette vérification
                 if ($insertTagQuery->rowCount() === 0) {
                     throw new \Exception("Erreur lors de l'insertion dans la table tags.");
                 }
             }
         } catch (\Exception $e) {
-            // Gérer l'erreur
             echo 'Erreur lors de l\'insertion du tag : ' . $e->getMessage();
         }
     }
-
 
     private function getTagID($tag)
     {
@@ -186,13 +162,11 @@ class PostTouiteAction extends Action
 
             return $tagIDQuery->fetchColumn();
         } catch (\Exception $e) {
-            // Affichez des informations de débogage
             echo 'Erreur lors de la récupération du tagID : ' . $e->getMessage();
             return null;
         }
     }
 
-    // Fonction pour associer un tag à un touite
     private function associateTagWithTouite($touiteID, $tagID)
     {
         $connection = ConnectionFactory::makeConnection();
@@ -204,14 +178,11 @@ class PostTouiteAction extends Action
             $associateTagQuery->bindParam(':tagID', $tagID, PDO::PARAM_INT);
             $associateTagQuery->execute();
 
-            // Ajouter cette vérification
             if ($associateTagQuery->rowCount() === 0) {
                 throw new \Exception("Erreur lors de l'insertion dans la table touitestags.");
             }
         } catch (\Exception $e) {
-            // Gérer l'erreur
             return 'Erreur lors de l\'association du tag avec le touite : ' . $e->getMessage();
         }
     }
-
 }

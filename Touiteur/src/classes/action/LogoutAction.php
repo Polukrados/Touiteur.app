@@ -2,8 +2,6 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\auth\Auth;
-
 class LogoutAction extends Action
 {
 
@@ -15,7 +13,6 @@ class LogoutAction extends Action
             header("Location: ?action=default");
             exit;
         }
-
         return $add_user;
     }
 }
