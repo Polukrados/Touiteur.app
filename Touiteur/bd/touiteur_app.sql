@@ -230,10 +230,11 @@ CREATE TABLE `utilisateurs` (
 --
 
 INSERT INTO `utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VALUES
-                                                                                  (1, 'Dupont', 'Alice', 'alice.dupont@gmail.com', 'jaimemonchat'),
-                                                                                  (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', 'durandbob'),
-                                                                                  (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', 'azertyuiop'),
-                                                                                  (4, 'Moreau', 'Diana', 'diana.moreau@gmail.com', 'diana357');
+                                                                                  (1, 'Dupont', 'Alice', 'alice.dupont@gmail.com', '$2y$10$8xiooHDFoThl5lGciRhuIuk8tfMb7eKsaNO6vaOm7BqD9u./E.Oo.'),
+                                                                                  (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', '$2y$10$9II7AtfWq2CmfDX9wh.Wzecy5OFhNKYksZweM1soAH84ZJPHOt09.'),
+                                                                                  (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', '$2y$10$vlbqiAvd4rg0iY4Fv60dne3lXrtclwPXhf9guln59SS3Ww..lagim'),
+                                                                                  (4, 'Moreau', 'Diana', 'diana.moreau@gmail.com', '$2y$10$8srs7.d6FTXGP0adp3log.U.yaHVJj8dONnZKSLCCqHREi1P383L2'),
+                                                                                    (5,'Root','Root','root@gmail.com','$2y$10$pXPoEd/24G30rb.tzhs5G.RfOao81yWfdo6.1e0D7NzBcgnD/LZ0u');
 
 --
 -- Index pour les tables déchargées
