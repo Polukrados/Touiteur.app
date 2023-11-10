@@ -49,7 +49,6 @@ abstract class Action
             if($display===true){
                 $query->bindParam(':user_id1', $userID, PDO::PARAM_INT);
                 $query->bindParam(':user_id2', $userID, PDO::PARAM_INT);
-
             }else{
                 $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
             }
@@ -150,6 +149,18 @@ abstract class Action
                             </ul>
                         </nav>";
             }
+            if($display===true){
+                $res.="<form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
+                        <input type='text' placeholder='S abonner à un tag' name='f' id='tagSearch' class='input-icon-email'>
+                        <input type='submit' value='S abonner'>
+                    </form>
+                    <br>
+                    <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
+                        <input type='text' placeholder='Se désabonner d un tag' name='u' id='tagSearch' class='input-icon-email'>
+                        <input type='submit' value='Se désabonner'>
+                    </form>
+                    <br>";
+            }
             return <<<HTML
             $res
             
@@ -218,6 +229,8 @@ abstract class Action
 
         return $pageContent;
     }
+
+
 
     abstract public function execute(): string;
 }

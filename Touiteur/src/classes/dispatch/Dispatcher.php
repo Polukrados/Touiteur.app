@@ -45,6 +45,12 @@ class Dispatcher
             case 'display-abo':
                 $requete = new action\DisplayAbonnementTouitesAction();
                 break;
+            case 'follow-tag':
+                $requete = new action\FollowTagAction();
+                break;
+            case 'unfollow-tag':
+                $requete = new action\UnfollowTagAction();
+                break;
             default:
                 $requete = new action\DefaultAction();
                 break;
