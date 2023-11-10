@@ -17,7 +17,7 @@ class SigninAdmin extends ActionAdmin
     public function execute(): string
     {
         $signin = "";
-        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        if ($this->http_method === 'GET') {
             $signin .= <<<HTML
                 <header> 
                   <p class ='libelle_page_courante'>Connexion Admin</p> 
@@ -25,7 +25,7 @@ class SigninAdmin extends ActionAdmin
                   </nav>
                 </header>
                       <div class="form-container">
-                            <form class="form" action='?action=defaultadmin' method='get'>
+                            <form class="form" action='?action=defaultadmin' method='post'>
                             <h1> Connectez-vous au back-office </h1>
                             <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                             <div class="password-container">
@@ -36,15 +36,19 @@ class SigninAdmin extends ActionAdmin
                             <input type='submit' value='Se connecter'>
                       </div>
               HTML;
-        } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        } else {
             $email = $_POST["email"];
             $mdp = $_POST["password"];
 
             // vérifie si le compte existe et si c'est le cas, affiche les touites de ses abonnements
-            if (AuthAdmin::authenticate($email, $mdp) && $_SESSION['utilisateur']['email'] == "root@gmail.com" && $_SESSION['utilisateur']['mdp'] == "rootrootroot") {
-                header("Location: ?action=defaultadmin");
-                exit();
-            } else { // Affiche une erreur si la connexion a échoué
+            if (AuthAdmin::authenticate($email, $mdp)) {
+                echo 'test';
+                if ($_SESSION['utilisateur']['email']=="root@gmail.com" && password_verify('rootrootroot', $_SESSION['utilisateur']['mdp'])) {
+                    header("Location: ?action=defaultadmin");
+                    exit();
+                    echo 'test';
+                }
+        } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
                                                 <header> 
                                                 <p class ='libelle_page_courante'>Connexion Admin</p> 
@@ -52,7 +56,7 @@ class SigninAdmin extends ActionAdmin
                                                 </nav>
                                                 </header>
                                                 <div class="form-container">
-                                                <form class="form" action='?action=defaultadmin' method='get'>
+                                                <form class="form" action='?action=defaultadmin' method='post'>
                                                 <h1> Connectez-vous au back-office </h1>
                                                 <input type='email' placeholder='Email' name='email' id='email' class='input-icon-email' required><br><br>
                                                 <div class="password-container">
