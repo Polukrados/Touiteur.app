@@ -30,11 +30,13 @@ class DeleteTouiteAction extends Action
         if ($this->http_method == "GET") {
             $touiteID = $_GET['tweet_id'];
             $html = <<<HTML
-                    <div> Voulez-vous vraiment supprimer ce touite ?</div>
-                    <form method=post>
-                        <input type=hidden name=touiteID value=$touiteID>
-                        <input type=submit value=Supprimer>
-                    </form>
+                    <div style="margin: auto; height: 50%" class="libelle_page_courante">
+                        <p> Voulez-vous vraiment supprimer ce touite ?</p>
+                        <form class="form" method=post>
+                            <input type=hidden name=touiteID value=$touiteID>
+                            <input type=submit value=Supprimer>
+                        </form>
+                    </div>
             HTML;
             return $html;
         } else if ($this->http_method == "POST") {

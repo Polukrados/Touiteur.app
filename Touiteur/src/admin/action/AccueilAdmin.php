@@ -18,7 +18,7 @@ class AccueilAdmin extends ActionAdmin
                   <nav class="menu-nav">
                   </nav>
                 </header>
-                      <div class="buttons-container">
+                      <div class="form-container">
                             <a href="?action=influenceursadmin" class="btn-influenceurs">Voir les Influenceurs</a>
 
                             <a href="?action=tendancesadmin" class="btn-tendances">Voir les Tendances</a>

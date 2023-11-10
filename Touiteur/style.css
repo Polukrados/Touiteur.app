@@ -1,5 +1,7 @@
+/* Importation de Bibliothèques pour les polices */
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
 /************************************************************/
 /*                       Styles Globaux                     */
 /************************************************************/
@@ -41,16 +43,7 @@ body, html {
     line-height: 1.6;
 }
 
-.container-titre {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    height: 20vh;
-    padding: 20px;
-}
-
+/* Logo Touiteur */
 .logo_touiteur img {
     height: auto;
     width: 8vw;
@@ -59,6 +52,10 @@ body, html {
     top: 0;
     margin: 10px;
 }
+
+/************************************************************/
+/*                      Titre Appli                         */
+/************************************************************/
 
 #touiteur {
     font-size: 4.5em;
@@ -107,18 +104,25 @@ body, html {
     display: inline-block;
 }
 
-/* Style de base pour les conteneurs */
+.container-titre {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    height: 20vh;
+    padding: 20px;
+}
+
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Barre de Navigation */
-.container {
-    position: relative;
-    z-index: 1000;
-}
+/************************************************************/
+/*                   Menu de profile                        */
+/************************************************************/
 
 .menu {
     position: fixed;
@@ -233,7 +237,6 @@ body, html {
         right: 10px;
     }
 }
-
 
 /************************************************************/
 /*                         Tweets                           */
@@ -417,10 +420,9 @@ body, html {
 }
 
 /************************************************************/
-/*                     Profil                               */
+/*                     Profile Style                        */
 /************************************************************/
 
-/* En-tête du profil avec nom et bouton de suivi */
 .profile-header {
     background: var(--secondary-background-color);
     padding: 20px;
@@ -450,7 +452,6 @@ body, html {
     0 20px 20px rgba(0,0,0,.15);
 }
 
-/* Bouton de suivi */
 .follow-btn {
     background-color: var(--button-color);
     color: var(--text-color);
@@ -475,408 +476,7 @@ body, html {
     margin-top: 10px;
 }
 
-
-
-
-/************************************************************/
-/*                     Buttons and Icons                    */
-/************************************************************/
-
-.button {
-}
-
-.icon {
-}
-
-.icon svg {
-    fill: white;
-    width: 1em;
-    height: 1em;
-}
-
-
-/************************************************************/
-/*                    Éléments Formulaires                  */
-/************************************************************/
-
-.libelle_page_courante {
-    font-size: 2em; /* Taille de police conséquente pour l'importance */
-    margin: 20px auto; /* Centrage horizontal */
-    border: 2px solid var(--border-color); /* Utilisation de la couleur de bordure définie dans :root */
-    padding: 10px; /* Espacement intérieur */
-    border-radius: var(--border-radius); /* Bordures arrondies à partir de la variable :root */
-    text-align: center; /* Texte centré */
-    justify-content: center; /* Centrage du contenu flex en horizontal */
-    align-items: center; /* Centrage du contenu flex en vertical */
-    width: 50%; /* Largeur de l'élément */
-    background-color: var(--secondary-background-color); /* Couleur d'arrière-plan secondaire */
-    color: var(--text-color); /* Couleur du texte */
-    box-shadow: var(--box-shadow); /* Ombre portée pour un effet de profondeur */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition pour les effets de survol */
-}
-
-.libelle_page_courante:hover {
-    transform: translateY(-3px); /* Légère élévation au survol */
-    box-shadow: 0 6px 12px var(--shadow-color); /* Ombre portée plus prononcée au survol */
-}
-
-.libelle_page_courante img {
-    width: 100px;
-    height: auto;
-}
-
-.libelle_page_courante a {
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-.retour-arriere {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin: 10px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: whitesmoke;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.retour-arriere:hover {
-    scale: 1.05;
-    cursor: move;
-}
-
-.retour-arriere img {
-    width: 30px;
-    height: 30px;
-}
-
-.menu-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    font-size: 1.5em;
-    justify-content: center;
-}
-
-.menu-nav li {
-    margin: 0 15px;
-}
-
-.menu-nav a {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.59);
-    font-weight: bold;
-}
-
-.menu-nav a:hover {
-    text-decoration: dashed underline;
-    color: white;
-}
-
-.form-container {
-    background-color: #32363c;
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55);
-    border-radius: 20px;
-}
-
-.form h1 {
-    text-align: center;
-    color: #007bff;
-    margin-bottom: 20px;
-}
-
-.form input[type=text],
-.form input[type=email],
-.form input[type=password],
-.form input[type=file] {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-}
-
-.password-container {
-    position: relative;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 15px;
-    cursor: pointer;
-    color: #232222 !important;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    border: 1px solid #006bff;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-upload:hover {
-    background-color: #0056b3;
-}
-
-.form textarea {
-    box-sizing: border-box;
-    width: 100%;
-    height: 200px;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    resize: none;
-}
-
-.form input[type=submit] {
-    width: 100%;
-    padding: 15px;
-    background-color: rgba(204, 51, 103, 0.83);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form input[type=submit]:hover {
-    background-color: #ff4081;
-}
-
-.separator{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto;
-    width: 40%;
-    border: 2px solid rgba(255, 255, 255, 0.51);
-
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .menu ul {
-        flex-direction: column;
-    }
-
-    .menu li {
-        margin: 10px 0;
-    }
-}
-
-
-/************************************************************/
-/*                    Template Feed                         */
-/*                Profil, Touite Details, ...               */
-/************************************************************/
-
-.template-all {
-    background-color: #32363c;
-    color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    margin: auto;
-    width: 70%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    overflow-wrap: break-word;
-
-}
-
-.template-all .user {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-.template-all .user a {
-    color: rgba(0, 123, 255, 0.64);
-    text-decoration: none;
-}
-
-.template-all .user a:hover {
-    color: rgb(0, 166, 255);
-}
-
-.template-all .suivre {
-    transition: transform 0.3s ease-in-out;
-    display: inline-block;
-}
-
-.icon-validate {
-    display: none;
-}
-
-.rotated-icon {
-    transform: rotate(180deg);
-}
-
-.template-all .content {
-    font-size: 1em;
-    margin-bottom: 10px;
-    background-color: #40454f;
-    padding: 10px;
-    border-radius: 6px;
-}
-
-.template-all .content a {
-    color: #ff4081;
-    text-decoration: none;
-}
-
-.template-all .content a:hover {
-    text-decoration: underline;
-}
-
-.template-all .timestamp {
-    font-size: 0.8em;
-    color: #999999;
-    margin-bottom: 10px;
-}
-
-.template-all .details-link {
-    font-size: 0.9em;
-    margin-top: 10px;
-    padding: 5px 10px;
-    border-radius: 20px;
-    background-color: #5b5757;
-    color: lightgrey;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-}
-
-.template-all img {
-    width: 50%;
-    height: 50%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-.template-all input[type=submit] {
-    padding: 10px 20px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 20px;
-    color: white;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.template-all input[type=submit]:hover {
-    background-color: #0056b3;
-}
-
-.pagination{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 2px solid rgba(74, 81, 86, 0.5);
-    border-bottom: 2px solid rgba(74, 81, 86, 0.5);
-    padding: 10px 0;
-    gap: 10px;
-    width: 30%;
-    margin: 20px auto;
-}
-
-.pagination a{
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 10px;
-    background-color: var(--button-hover-color);
-    margin: 0 5px;
-    transition: background-color 0.2s ease;
-}
-
-.pagination a:hover{
-    background-color: var(--button-color);
-}
-
-
-/************************************************************/
-/*                    Suivi Tags                            */
-/************************************************************/
-
-.tweet-detail {
-    background-color: #32363c;
-    color: #ffffff;
-    border: 1px solid #007bff;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 600px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: var(--secondary-font);
-}
-
-.tweet-detail .user,
-.tweet-detail .content,
-.tweet-detail .timestamp,
-.tweet-detail .score {
-    margin-bottom: 15px;
-}
-
-.tweet-detail .score {
-    font-weight: bold;
-    color: #ff4081;
-}
-
-.tweet-detail img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-top: 15px;
-}
-
-/************************************************************/
-/*                         Footer                           */
-/************************************************************/
-
-footer {
-    background-color: #ffffff;
-    padding: 10px 0;
-    border-top: 1px solid #eaeaea;
-    text-align: center;
-    font-size: 0.8em;
-    color: #999;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Boîte modale */
+/* Boîte modale pour la liste des followers */
 .modal {
     display: none;
     position: fixed;
@@ -1026,4 +626,449 @@ footer {
         right: 5px;
         font-size: 28px;
     }
+}
+
+/**********************************************/
+/*                     Admin                  */
+/**********************************************/
+
+.btn-influenceurs, .btn-tendances {
+     display: inline-block;
+     padding: 10px 20px;
+     margin: 5px;
+     font-size: 16px;
+     font-weight: bold;
+     color: white;
+     text-decoration: none;
+     border-radius: 25px;
+     transition: all 0.3s ease-in-out;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     border: none;
+     cursor: pointer;
+}
+
+.btn-influenceurs {
+    background: #5F4B8B; /* Fallback for older browsers without gradients */
+    background: linear-gradient(45deg, #5F4B8B, #E69A8DFF);
+}
+
+.btn-tendances {
+    background: #009688; /* Fallback for older browsers without gradients */
+    background: linear-gradient(45deg, #009688, #4db6ac);
+}
+
+.btn-influenceurs:hover, .btn-tendances:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-influenceurs:active, .btn-tendances:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+.influenceurs-container {
+     max-width: 600px;
+     margin: 20px auto;
+     padding: 20px;
+     background: var(--secondary-background-color);
+     border-radius: 8px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.influenceur {
+    padding: 10px;
+    border-bottom: 1px solid #e1e1e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.influenceurs-container:hover {
+    background-color: var(--background-color-tweet);
+}
+
+.influenceur:last-child {
+    border-bottom: none;
+}
+
+.influenceur p {
+    margin: 0;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+.influenceur p:first-child {
+    font-weight: bold;
+}
+
+.influenceur p:last-child {
+    font-size: 16px;
+    color: #989696;
+}
+
+/************************************************************/
+/*                    Éléments Naviguation                  */
+/************************************************************/
+
+.libelle_page_courante {
+    font-size: 2em;
+    margin: 20px auto;
+    border: 2px solid var(--border-color);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.libelle_page_courante:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.libelle_page_courante img {
+    width: 100px;
+    height: auto;
+}
+
+.libelle_page_courante a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.retour-arriere {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.retour-arriere:hover {
+    scale: 1.05;
+    cursor: move;
+}
+
+.retour-arriere img {
+    width: 30px;
+    height: 30px;
+}
+
+.menu-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    font-size: 1.5em;
+    justify-content: center;
+}
+
+.menu-nav li {
+    margin: 0 15px;
+}
+
+.menu-nav a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.59);
+    font-weight: bold;
+}
+
+.menu-nav a:hover {
+    text-decoration: dashed underline;
+    color: white;
+}
+
+/************************************************************/
+/*                    Template Formulaire                   */
+/*                   Connexion, Inscription                 */
+/************************************************************/
+
+.form-container {
+    background-color: #32363c;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55);
+    border-radius: 20px;
+}
+
+.form h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.form input[type=text],
+.form input[type=email],
+.form input[type=password],
+.form input[type=file] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 15px;
+    cursor: pointer;
+    color: #232222 !important;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #006bff;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+.form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    resize: none;
+}
+
+.form input[type=submit] {
+    width: 100%;
+    padding: 15px;
+    background-color: rgba(204, 51, 103, 0.83);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form input[type=submit]:hover {
+    background-color: #ff4081;
+}
+
+.separator{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    width: 40%;
+    border: 2px solid rgba(255, 255, 255, 0.51);
+
+}
+
+@media (max-width: 768px) {
+    .menu ul {
+        flex-direction: column;
+    }
+
+    .menu li {
+        margin: 10px 0;
+    }
+}
+
+
+/************************************************************/
+/*                    Template Feed                         */
+/*                Profil, Touite, Details, ...              */
+/************************************************************/
+
+.template-all {
+    background-color: #32363c;
+    color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: auto;
+    width: 70%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow-wrap: break-word;
+}
+
+.template-all .user {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.template-all .user a {
+    color: rgba(0, 123, 255, 0.64);
+    text-decoration: none;
+}
+
+.template-all .user a:hover {
+    color: rgb(0, 166, 255);
+}
+
+.template-all .suivre {
+    transition: transform 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.template-all .content {
+    font-size: 1em;
+    margin-bottom: 10px;
+    background-color: #40454f;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.template-all .content a {
+    color: #ff4081;
+    text-decoration: none;
+}
+
+.template-all .content a:hover {
+    text-decoration: underline;
+}
+
+.template-all .timestamp {
+    font-size: 0.8em;
+    color: #999999;
+    margin-bottom: 10px;
+}
+
+.template-all .details-link {
+    font-size: 0.9em;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: #5b5757;
+    color: lightgrey;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.template-all img {
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.template-all input[type=submit] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.template-all input[type=submit]:hover {
+    background-color: #0056b3;
+}
+
+/************************************************************/
+/*                    Pagination                            */
+/************************************************************/
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 2px solid rgba(74, 81, 86, 0.5);
+    border-bottom: 2px solid rgba(74, 81, 86, 0.5);
+    padding: 10px 0;
+    gap: 10px;
+    width: 30%;
+    margin: 20px auto;
+}
+
+.pagination a{
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: var(--button-hover-color);
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
+}
+
+.pagination a:hover{
+    background-color: var(--button-color);
+}
+
+
+/************************************************************/
+/*                    Suivi Tags                            */
+/************************************************************/
+
+.tweet-detail {
+    background-color: #32363c;
+    color: #ffffff;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: var(--secondary-font);
+}
+
+.tweet-detail .user,
+.tweet-detail .content,
+.tweet-detail .timestamp,
+.tweet-detail .score {
+    margin-bottom: 15px;
+}
+
+.tweet-detail .score {
+    font-weight: bold;
+    color: #ff4081;
+}
+
+.tweet-detail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/************************************************************/
+/*                         Footer                           */
+/************************************************************/
+
+footer {
+    background-color: var(--secondary-background-color);
+    padding: 10px 0;
+    border-top: 1px solid #eaeaea;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--secondary-text-color);
 }
