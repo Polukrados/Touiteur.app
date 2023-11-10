@@ -9,17 +9,13 @@ class TendanceAdmin extends ActionAdmin{
 
     public function execute(): string
     {
-        // Connexion à la base de données
         $db = ConnectionFactoryAdmin::makeConnection();
-
-        // Requête pour récupérer les tendances
         $query = $db->query("SELECT tags.libelle, COUNT(touitestags.TagID) as count
                              FROM touitestags
                              JOIN tags ON touitestags.TagID = tags.tagID
                              GROUP BY touitestags.TagID
                              ORDER BY count desc");
 
-        // Récupération des tendances
         $trendingTags = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $tagLabel = $row['libelle'];
@@ -35,8 +31,7 @@ class TendanceAdmin extends ActionAdmin{
             HTML;
         }
 
-        // Construire la page avec les tendances
-        $pageContent = <<<HTML
+        return <<<HTML
             <header>
                 <div class="libelle_page_courante">Tendances</div>
                 <nav class="menu-nav">
@@ -47,7 +42,5 @@ class TendanceAdmin extends ActionAdmin{
             </header>
                 $trendingTags
         HTML;
-
-        return $pageContent;
     }
 }

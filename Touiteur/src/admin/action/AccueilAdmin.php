@@ -11,7 +11,7 @@ class AccueilAdmin extends ActionAdmin
 
     public function execute(): string
     {
-        $pageContent = "";
+        if ($this->http_method === 'GET') {
             $pageContent = <<<HTML
                 <header> 
                   <p class ='libelle_page_courante'>Accueil Admin</p> 
@@ -24,7 +24,20 @@ class AccueilAdmin extends ActionAdmin
                             <a href="?action=tendancesadmin" class="btn-tendances">Voir les Tendances</a>
                         </div>
               HTML;
+        } else {
+            $pageContent = <<<HTML
+                <header> 
+                  <p class ='libelle_page_courante'>Accueil Admin</p> 
+                  <nav class="menu-nav">
+                  </nav>
+                </header>
+                      <div class="form-container">
+                            <a href="?action=influenceursadmin" class="btn-influenceurs">Voir les Influenceurs</a>
 
+                            <a href="?action=tendancesadmin" class="btn-tendances">Voir les Tendances</a>
+                        </div>
+              HTML;
+        }
         return $pageContent;
     }
 }

@@ -2,10 +2,7 @@
 
 namespace iutnc\admin\action;
 
-use iutnc\admin\action\ActionAdmin;
 use iutnc\admin\auth\AuthAdmin;
-use iutnc\admin\db\ConnectionFactoryAdmin;
-use PDO;
 
 class SigninAdmin extends ActionAdmin
 {
@@ -21,17 +18,9 @@ class SigninAdmin extends ActionAdmin
             $signin .= <<<HTML
                 <header> 
                   <p class ='libelle_page_courante'>Connexion Admin</p> 
-                  <nav class="menu-nav">
-                  </nav>
                     <nav class="menu">
-                    <div class="photo-profil">
-                        <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                            <img src="images/profile_icone.png" alt="Icône de profil">
-                        </a>
-                    </div>
                     <ul>
                         <li><a href="?action=post-touite" class="publish-btn">Publier un touite</a></li>
-                        <li><a href="?action=default"><i class="fa-solid fa-house"></i></a></li>
                     </ul>
                     </nav>
                 </header>
@@ -50,16 +39,12 @@ class SigninAdmin extends ActionAdmin
         } else {
             $email = $_POST["email"];
             $mdp = $_POST["password"];
-
-            // vérifie si le compte existe et si c'est le cas, affiche les touites de ses abonnements
             if (AuthAdmin::authenticate($email, $mdp)) {
-                echo 'test';
-                if ($_SESSION['utilisateur']['email']=="root@gmail.com" && password_verify('rootrootroot', $_SESSION['utilisateur']['mdp'])) {
+                if ($_SESSION['utilisateur']['email'] == "root@gmail.com" && password_verify('rootrootroot', $_SESSION['utilisateur']['mdp'])) {
                     header("Location: ?action=defaultadmin");
                     exit();
-                    echo 'test';
                 }
-        } else { // Affiche une erreur si la connexion a échoué
+            } else {
                 $signin .= <<<HTML
                                                 <header> 
                                                 <p class ='libelle_page_courante'>Connexion Admin</p> 
@@ -84,6 +69,4 @@ class SigninAdmin extends ActionAdmin
         }
         return $signin;
     }
-
-
 }

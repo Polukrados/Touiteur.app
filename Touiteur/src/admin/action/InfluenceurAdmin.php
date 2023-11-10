@@ -5,23 +5,19 @@ namespace iutnc\admin\action;
 use iutnc\admin\db\ConnectionFactoryAdmin;
 use PDO;
 
-class InfluenceurAdmin extends ActionAdmin{
+class InfluenceurAdmin extends ActionAdmin
+{
 
     public function execute(): string
     {
-        // Connexion à la base de données
         $db = ConnectionFactoryAdmin::makeConnection();
-
-        // Requête pour récupérer les utilisateurs les plus suivis
         $query = $db->prepare("SELECT utilisateurs.*, COUNT(suivi.suiviID) AS followers_count
                                FROM utilisateurs
                                LEFT JOIN suivi ON utilisateurs.utilisateurID = suivi.suiviID
                                GROUP BY utilisateurs.utilisateurID
                                ORDER BY followers_count DESC");
-
         $query->execute();
 
-        // Construction de la liste des influenceurs
         $influencers = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $userName = $row['prenom'] . ' ' . $row['nom'];
@@ -37,8 +33,7 @@ class InfluenceurAdmin extends ActionAdmin{
             HTML;
         }
 
-        // Construction de la page
-        $pageContent = <<<HTML
+        return <<<HTML
             <header>
                 <p class='libelle_page_courante'>Influenceurs</p>
                 <nav class="menu-nav">
@@ -53,7 +48,5 @@ class InfluenceurAdmin extends ActionAdmin{
                 $influencers
             </div>
         HTML;
-
-        return $pageContent;
     }
 }
