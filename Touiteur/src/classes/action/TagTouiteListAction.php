@@ -2,16 +2,13 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\action\Action;
-use iutnc\touiteur\db\ConnectionFactory;
-use PDO;
-
 class TagTouiteListAction extends Action
 {
     public function __construct()
     {
         parent::__construct();
     }
+
     public function execute(): string
     {
         $pageContent = "";
@@ -26,11 +23,9 @@ class TagTouiteListAction extends Action
                     LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
                     WHERE Tags.TagID = :tag_id
                     ORDER BY Touites.datePublication DESC
-                    LIMIT :limit OFFSET :offset",true);
+                    LIMIT :limit OFFSET :offset", true);
 
         }
         return $pageContent;
-
     }
-
 }

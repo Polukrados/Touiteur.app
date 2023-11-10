@@ -3,9 +3,6 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
-use iutnc\touiteur\user\User;
-use iutnc\Touiteur\db\ConnectionFactory;
-use PDO;
 
 class Signin extends Action
 {
@@ -78,6 +75,4 @@ class Signin extends Action
         }
         return $signin;
     }
-
-
 }

@@ -2,18 +2,12 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\action\Action;
-use iutnc\touiteur\db\ConnectionFactory;
-use PDO;
-
 class UserTouiteListAction extends Action
 {
     public function __construct()
     {
         parent::__construct();
     }
-
-
 
     public function execute(): string
     {
@@ -33,6 +27,5 @@ class UserTouiteListAction extends Action
 
         }
         return $pageContent;
-
     }
 }

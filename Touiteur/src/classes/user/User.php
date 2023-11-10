@@ -2,9 +2,6 @@
 
 namespace iutnc\touiteur\user;
 
-use iutnc\touiteur\db\ConnectionFactory;
-use PDO;
-
 class User
 {
     private int $userID;
