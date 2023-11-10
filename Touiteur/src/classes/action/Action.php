@@ -120,22 +120,47 @@ abstract class Action
                                 </div>
                                 <div class="timestamp">Publié le : $timestamp</div>
                                 <a class="details-link" href="?action=details&tweet_id=$tweetID">Voir les détails</a>
-                                <div class="tweet-actions">
-                                    <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
-                                        <i class="fa-solid fa-thumbs-up"></i>
-                                    </a>
-                                    <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
-                                        <i class="fa-solid fa-thumbs-down"></i>
-                                    </a>
-                                    <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
-                                        <i class="fa-solid fa-retweet"></i>
-                                    </a>
-                                    <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
-                                        <i class="fa-solid fa-reply"></i>
-                                    </a>
-                                </div>
-                            </div>
                             HTML;
+                if($_SESSION['utilisateur']['userID'] == $userID) {
+                    $tweets.= <<<HTML
+                                                              <div class="tweet-actions">
+                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                                      <i class="fa-solid fa-thumbs-up"></i>
+                                                                  </a>
+                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                                      <i class="fa-solid fa-thumbs-down"></i>
+                                                                  </a>
+                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                                      <i class="fa-solid fa-retweet"></i>
+                                                                  </a>
+                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                                      <i class="fa-solid fa-reply"></i>
+                                                                  </a>
+                                                                  <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
+                                                                      <i class="fa-solid fa-trash"></i>
+                                                                  </a>
+                                                              </div>
+                                                          </div>
+                                                          HTML;
+                } else {
+                    $tweets.= <<<HTML
+                                                              <div class="tweet-actions">
+                                                                  <a href="?action=like&tweet_id=$tweetID" class="tweet-action like">
+                                                                      <i class="fa-solid fa-thumbs-up"></i>
+                                                                  </a>
+                                                                  <a href="?action=dislike&tweet_id=$tweetID" class="tweet-action dislike">
+                                                                      <i class="fa-solid fa-thumbs-down"></i>
+                                                                  </a>
+                                                                  <a href="?action=retweet&tweet_id=$tweetID" class="tweet-action retweet">
+                                                                      <i class="fa-solid fa-retweet"></i>
+                                                                  </a>
+                                                                  <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
+                                                                      <i class="fa-solid fa-reply"></i>
+                                                                  </a>
+                                                              </div>
+                                                          </div>
+                                                          HTML;
+                }
             }
         }
         // Nombre total de touites

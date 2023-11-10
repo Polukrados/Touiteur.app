@@ -385,7 +385,8 @@ body, html {
 .tweet-action.like,
 .tweet-action.dislike,
 .tweet-action.retweet,
-.tweet-action.reply{
+.tweet-action.reply,
+.tweet-action.trash{
     margin-top: 15px;
     color: grey;
     transform: scale(1.1);
