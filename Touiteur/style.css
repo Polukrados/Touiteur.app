@@ -160,6 +160,7 @@ body, html {
     transition: all 0.3s ease;
     color: #cccccc;
     font-family: "JetBrains Mono Thin";
+    overflow-wrap: break-word;
 }
 
 .tweet a {
@@ -239,6 +240,10 @@ body, html {
     font-size: 0.8em;
     color: #999999;
     margin-top: 55px;
+}
+
+.tweet-detail {
+    overflow-wrap: break-word;
 }
 
 .tweet .details-link {
