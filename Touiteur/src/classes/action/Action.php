@@ -45,7 +45,7 @@ abstract class Action
             $query->bindParam(':tag_id', $tagID, PDO::PARAM_INT);
         }
         if ($listUser === true || $user === true||$display===true) {
-            $userID = $_SESSION['utilisateur']['userID'];
+            $userID = $_GET['user_id'];
             if($display===true){
                 $query->bindParam(':user_id1', $userID, PDO::PARAM_INT);
                 $query->bindParam(':user_id2', $userID, PDO::PARAM_INT);
