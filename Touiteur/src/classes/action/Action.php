@@ -97,6 +97,15 @@ abstract class Action
                                                     <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
                                                         <i class="fa-solid fa-reply"></i>
                                                     </a>
+                                            HTML;
+                                            if ($_SESSION['utilisateur']['userID'] == $userID) {
+                                                $tweets.= <<<HTML
+                                                            <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </a>
+                                                HTML;
+                                            }
+                                            $tweets.= <<<HTML
                                                 </div>
                                             </div>
                                             HTML;
@@ -134,12 +143,18 @@ abstract class Action
                                                                                   <a href="?action=reply&tweet_id=$tweetID" class="tweet-action reply">
                                                                                       <i class="fa-solid fa-reply"></i>
                                                                                   </a>
-                                                                                  <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
-                                                                                      <i class="fa-solid fa-trash"></i>
-                                                                                  </a>
+                                 HTML;
+                                                                              if ($_SESSION['utilisateur']['userID'] == $userID) {
+                                                                                $tweets.= <<<HTML
+                                                                                         <a href="?action=delete&tweet_id=$tweetID" class="tweet-action trash">
+                                                                                            <i class="fa-solid fa-trash"></i>
+                                                                                         </a>
+                                                                                HTML;
+                                                                              }
+                                                                              $tweets.= <<<HTML
                                                                               </div>
                                                                           </div>
-                                HTML;
+                                                                          HTML;
                 }
             } else {
                 if ($tag === true || $listUser === true || $user === true) {
