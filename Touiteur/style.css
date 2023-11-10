@@ -61,7 +61,7 @@ body, html {
 }
 
 #touiteur {
-    font-size: 5em;
+    font-size: 4.5em;
     line-height: 1em;
     text-align: center;
     position: relative;
@@ -216,6 +216,7 @@ body, html {
 }
 
 .menu .photo-profil a img {
+    margin: auto;
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -655,6 +656,16 @@ body, html {
 
 .form input[type=submit]:hover {
     background-color: #ff4081;
+}
+
+.separator{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    width: 40%;
+    border: 2px solid rgba(255, 255, 255, 0.51);
+
 }
 
 /* Responsive Design */

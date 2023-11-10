@@ -182,23 +182,29 @@ abstract class Action
                         </nav>";
             }
             if($display===true){
-                $res.="<form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
-                        <input type='text' placeholder='S abonner à un tag' name='f' id='tagSearch' class='input-icon-email'>
-                        <input type='submit' value='S abonner'>
-                    </form>
-                    <br>
-                    <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
-                        <input type='text' placeholder='Se désabonner d un tag' name='u' id='tagSearch' class='input-icon-email'>
-                        <input type='submit' value='Se désabonner'>
-                    </form>
-                    <br>";
+                $res.="
+                        <div class='form-container'>
+                            <h2 style='text-align: center'>Tags</h2>
+                            <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
+                                <input type='text' placeholder='S abonner à un tag' name='f' id='tagSearch' class='input-icon-email'>
+                                <input type='submit' value='S abonner'>
+                            </form>
+                            <br>
+                            <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
+                                <input type='text' placeholder='Se désabonner d un tag' name='u' id='tagSearch' class='input-icon-email'>
+                                <input type='submit' value='Se désabonner'>
+                            </form>
+                        </div>
+                        <div class='separator'></div>
+                        <h2 style='text-align: center'>Liste des Touites dans lesquels vos Abonnements Tags apparaissent !</h2>
+                    ";
             }
             return <<<HTML
                         $res
                         <nav class="menu">
                             <div class="photo-profil">
                                 <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                                    <img src="images/gaetan.png" alt="Icône de profil">
+                                    <img src="images/profile_icone.png" alt="Icône de profil">
                                 </a>
                             </div>
                             <ul>
@@ -249,7 +255,7 @@ abstract class Action
                     <nav class="menu">
                     <div class="photo-profil">
                         <a href="#lien_vers_profil_peut_etre_pas_oblige">
-                            <img src="images/gaetan.png" alt="Icône de profil">
+                            <img src="images/profile_icone.png" alt="Icône de profil">
                         </a>
                     </div>
                     <ul>
