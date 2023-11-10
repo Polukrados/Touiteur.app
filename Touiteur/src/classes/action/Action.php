@@ -175,6 +175,7 @@ abstract class Action
         for ($i = 1; $i <= $totalPages; $i++) {
             $paginationLinks .= "<a href='?action=default&page=$i'>$i</a> ";
         }
+
         $res = "";
         $pasabo = "<div class='tweets'>
             $tweets
