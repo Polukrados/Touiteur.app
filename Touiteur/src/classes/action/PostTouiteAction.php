@@ -89,7 +89,8 @@ class PostTouiteAction extends Action
                     // Insérer les nouveaux tags dans la base de données
                     foreach ($tags as $tag) {
                         $tag = '#' . $tag;
-                        if($tag != '#39') {
+                        // On vérifie que les tags générés par les caractères spéciaux ne s'ajoutent pas dans la base de données.
+                        if(($tag != '#39') && ($tag != '#38') && ($tag != '#34') && ($tag != '#60') && ($tag != '#62') && ($tag != '#13') && ($tag != '#10')) {
                             $this->insertTagIfNotExists($tag);
                             $tagID = $this->getTagID($tag);
                             $this->associateTagWithTouite($touiteID, $tagID);
@@ -133,16 +134,10 @@ class PostTouiteAction extends Action
                     $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
 
 
-
-                    // Ajouter des informations de débogage
-                    file_put_contents('error_log.txt', '[' . date('Y-m-d H:i:s') . '] PDOException: ' . $e->getMessage() . PHP_EOL, FILE_APPEND);
                 } catch (\Exception $e) {
                     // Gérer l'erreur
                     $post_touite_html .= "<p>Erreur lors de la publication du touite.</p>";
 
-
-                    // Ajouter des informations de débogage
-                    file_put_contents('error_log.txt', '[' . date('Y-m-d H:i:s') . '] Exception: ' . $e->getMessage() . PHP_EOL, FILE_APPEND);
                 }
             }
 

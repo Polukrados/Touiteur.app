@@ -59,12 +59,20 @@ class ProfileUserAction extends Action
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
                 $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
+                $pseudo = $prenomfollower.'_'.$nomfollower;
                 $followerID = $row['utilisateurID']; // L'identifiant unique de l'utilisateur suiveur
-                $listefollowers .= "<div class='follower-item'>
+                // Ajoutez une condition pour exclure l'utilisateur actuel de la liste des followers
+                    if ($followerID != $_SESSION['utilisateur']['userID']) {
+                        $prenomfollower = htmlspecialchars($row['prenom'], ENT_QUOTES, 'UTF-8');
+                        $nomfollower = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8');
+                        $pseudo = $prenomfollower . '_' . $nomfollower;
+
+                        $listefollowers .= "<div class='follower-item'>
                             <a href='?action=profile&user_id=$followerID' class='follower-link'>
-                                <div class='follower-name'><i class='fa fa-user-circle'></i> $prenomfollower $nomfollower</div>
+                                <div class='follower-name'><i class='fa fa-user-circle'></i> $pseudo </div>
                             </a>
                         </div>";
+                    }
             }
 
             $tweets = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Utilisateurs.utilisateurID
@@ -117,7 +125,6 @@ class ProfileUserAction extends Action
                                      </form>";
                 }
             }
-
             return <<<HTML
                     <div class="profile-container">
                    <div class="profile-header">
@@ -126,7 +133,7 @@ class ProfileUserAction extends Action
                           <br>
                           <p style="color: var(--secondary-text-color);">$scoremoyen</p>
                           <br>
-                            <button class="modal-open">Voir les followers</button>
+                            <button class="modal-open">Autres followers</button>
                             <div id="followersModal" class="modal">
                                 <div class="modal-content">
                                     <span class="close-modal"><i class="fa fa-close"></i></span>
@@ -185,6 +192,7 @@ class ProfileUserAction extends Action
                                 <input type='submit' class='follow-btn' value='+ Suivre +'>
                             </form>";
                 }
+
             }
             return <<<HTML
         <div class="profile-container">
@@ -194,7 +202,7 @@ class ProfileUserAction extends Action
                 <br>
                 <p style="color: var(--secondary-text-color);">$scoremoyen</p>
                 <br>
-                <button class="modal-open">Voir les followers</button>
+                <button class="modal-open">Autres followers</button>
                             <div id="followersModal" class="modal">
                                 <div class="modal-content">
                                     <span class="close-modal"><i class="fa fa-close"></i></span>
@@ -215,6 +223,7 @@ class ProfileUserAction extends Action
             </div>
         </div>
     HTML;
+        header(Refresh:0);
         }
     }
 }
