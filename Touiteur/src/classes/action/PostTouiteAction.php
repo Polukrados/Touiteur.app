@@ -58,7 +58,7 @@ class PostTouiteAction extends Action
                 $datePublication = date('Y-m-d H:i:s'); // Date et heure courantes
 
                 // insertion dans la table touites
-                $query_touite = $connection->prepare("INSERT INTO touites (texte, datePublication) VALUES (:texte, :datePublication)");
+                $query_touite = $connection->prepare("INSERT INTO Touites (texte, datePublication) VALUES (:texte, :datePublication)");
                 $query_touite->bindParam(':texte', $texte);
                 $query_touite->bindParam(':datePublication', $datePublication);
                 $query_touite->execute();
@@ -70,7 +70,7 @@ class PostTouiteAction extends Action
                 // Si l'insertion dans touites s'est bien déroulée, alors on peut insérer dans touitesutilisateurs
                 $touiteID = $connection->lastInsertId();
 
-                $query_touite_utilisateur = $connection->prepare("INSERT INTO touitesutilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
+                $query_touite_utilisateur = $connection->prepare("INSERT INTO TouitesUtilisateurs (touiteID, utilisateurID) VALUES (:touiteID, :utilisateurID)");
                 $query_touite_utilisateur->bindParam(':touiteID', $touiteID);
                 $query_touite_utilisateur->bindParam(':utilisateurID', $utilisateurID);
                 $query_touite_utilisateur->execute();
@@ -96,7 +96,7 @@ class PostTouiteAction extends Action
                         move_uploaded_file($_FILES['media']['tmp_name'], 'images/' . $mediaPath);
 
                         // insertion dans la table images
-                        $query_image = $connection->prepare("INSERT INTO images (description, cheminFichier) VALUES (:description, :mediaPath)");
+                        $query_image = $connection->prepare("INSERT INTO Images (description, cheminFichier) VALUES (:description, :mediaPath)");
                         $query_image->bindParam(':description', $description);
                         $query_image->bindParam(':mediaPath', $mediaPath);
 
@@ -105,7 +105,7 @@ class PostTouiteAction extends Action
                         $imageID = $connection->lastInsertId();
 
                         // insertion dans la table touitesimages
-                        $query_touite_image = $connection->prepare("INSERT INTO touitesimages (touiteID, imageID) VALUES (:touiteID, :imageID)");
+                        $query_touite_image = $connection->prepare("INSERT INTO TouitesImages (touiteID, imageID) VALUES (:touiteID, :imageID)");
                         $query_touite_image->bindParam(":touiteID", $touiteID);
                         $query_touite_image->bindParam(":imageID", $imageID);
                         $query_touite_image->execute();
@@ -131,13 +131,13 @@ class PostTouiteAction extends Action
         $connection = ConnectionFactory::makeConnection();
 
         try {
-            $checkTagQuery = $connection->prepare("SELECT tagID FROM tags WHERE libelle = :tag");
+            $checkTagQuery = $connection->prepare("SELECT tagID FROM Tags WHERE libelle = :tag");
             $checkTagQuery->bindParam(':tag', $tag, PDO::PARAM_STR);
             $checkTagQuery->execute();
 
             if (!$checkTagQuery->fetchColumn()) {
                 // Le tag n'existe pas, on l'insère
-                $insertTagQuery = $connection->prepare("INSERT INTO tags (libelle, description) VALUES (:tag, :description)");
+                $insertTagQuery = $connection->prepare("INSERT INTO Tags (libelle, description) VALUES (:tag, :description)");
                 $insertTagQuery->bindParam(':tag', $tag, PDO::PARAM_STR);
                 $insertTagQuery->bindParam(':description', $tag, PDO::PARAM_STR); // Utilisez le même libellé comme description temporaire
                 $insertTagQuery->execute();
@@ -156,7 +156,7 @@ class PostTouiteAction extends Action
         $connection = ConnectionFactory::makeConnection();
 
         try {
-            $tagIDQuery = $connection->prepare("SELECT tagID FROM tags WHERE libelle = :tag");
+            $tagIDQuery = $connection->prepare("SELECT tagID FROM Tags WHERE libelle = :tag");
             $tagIDQuery->bindParam(':tag', $tag, PDO::PARAM_STR);
             $tagIDQuery->execute();
 
@@ -173,7 +173,7 @@ class PostTouiteAction extends Action
 
         try {
             // Insérer dans la table touitestags
-            $associateTagQuery = $connection->prepare("INSERT INTO touitestags (touiteID, tagID) VALUES (:touiteID, :tagID)");
+            $associateTagQuery = $connection->prepare("INSERT INTO TouitesTags (touiteID, tagID) VALUES (:touiteID, :tagID)");
             $associateTagQuery->bindParam(':touiteID', $touiteID, PDO::PARAM_INT);
             $associateTagQuery->bindParam(':tagID', $tagID, PDO::PARAM_INT);
             $associateTagQuery->execute();

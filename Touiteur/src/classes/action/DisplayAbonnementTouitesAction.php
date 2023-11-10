@@ -17,9 +17,9 @@ LEFT JOIN TouitesUtilisateurs ON t.touiteID = TouitesUtilisateurs.TouiteID
 LEFT JOIN Utilisateurs u ON TouitesUtilisateurs.utilisateurID = u.utilisateurID
 LEFT JOIN TouitesTags ON t.touiteID = TouitesTags.TouiteID
 LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-LEFT JOIN abonnementtags ON Tags.tagID = abonnementtags.tagID
-LEFT JOIN suivi ON u.utilisateurID = suivi.suiviID
-WHERE (abonnementtags.utilisateurID = :user_id1 OR suivi.suivreID = :user_id2)
+LEFT JOIN AbonnementTags ON Tags.tagID = AbonnementTags.tagID
+LEFT JOIN Suivi ON u.utilisateurID = Suivi.suiviID
+WHERE (AbonnementTags.utilisateurID = :user_id1 OR Suivi.suivreID = :user_id2)
 ORDER BY t.datePublication DESC
 LIMIT :limit OFFSET :offset;", false, false, false, true);
 
@@ -49,14 +49,14 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
         $tagID = $tagIDQuery->fetchColumn();
 
         if ($tagID !== false) {
-            $checkQuery = $db->prepare("SELECT count(*) FROM Abonnementtags
+            $checkQuery = $db->prepare("SELECT count(*) FROM AbonnementTags
                                     WHERE utilisateurID = :user AND tagID = :tag");
             $checkQuery->bindParam(':user', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
             $checkQuery->bindParam(':tag', $tagID, PDO::PARAM_INT);
             $checkQuery->execute();
             $check = $checkQuery->fetchColumn();
             if ($check == 0) {
-                $followQuery = $db->prepare("INSERT INTO Abonnementtags(utilisateurID, tagID) VALUES(:user, :tag)");
+                $followQuery = $db->prepare("INSERT INTO AbonnementTags(utilisateurID, tagID) VALUES(:user, :tag)");
                 $followQuery->bindValue(':user', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                 $followQuery->bindValue(':tag', $tagID, PDO::PARAM_INT);
                 $followQuery->execute();
@@ -74,7 +74,7 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
         $tagID = $tagIDQuery->fetchColumn();
 
         if ($tagID !== false) {
-            $checkQuery = $db->prepare("SELECT count(*) FROM Abonnementtags
+            $checkQuery = $db->prepare("SELECT count(*) FROM AbonnementTags
                                                 WHERE utilisateurID = :user AND tagID = :tag");
             $checkQuery->bindParam(':user', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
             $checkQuery->bindParam(':tag', $tagID, PDO::PARAM_INT);
@@ -82,7 +82,7 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
 
             $check = $checkQuery->fetchColumn();
             if ($check !== 0) {
-                $deleteQuery = $db->prepare("DELETE FROM Abonnementtags WHERE utilisateurID = :user AND tagID = :tag");
+                $deleteQuery = $db->prepare("DELETE FROM AbonnementTags WHERE utilisateurID = :user AND tagID = :tag");
                 $deleteQuery->bindParam(':user', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                 $deleteQuery->bindParam(':tag', $tagID, PDO::PARAM_INT);
                 $deleteQuery->execute();

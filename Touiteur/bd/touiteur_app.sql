@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `abonnementtags`
 --
 
-CREATE TABLE `abonnementtags` (
+CREATE TABLE `AbonnementTags` (
                                   `utilisateurID` int(11) NOT NULL,
                                   `tagID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -36,7 +36,7 @@ CREATE TABLE `abonnementtags` (
 -- Déchargement des données de la table `abonnementtags`
 --
 
-INSERT INTO `abonnementtags` (`utilisateurID`, `tagID`) VALUES
+INSERT INTO `AbonnementTags` (`utilisateurID`, `tagID`) VALUES
                                                             (1, 1),
                                                             (2, 2),
                                                             (3, 3),
@@ -48,7 +48,7 @@ INSERT INTO `abonnementtags` (`utilisateurID`, `tagID`) VALUES
 -- Structure de la table `evaluations`
 --
 
-CREATE TABLE `evaluations` (
+CREATE TABLE `Evaluations` (
                                `touiteID` int(11) NOT NULL,
                                `utilisateurID` int(11) NOT NULL,
                                `note` int(11) DEFAULT NULL
@@ -58,7 +58,7 @@ CREATE TABLE `evaluations` (
 -- Déchargement des données de la table `evaluations`
 --
 
-INSERT INTO `evaluations` (`touiteID`, `utilisateurID`, `note`) VALUES
+INSERT INTO `Evaluations` (`touiteID`, `utilisateurID`, `note`) VALUES
                                                                     (1, 2, 8),
                                                                     (1, 3, 7),
                                                                     (2, 1, 5),
@@ -70,7 +70,7 @@ INSERT INTO `evaluations` (`touiteID`, `utilisateurID`, `note`) VALUES
 -- Structure de la table `images`
 --
 
-CREATE TABLE `images` (
+CREATE TABLE `Images` (
                           `imageID` int(11) NOT NULL,
                           `description` text DEFAULT NULL,
                           `cheminFichier` varchar(255) DEFAULT NULL
@@ -80,7 +80,7 @@ CREATE TABLE `images` (
 -- Déchargement des données de la table `images`
 --
 
-INSERT INTO `images` (`imageID`, `description`, `cheminFichier`) VALUES
+INSERT INTO `Images` (`imageID`, `description`, `cheminFichier`) VALUES
                                                                      (1, 'Image de profil', 'icone_de_profil.jpg'),
                                                                      (2, 'Couverture pour touite', 'couverture_touite.jpg'),
                                                                      (3, 'Illustration de touite', 'illustration_touite.jpg'),
@@ -92,7 +92,7 @@ INSERT INTO `images` (`imageID`, `description`, `cheminFichier`) VALUES
 -- Structure de la table `suivi`
 --
 
-CREATE TABLE `suivi` (
+CREATE TABLE `Suivi` (
                          `suivreID` int(11) NOT NULL,
                          `suiviID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -101,7 +101,7 @@ CREATE TABLE `suivi` (
 -- Déchargement des données de la table `suivi`
 --
 
-INSERT INTO `suivi` (`suivreID`, `suiviID`) VALUES
+INSERT INTO `Suivi` (`suivreID`, `suiviID`) VALUES
                                                 (1, 2),
                                                 (1, 3),
                                                 (2, 3),
@@ -113,7 +113,7 @@ INSERT INTO `suivi` (`suivreID`, `suiviID`) VALUES
 -- Structure de la table `tags`
 --
 
-CREATE TABLE `tags` (
+CREATE TABLE `Tags` (
                         `tagID` int(11) NOT NULL,
                         `libelle` varchar(100) DEFAULT NULL,
                         `description` text DEFAULT NULL
@@ -123,7 +123,7 @@ CREATE TABLE `tags` (
 -- Déchargement des données de la table `tags`
 --
 
-INSERT INTO `tags` (`tagID`, `libelle`, `description`) VALUES
+INSERT INTO `Tags` (`tagID`, `libelle`, `description`) VALUES
                                                            (1, '#ExempleTag', 'Un tag pour des exemples'),
                                                            (2, '#Portfolio', 'Tag lié aux portfolios'),
                                                            (3, '#Accord', 'Tag pour exprimer l’accord'),
@@ -135,7 +135,7 @@ INSERT INTO `tags` (`tagID`, `libelle`, `description`) VALUES
 -- Structure de la table `touites`
 --
 
-CREATE TABLE `touites` (
+CREATE TABLE `Touites` (
                            `touiteID` int(11) NOT NULL,
                            `texte` varchar(235) DEFAULT NULL,
                            `datePublication` datetime DEFAULT NULL
@@ -145,7 +145,7 @@ CREATE TABLE `touites` (
 -- Déchargement des données de la table `touites`
 --
 
-INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`) VALUES
+INSERT INTO `Touites` (`touiteID`, `texte`, `datePublication`) VALUES
                                                                    (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00'),
                                                                    (2, 'Un autre touite avec un', '2023-11-06 11:00:00'),
                                                                    (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00'),
@@ -157,7 +157,7 @@ INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`) VALUES
 -- Structure de la table `touitesimages`
 --
 
-CREATE TABLE `touitesimages` (
+CREATE TABLE `TouitesImages` (
                                  `TouiteID` int(11) NOT NULL,
                                  `ImageID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -166,7 +166,7 @@ CREATE TABLE `touitesimages` (
 -- Déchargement des données de la table `touitesimages`
 --
 
-INSERT INTO `touitesimages` (`TouiteID`, `ImageID`) VALUES
+INSERT INTO `TouitesImages` (`TouiteID`, `ImageID`) VALUES
                                                         (2, 2),
                                                         (3, 3);
 
@@ -176,7 +176,7 @@ INSERT INTO `touitesimages` (`TouiteID`, `ImageID`) VALUES
 -- Structure de la table `touitestags`
 --
 
-CREATE TABLE `touitestags` (
+CREATE TABLE `TouitesTags` (
                                `TouiteID` int(11) NOT NULL,
                                `TagID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -185,7 +185,7 @@ CREATE TABLE `touitestags` (
 -- Déchargement des données de la table `touitestags`
 --
 
-INSERT INTO `touitestags` (`TouiteID`, `TagID`) VALUES
+INSERT INTO `TouitesTags` (`TouiteID`, `TagID`) VALUES
                                                     (2, 1),
                                                     (3, 2),
                                                     (4, 3);
@@ -196,7 +196,7 @@ INSERT INTO `touitestags` (`TouiteID`, `TagID`) VALUES
 -- Structure de la table `touitesutilisateurs`
 --
 
-CREATE TABLE `touitesutilisateurs` (
+CREATE TABLE `TouitesUtilisateurs` (
                                        `TouiteID` int(11) NOT NULL,
                                        `utilisateurID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -205,7 +205,7 @@ CREATE TABLE `touitesutilisateurs` (
 -- Déchargement des données de la table `touitesutilisateurs`
 --
 
-INSERT INTO `touitesutilisateurs` (`TouiteID`, `utilisateurID`) VALUES
+INSERT INTO `TouitesUtilisateurs` (`TouiteID`, `utilisateurID`) VALUES
                                                                     (1, 4),
                                                                     (2, 3),
                                                                     (4, 1),
@@ -217,7 +217,7 @@ INSERT INTO `touitesutilisateurs` (`TouiteID`, `utilisateurID`) VALUES
 -- Structure de la table `utilisateurs`
 --
 
-CREATE TABLE `utilisateurs` (
+CREATE TABLE `Utilisateurs` (
                                 `utilisateurID` int(11) NOT NULL,
                                 `nom` varchar(255) DEFAULT NULL,
                                 `prenom` varchar(255) DEFAULT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE `utilisateurs` (
 -- Déchargement des données de la table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VALUES
+INSERT INTO `Utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VALUES
                                                                                   (1, 'Dupont', 'Alice', 'alice.dupont@gmail.com', '$2y$10$8xiooHDFoThl5lGciRhuIuk8tfMb7eKsaNO6vaOm7BqD9u./E.Oo.'),
                                                                                   (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', '$2y$10$9II7AtfWq2CmfDX9wh.Wzecy5OFhNKYksZweM1soAH84ZJPHOt09.'),
                                                                                   (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', '$2y$10$vlbqiAvd4rg0iY4Fv60dne3lXrtclwPXhf9guln59SS3Ww..lagim'),
@@ -243,7 +243,7 @@ INSERT INTO `utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VA
 --
 -- Index pour la table `abonnementtags`
 --
-ALTER TABLE `abonnementtags`
+ALTER TABLE `Abonnementtags`
     ADD PRIMARY KEY (`utilisateurID`,`tagID`),
   ADD KEY `utilisateurID` (`utilisateurID`),
   ADD KEY `tagID` (`tagID`);
@@ -251,7 +251,7 @@ ALTER TABLE `abonnementtags`
 --
 -- Index pour la table `evaluations`
 --
-ALTER TABLE `evaluations`
+ALTER TABLE `Evaluations`
     ADD PRIMARY KEY (`touiteID`,`utilisateurID`),
   ADD KEY `touiteID` (`touiteID`),
   ADD KEY `utilisateurID` (`utilisateurID`);
@@ -259,13 +259,13 @@ ALTER TABLE `evaluations`
 --
 -- Index pour la table `images`
 --
-ALTER TABLE `images`
+ALTER TABLE `Images`
     ADD PRIMARY KEY (`imageID`);
 
 --
 -- Index pour la table `suivi`
 --
-ALTER TABLE `suivi`
+ALTER TABLE `Suivi`
     ADD PRIMARY KEY (`suivreID`,`suiviID`),
   ADD KEY `suivreID` (`suivreID`),
   ADD KEY `suiviID` (`suiviID`);
@@ -273,19 +273,19 @@ ALTER TABLE `suivi`
 --
 -- Index pour la table `tags`
 --
-ALTER TABLE `tags`
+ALTER TABLE `Tags`
     ADD PRIMARY KEY (`tagID`);
 
 --
 -- Index pour la table `touites`
 --
-ALTER TABLE `touites`
+ALTER TABLE `Touites`
     ADD PRIMARY KEY (`touiteID`);
 
 --
 -- Index pour la table `touitesimages`
 --
-ALTER TABLE `touitesimages`
+ALTER TABLE `TouitesImages`
     ADD PRIMARY KEY (`TouiteID`,`ImageID`),
   ADD KEY `TouiteID` (`TouiteID`),
   ADD KEY `ImageID` (`ImageID`);
@@ -293,7 +293,7 @@ ALTER TABLE `touitesimages`
 --
 -- Index pour la table `touitestags`
 --
-ALTER TABLE `touitestags`
+ALTER TABLE `TouitesTags`
     ADD PRIMARY KEY (`TouiteID`,`TagID`),
   ADD KEY `TouiteID` (`TouiteID`),
   ADD KEY `TagID` (`TagID`);
@@ -301,7 +301,7 @@ ALTER TABLE `touitestags`
 --
 -- Index pour la table `touitesutilisateurs`
 --
-ALTER TABLE `touitesutilisateurs`
+ALTER TABLE `TouitesUtilisateurs`
     ADD PRIMARY KEY (`TouiteID`,`utilisateurID`),
   ADD KEY `TouiteID` (`TouiteID`),
   ADD KEY `TagID` (`utilisateurID`);
@@ -309,7 +309,7 @@ ALTER TABLE `touitesutilisateurs`
 --
 -- Index pour la table `utilisateurs`
 --
-ALTER TABLE `utilisateurs`
+ALTER TABLE `Utilisateurs`
     ADD PRIMARY KEY (`utilisateurID`);
 
 --
@@ -319,25 +319,25 @@ ALTER TABLE `utilisateurs`
 --
 -- AUTO_INCREMENT pour la table `images`
 --
-ALTER TABLE `images`
+ALTER TABLE `Images`
     MODIFY `imageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `tags`
 --
-ALTER TABLE `tags`
+ALTER TABLE `Tags`
     MODIFY `tagID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `touites`
 --
-ALTER TABLE `touites`
+ALTER TABLE `Touites`
     MODIFY `touiteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
-ALTER TABLE `utilisateurs`
+ALTER TABLE `Utilisateurs`
     MODIFY `utilisateurID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
@@ -347,42 +347,42 @@ ALTER TABLE `utilisateurs`
 --
 -- Contraintes pour la table `abonnementtags`
 --
-ALTER TABLE `abonnementtags`
+ALTER TABLE `Abonnementtags`
     ADD CONSTRAINT `abonnementtags_ibfk_1` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`),
   ADD CONSTRAINT `abonnementtags_ibfk_2` FOREIGN KEY (`tagID`) REFERENCES `tags` (`tagID`);
 
 --
 -- Contraintes pour la table `evaluations`
 --
-ALTER TABLE `evaluations`
+ALTER TABLE `Evaluations`
     ADD CONSTRAINT `evaluations_ibfk_1` FOREIGN KEY (`touiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `evaluations_ibfk_2` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`);
 
 --
 -- Contraintes pour la table `suivi`
 --
-ALTER TABLE `suivi`
+ALTER TABLE `Suivi`
     ADD CONSTRAINT `suivi_ibfk_1` FOREIGN KEY (`suivreID`) REFERENCES `utilisateurs` (`utilisateurID`),
   ADD CONSTRAINT `suivi_ibfk_2` FOREIGN KEY (`suiviID`) REFERENCES `utilisateurs` (`utilisateurID`);
 
 --
 -- Contraintes pour la table `touitesimages`
 --
-ALTER TABLE `touitesimages`
+ALTER TABLE `TouitesImages`
     ADD CONSTRAINT `touitesimages_ibfk_1` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `touitesimages_ibfk_2` FOREIGN KEY (`ImageID`) REFERENCES `images` (`imageID`);
 
 --
 -- Contraintes pour la table `touitestags`
 --
-ALTER TABLE `touitestags`
+ALTER TABLE `TouitesTags`
     ADD CONSTRAINT `touitestags_ibfk_1` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `touitestags_ibfk_2` FOREIGN KEY (`TagID`) REFERENCES `tags` (`tagID`);
 
 --
 -- Contraintes pour la table `touitesutilisateurs`
 --
-ALTER TABLE `touitesutilisateurs`
+ALTER TABLE `TouitesUtilisateurs`
     ADD CONSTRAINT `touitesutilisateurs_ibfk_1` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `touitesutilisateurs_ibfk_2` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`);
 COMMIT;

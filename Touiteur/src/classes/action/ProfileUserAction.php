@@ -89,7 +89,7 @@ class ProfileUserAction extends Action
         }
 
         if ($this->http_method === 'GET') {
-            $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+            $checkQuery = $db->prepare("SELECT COUNT(*) FROM Suivi WHERE suivreID = :followID AND suiviID = :followedID");
             $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
             $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
             $checkQuery->execute();
@@ -158,7 +158,7 @@ class ProfileUserAction extends Action
             if ($follow === 0) {
                 if ($userID !== null) {
                     // La relation n'existe pas alors on fait l'insertion dans la table
-                    $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
+                    $insertQuery = $db->prepare("INSERT INTO Suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
                     $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     try {
@@ -177,7 +177,7 @@ class ProfileUserAction extends Action
             } else if ($follow === 1) {
                 if ($userID !== null) {
                     // On supprime, on veut plus le suivre
-                    $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
+                    $deleteQuery = $db->prepare("DELETE FROM Suivi WHERE suivreID = :followID AND suiviID = :followedID");
                     $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     $deleteQuery->execute();

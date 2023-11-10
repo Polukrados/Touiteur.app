@@ -11,10 +11,10 @@ class InfluenceurAdmin extends ActionAdmin
     public function execute(): string
     {
         $db = ConnectionFactoryAdmin::makeConnection();
-        $query = $db->prepare("SELECT utilisateurs.*, COUNT(suivi.suiviID) AS followers_count
-                               FROM utilisateurs
-                               LEFT JOIN suivi ON utilisateurs.utilisateurID = suivi.suiviID
-                               GROUP BY utilisateurs.utilisateurID
+        $query = $db->prepare("SELECT Utilisateurs.*, COUNT(Suivi.suiviID) AS followers_count
+                               FROM Utilisateurs
+                               LEFT JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suiviID
+                               GROUP BY Utilisateurs.utilisateurID
                                ORDER BY followers_count DESC");
         $query->execute();
 

@@ -9,7 +9,7 @@ class AuthAdmin
     public static function authenticate(string $email, string $mdp): bool
     {
         $db = db\ConnectionFactoryAdmin::makeConnection();
-        $query = 'SELECT * FROM utilisateurs WHERE email = :email';
+        $query = 'SELECT * FROM Utilisateurs WHERE email = :email';
         $st = $db->prepare($query);
         $st->bindParam(':email', $email);
         $st->execute();

@@ -10,10 +10,10 @@ class TendanceAdmin extends ActionAdmin{
     public function execute(): string
     {
         $db = ConnectionFactoryAdmin::makeConnection();
-        $query = $db->query("SELECT tags.libelle, COUNT(touitestags.TagID) as count
-                             FROM touitestags
-                             JOIN tags ON touitestags.TagID = tags.tagID
-                             GROUP BY touitestags.TagID
+        $query = $db->query("SELECT Tags.libelle, COUNT(TouitesTags.TagID) as count
+                             FROM TouitesTags
+                             JOIN Tags ON TouitesTags.TagID = Tags.tagID
+                             GROUP BY TouitesTags.TagID
                              ORDER BY count desc");
 
         $trendingTags = '';
