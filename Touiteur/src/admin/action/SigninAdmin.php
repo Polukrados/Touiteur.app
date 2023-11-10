@@ -42,7 +42,7 @@ class SigninAdmin extends ActionAdmin
 
             // vérifie si le compte existe et si c'est le cas, affiche les touites de ses abonnements
             if (AuthAdmin::authenticate($email, $mdp)) {
-                if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+                if ($_SESSION['utilisateur']['email']=="root@gmail.com" && $_SESSION['utilisateur']['mdp']=="rootrootroot") {
                     header("Location: ?action=defaultadmin");
                     exit();
                 }

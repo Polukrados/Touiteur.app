@@ -18,7 +18,7 @@ class DetailsAction extends Action
         if ($this->http_method === 'GET' && isset($_GET['tweet_id'])) {
             $db = ConnectionFactory::makeConnection();
             $tweetID = intval($_GET['tweet_id']);
-            $query = $db->prepare("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Touites.note, Images.cheminFichier
+            $query = $db->prepare("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Evaluations.note, Images.cheminFichier
                 FROM Touites
                 INNER JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
                 INNER JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID

@@ -45,12 +45,6 @@ class Dispatcher
             case 'display-abo':
                 $requete = new action\DisplayAbonnementTouitesAction();
                 break;
-            case 'like':
-                $requete = new action\LikeAction();
-                break;
-            case 'dislike':
-                $requete = new action\DislikeAction();
-                break;
             default:
                 $requete = new action\DefaultAction();
                 break;

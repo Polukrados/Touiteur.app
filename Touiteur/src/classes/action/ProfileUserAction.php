@@ -29,9 +29,8 @@ class ProfileUserAction extends Action
             $nom = $row['nom'];
 
             $scoremoyen = 'Score moyen de l\'utilisateur : ';
-            $query = $db->prepare("SELECT avg(note) FROM touites
-                                                    INNER JOIN TouitesUtilisateurs ON touites.touiteID = TouitesUtilisateurs.TouiteID
-                                                    WHERE TouitesUtilisateurs.utilisateurID = :id");
+            $query = $db->prepare("SELECT AVG(note) FROM Evaluations
+                                                    INNER JOIN TouitesUtilisateurs ON Evaluations.touiteID = TouitesUtilisateurs.TouiteID");
             $query->bindParam(':id', $userID, PDO::PARAM_INT);
             $query->execute();
             $score = $query->fetchColumn();

@@ -49,59 +49,6 @@ class Signin extends Action
                 $userID = $_SESSION['utilisateur']['userID'];
                 header("Location: ?action=default&user_id=$userID");
                 exit();
-                $user = new User(intval($_SESSION['utilisateur']['userID']), $_SESSION['utilisateur']['nom'], $_SESSION['utilisateur']['prenom'], $_SESSION['utilisateur']['email'], $_SESSION['utilisateur']['mdp']);
-                $pseudo = $user->getPseudo();
-
-                $listtouites = 'Liste des touites des utilisateurs que '. $pseudo. ' suit :<br><br>';
-                $touits = $user->getTouitsFromFollowedUsers();
-
-                // Si l'utilisateur recherche et s'abonne à un tag
-                if (isset($_POST['f'])) {
-                    $tagToFollow = htmlspecialchars($_POST['f']);
-                    $this->followTag($tagToFollow);
-                }
-
-                $listtags = 'Liste des tweets contenant un tag que '.$pseudo. ' suit :<br><br>';
-                $touitstags = $user->getTouitTagFollow();
-
-                if (isset($_POST['u'])) {
-                    $tagToUnfollow = htmlspecialchars($_POST['u']);
-                    $this->unfollowTag($tagToUnfollow);
-                }
-
-                $signin .= <<<HTML
-                            <header>
-                              <p class ='libelle_page_courante'>$pseudo</p>
-                              <nav class="menu-nav">
-                                <ul>
-                                  <li><a href="?action=post-touite">Publier un touite</a></li>
-                                  <li><a href="?action=accueil"><i class="fa fa-home"></i></a></li>
-                                </ul>
-                              </nav>
-                            </header>
-                            <div class="tweets">
-                                $listtouites
-                                $touits
-                                <br>
-                                <form class="form" action="?action=signin" method="post">
-                                    <input type="hidden" name="email" value="$email">
-                                    <input type="hidden" name="password" value="$mdp">
-                                    <input type="text" placeholder="S'abonner à un tag" name="f" id="tagSearch" class="input-icon-email">
-                                    <input type="submit" value="S'abonner">
-                                </form>
-                                <br>
-                                <form class="form" action="?action=signin" method="post">
-                                    <input type="hidden" name="email" value="$email">
-                                    <input type="hidden" name="password" value="$mdp">
-                                    <input type="text" placeholder="Se désabonner d'un tag" name="u" id="tagSearch" class="input-icon-email">
-                                    <input type="submit" value="Se désabonner">
-                                </form>
-                                <br>
-                                $listtags
-                                $touitstags
-                            </div>
-                          HTML;
-
             } else { // Affiche une erreur si la connexion a échoué
                 $signin .= <<<HTML
                             <header> 
