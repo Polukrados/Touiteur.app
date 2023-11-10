@@ -2,17 +2,24 @@
 
 namespace iutnc\touiteur\action;
 
+/**
+ * Action par défaut
+ */
 class DefaultAction extends Action
 {
+    // Constructeur
     public function __construct()
     {
         parent::__construct();
     }
 
+    // Méthode d'exécution
     public function execute(): string
     {
         $pageContent = "";
+        // Si la méthode HTTP est GET, on affiche la page de connexion
         if ($this->http_method === 'GET') {
+            // On génère le contenu de la page d'accueil donc on appelle la méthode generationAction qui va nous permettre de récupérer les données de la base de données
             $pageContent = parent::generationAction(
                 "SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle
                             FROM Touites

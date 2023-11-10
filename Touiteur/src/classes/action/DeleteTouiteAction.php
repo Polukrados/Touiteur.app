@@ -29,7 +29,8 @@ class DeleteTouiteAction extends Action
         if ($this->http_method == "GET") {
             $touiteID = $_GET['tweet_id'];
             $html = <<<HTML
-                    <div style="margin: auto; height: 50%" class="libelle_page_courante">
+                    <button style="background: none; border: none; top: 0; right: 0" onclick="window.location.href='index.php';" class="close-modal"><i class="fa fa-times"></i></button>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="libelle_page_courante">
                         <p> Voulez-vous vraiment supprimer ce touite ?</p>
                         <form class="form" method=post>
                             <input type=hidden name=touiteID value=$touiteID>
@@ -98,12 +99,12 @@ class DeleteTouiteAction extends Action
                         throw new \Exception("Erreur lors de la suppression du touite.");
                     }
                 } catch (\PDOException $e) {
-                    $delete_touite_html .= "<p>Erreur de connexion à la base de données : " . $e->getMessage() . "</p>";
+                    $delete_touite_html .= "<p class='libelle_page_courante'>Erreur de connexion à la base de données : " . $e->getMessage() . "</p>";
                 } catch (\Exception $e) {
-                    $delete_touite_html .= "<p>Erreur lors de la suppression du touite : " . $e->getMessage() . "</p>";
+                    $delete_touite_html .= "<p class='libelle_page_courante'>Erreur lors de la suppression du touite : " . $e->getMessage() . "</p>";
                 }
             } else {
-                $delete_touite_html .= "<p>Vous n'avez pas l'autorisation de supprimer ce touite.</p>";
+                $delete_touite_html .= "<p class='libelle_page_courante'>Vous n'avez pas l'autorisation de supprimer ce touite.</p>";
             }
         }
 

@@ -4,6 +4,9 @@ namespace iutnc\admin\db;
 
 use PDO;
 
+/**
+ * Classe gérant la connexion à la base de données.
+ */
 class ConnectionFactoryAdmin
 {
     private static $tableau = [];

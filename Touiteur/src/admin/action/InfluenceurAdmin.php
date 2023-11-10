@@ -5,12 +5,16 @@ namespace iutnc\admin\action;
 use iutnc\admin\db\ConnectionFactoryAdmin;
 use PDO;
 
+// Affiche la liste des influenceurs
 class InfluenceurAdmin extends ActionAdmin
 {
 
+    // Fonction qui affiche la liste des influenceurs
     public function execute(): string
     {
         $db = ConnectionFactoryAdmin::makeConnection();
+        // Récupère les influenceurs donc le nombre de followers est le plus élevé
+        // Trier par ordre décroissant
         $query = $db->prepare("SELECT Utilisateurs.*, COUNT(Suivi.suiviID) AS followers_count
                                FROM Utilisateurs
                                LEFT JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suiviID
@@ -18,11 +22,14 @@ class InfluenceurAdmin extends ActionAdmin
                                ORDER BY followers_count DESC");
         $query->execute();
 
+        // Affiche les influenceurs
         $influencers = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            // Affiche le nom et le nombre de followers des influenceurs
             $userName = $row['prenom'] . ' ' . $row['nom'];
             $followersCount = $row['followers_count'];
 
+            // Rendu HTML de la liste des influenceurs
             $influencers .= <<<HTML
                 <div class="influenceurs-container">
                     <div class="influenceur">

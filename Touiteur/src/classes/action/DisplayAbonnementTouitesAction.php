@@ -5,11 +5,17 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
+/**
+ * Action permettant d'afficher les touites des utilisateurs suivis par l'utilisateur connecté
+ */
 class DisplayAbonnementTouitesAction extends Action
 {
 
+    // Méthode qui exécute l'action
     public function execute(): string
     {
+        $pageContent="";
+        // Si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion
         if ($this->http_method == "GET") {
             $pageContent = parent::generationAction("SELECT DISTINCT t.touiteID, t.texte, u.utilisateurID, u.nom, u.prenom, t.datePublication, Tags.tagID, Tags.libelle
 FROM Touites t
@@ -23,11 +29,13 @@ WHERE (AbonnementTags.utilisateurID = :user_id1 OR Suivi.suivreID = :user_id2)
 ORDER BY t.datePublication DESC
 LIMIT :limit OFFSET :offset;", false, false, false, true);
 
-        } else {
+            // On récupère les tags de l'utilisateur
+        }else{
             if (isset($_POST['f'])) {
                 $tagToFollow = htmlspecialchars($_POST['f']);
                 $this->followTag($tagToFollow);
             }
+            // On récupère les tags de l'utilisateur
             if (isset($_POST['u'])) {
                 $tagToUnfollow = htmlspecialchars($_POST['u']);
                 $this->unfollowTag($tagToUnfollow);
@@ -38,8 +46,11 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
         return $pageContent;
     }
 
+
+    // Permet de suivre un tag
     private function followTag($tag)
     {
+        // Effectuez l'insertion dans la table Abonnementtags
         $db = ConnectionFactory::makeConnection();
 
         $tagIDQuery = $db->prepare("SELECT tagID FROM Tags WHERE libelle = :tag");
@@ -48,6 +59,7 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
 
         $tagID = $tagIDQuery->fetchColumn();
 
+        // Si le tag existe alors on l'ajoute à la table Abonnementtags
         if ($tagID !== false) {
             $checkQuery = $db->prepare("SELECT count(*) FROM AbonnementTags
                                     WHERE utilisateurID = :user AND tagID = :tag");
@@ -67,12 +79,16 @@ LIMIT :limit OFFSET :offset;", false, false, false, true);
     // Récupère les tag follow par l'utilisateur
     private function unfollowTag($tag)
     {
+        // Effectuez l'insertion dans la table Abonnementtags
         $db = ConnectionFactory::makeConnection();
+
         $tagIDQuery = $db->prepare("SELECT tagID FROM Tags WHERE libelle = :tag");
         $tagIDQuery->bindParam(':tag', $tag, PDO::PARAM_STR);
         $tagIDQuery->execute();
+
         $tagID = $tagIDQuery->fetchColumn();
 
+        // Si le tag existe alors on l'ajoute à la table Abonnementtags
         if ($tagID !== false) {
             $checkQuery = $db->prepare("SELECT count(*) FROM AbonnementTags
                                                 WHERE utilisateurID = :user AND tagID = :tag");

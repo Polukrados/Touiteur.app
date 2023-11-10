@@ -5,13 +5,15 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
+// Classe abstraite Action qui sert de base pour toutes les actions dans l'application.
 abstract class Action
 {
-
+    // Propriétés pour stocker les informations de la requête HTTP.
     protected ?string $http_method = null;
     protected ?string $hostname = null;
     protected ?string $script_name = null;
 
+    // Le constructeur initialise les propriétés avec les valeurs globales $_SERVER.
     public function __construct()
     {
         $this->http_method = $_SERVER['REQUEST_METHOD'];
@@ -19,6 +21,7 @@ abstract class Action
         $this->script_name = $_SERVER['SCRIPT_NAME'];
     }
 
+    // Méthode pour tronquer un texte à une longueur donnée avec un suffixe.
     protected function texte($text, $maxLength = 200, $suffix = '...'): string
     {
         if (strlen($text) > $maxLength) {
@@ -27,17 +30,28 @@ abstract class Action
         return $text;
     }
 
+    // Méthode générale pour la génération du contenu des actions.
     protected function generationAction($query, $tag = false, $listUser = false, $user = false, $display = false): string
     {
         //Pagination
         $db = ConnectionFactory::makeConnection();
+
+        // Définition du nombre de touites par page pour la pagination.
         $touitesParPages = 10;
+        // Détermination de la page courante basée sur le paramètre 'page' de l'URL.
         $pageCourante = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        // Initialisation des variables pour le nom d'utilisateur et le libellé du tag.
         $offset = ($pageCourante - 1) * $touitesParPages;
 
         $userName = '';
         $libelle = '';
+        // Calcul de l'offset pour la requête SQL basée sur la pagination.
+        $offset = ($pageCourante - 1) * $touitesParPages;
+
+        // Préparation de la requête SQL avec des paramètres nommés pour la sécurité.
         $query = $db->prepare($query);
+
+        // Liaison des paramètres SQL si la requête dépend des tags, des utilisateurs ou d'affichage spécifique.
         if ($tag === true) {
             $tagID = intval($_GET['tag_id']);
             $query->bindParam(':tag_id', $tagID, PDO::PARAM_INT);
@@ -51,11 +65,15 @@ abstract class Action
                 $query->bindParam(':user_id', $userID, PDO::PARAM_INT);
             }
         }
+
+        // Liaison des paramètres pour la limite et l'offset dans la requête paginée.
         $query->bindParam(':limit', $touitesParPages, PDO::PARAM_INT);
         $query->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+        // Exécution de la requête.
         $query->execute();
 
-        // Récupération des touites
+        // Initialisation de la variable qui contiendra les touites sous forme de HTML.
         $tweets = '';
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             // Récupération des données pour chaque touite

@@ -4,12 +4,17 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
 
+/**
+ * Action permettant d'ajouter un utilisateur
+ */
 class AddUserAction extends Action
 {
 
+    // Méthode exécutant l'action
     public function execute(): string
     {
         $add_user = "";
+        // Si l'utilisateur n'est pas connecté, on affiche le formulaire de connexion
         if ($this->http_method == "GET") {
             $add_user = <<<HTML
                   <header> 
@@ -31,6 +36,7 @@ class AddUserAction extends Action
                         <input type='submit' value="S'inscrire">
                   </div>
                   HTML;
+            // Si l'utilisateur est connecté, on le redirige vers la page d'accueil
         } else if ($this->http_method == "POST") {
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
@@ -38,9 +44,11 @@ class AddUserAction extends Action
             $passwd = $_POST['password'];
 
             $auth = new Auth();
+            // Si l'inscription réussit, on redirige l'utilisateur vers la page d'accueil
             if ($auth->register($nom, $prenom, $email, $passwd)) {
                 header("Location: ?action=default");
                 exit;
+            // Sinon, on affiche un message d'erreur
             } else {
                 $add_user .= <<<HTML
                                 <header> 
@@ -65,7 +73,6 @@ class AddUserAction extends Action
                               HTML;
             }
         }
-
         return $add_user;
     }
 }

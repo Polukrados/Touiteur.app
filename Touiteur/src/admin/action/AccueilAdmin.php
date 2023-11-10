@@ -2,15 +2,22 @@
 
 namespace iutnc\admin\action;
 
+/**
+ * Classe gérant l'affichage de la page d'accueil.
+ */
 class AccueilAdmin extends ActionAdmin
 {
+    // Constructeur
     public function __construct()
     {
         parent::__construct();
     }
 
+    // Méthode d'exécution
     public function execute(): string
     {
+        // Génération du contenu de la page d'accueil
+        // on affiche les influenceurs et les tendances
         if ($this->http_method === 'GET') {
             $pageContent = <<<HTML
                 <header> 
