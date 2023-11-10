@@ -44,26 +44,6 @@ INSERT INTO `abonnementtags` (`utilisateurID`, `tagID`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Structure de la table `evaluations`
---
-
-CREATE TABLE `evaluations` (
-                               `touiteID` int(11) NOT NULL,
-                               `utilisateurID` int(11) NOT NULL,
-                               `note` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Déchargement des données de la table `evaluations`
---
-
-INSERT INTO `evaluations` (`touiteID`, `utilisateurID`, `note`) VALUES
-                                                                    (1, 2, 8),
-                                                                    (1, 3, 7),
-                                                                    (2, 1, 5),
-                                                                    (3, 4, 9);
-
 -- --------------------------------------------------------
 
 --
@@ -138,18 +118,19 @@ INSERT INTO `tags` (`tagID`, `libelle`, `description`) VALUES
 CREATE TABLE `touites` (
                            `touiteID` int(11) NOT NULL,
                            `texte` varchar(235) DEFAULT NULL,
-                           `datePublication` datetime DEFAULT NULL
+                           `datePublication` datetime DEFAULT NULL,
+                           `note` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Déchargement des données de la table `touites`
 --
 
-INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`) VALUES
-                                                                   (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00'),
-                                                                   (2, 'Un autre touite avec un', '2023-11-06 11:00:00'),
-                                                                   (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00'),
-                                                                   (4, 'Je suis d’accord avec ça', '2023-11-06 13:00:00');
+INSERT INTO `touites` (`touiteID`, `texte`, `datePublication`, `note`) VALUES
+                                                                   (1, 'Ceci est mon premier touite !', '2023-11-06 10:00:00', 0),
+                                                                   (2, 'Un autre touite avec un', '2023-11-06 11:00:00', 0),
+                                                                   (3, 'Découvrez mon travail sur mon site', '2023-11-06 12:00:00', 0),
+                                                                   (4, 'Je suis d’accord avec ça', '2023-11-06 13:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -234,27 +215,26 @@ INSERT INTO `utilisateurs` (`utilisateurID`, `nom`, `prenom`, `email`, `mdp`) VA
                                                                                   (2, 'Durand', 'Bob', 'bob.durand@hotmail.com', 'durandbob'),
                                                                                   (3, 'Leroy', 'Charlie', 'charlie.leroy@sfr.com', 'azertyuiop'),
                                                                                   (4, 'Moreau', 'Diana', 'diana.moreau@gmail.com', 'diana357');
+  
+  
+  -- --------------------------------------------------------
 
 --
--- Index pour les tables déchargées
+-- Structure de la table `evaluations`
 --
+CREATE TABLE `evaluations` (
+                                 `utilisateurID` int(11) NOT NULL,
+                                 `TouiteID` int(11) NOT NULL,
+								  `evalue` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
+                                                                                  
 -- Index pour la table `abonnementtags`
 --
 ALTER TABLE `abonnementtags`
     ADD PRIMARY KEY (`utilisateurID`,`tagID`),
   ADD KEY `utilisateurID` (`utilisateurID`),
   ADD KEY `tagID` (`tagID`);
-
---
--- Index pour la table `evaluations`
---
-ALTER TABLE `evaluations`
-    ADD PRIMARY KEY (`touiteID`,`utilisateurID`),
-  ADD KEY `touiteID` (`touiteID`),
-  ADD KEY `utilisateurID` (`utilisateurID`);
-
 --
 -- Index pour la table `images`
 --
@@ -351,12 +331,6 @@ ALTER TABLE `abonnementtags`
   ADD CONSTRAINT `abonnementtags_ibfk_2` FOREIGN KEY (`tagID`) REFERENCES `tags` (`tagID`);
 
 --
--- Contraintes pour la table `evaluations`
---
-ALTER TABLE `evaluations`
-    ADD CONSTRAINT `evaluations_ibfk_1` FOREIGN KEY (`touiteID`) REFERENCES `touites` (`touiteID`),
-  ADD CONSTRAINT `evaluations_ibfk_2` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`);
-
 --
 -- Contraintes pour la table `suivi`
 --
@@ -385,6 +359,15 @@ ALTER TABLE `touitesutilisateurs`
     ADD CONSTRAINT `touitesutilisateurs_ibfk_1` FOREIGN KEY (`TouiteID`) REFERENCES `touites` (`touiteID`),
   ADD CONSTRAINT `touitesutilisateurs_ibfk_2` FOREIGN KEY (`utilisateurID`) REFERENCES `utilisateurs` (`utilisateurID`);
 COMMIT;
+
+--
+-- Contraintes pour la table `evaluations`
+--
+ALTER TABLE evaluations ADD CONSTRAINT PK_key PRIMARY KEY (utilisateurID, touiteID);
+
+ALTER TABLE evaluations ADD FOREIGN KEY (utilisateurID) REFERENCES utilisateurs(utilisateurID);
+
+ALTER TABLE evaluations ADD FOREIGN KEY (touiteID) REFERENCES touites(touiteID);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
