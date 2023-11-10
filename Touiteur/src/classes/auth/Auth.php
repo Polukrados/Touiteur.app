@@ -11,7 +11,7 @@ class Auth
     public static function authenticate(string $email, string $mdp): bool
     {
         $db = db\ConnectionFactory::makeConnection();
-        $query = 'SELECT * FROM utilisateurs WHERE email = :email';
+        $query = 'SELECT * FROM Utilisateurs WHERE email = :email';
         $st = $db->prepare($query);
         $st->bindParam(':email', $email);
         $st->execute();
@@ -44,7 +44,7 @@ class Auth
 
         // vérifie que l'utilisateur n'existe pas déjà
         $db = db\ConnectionFactory::makeConnection();
-        $query = "SELECT * FROM utilisateurs where nom = :nom and prenom = :prenom and email = :email";
+        $query = "SELECT * FROM Utilisateurs where nom = :nom and prenom = :prenom and email = :email";
         $st = $db->prepare($query);
         $st->bindParam(":nom", $nom);
         $st->bindParam(":prenom", $prenom);
@@ -60,7 +60,7 @@ class Auth
         // vérifie la qualité du mdp et l'ajoute à la bd s'il est bon
         if ($this->checkPasswordStrength($mdp, 8)) {
             $hash = password_hash($mdp, PASSWORD_DEFAULT, ['cost' => 12]);
-            $query2 = "INSERT INTO utilisateurs (nom, prenom, email, mdp) VALUES(:nom, :prenom, :email, :hash)";
+            $query2 = "INSERT INTO Utilisateurs (nom, prenom, email, mdp) VALUES(:nom, :prenom, :email, :hash)";
             $st = $db->prepare($query2);
             $st->bindParam(":nom", $nom);
             $st->bindParam(":prenom", $prenom);
