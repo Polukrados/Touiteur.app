@@ -36,7 +36,7 @@ class DislikeAction extends Action
                             $st3->bindParam(":touiteID", $touiteID);
                             $st3->execute();
 
-                            $query4 = "UPDATE evaluations SET evalue = 0 WHERE touiteID = :touiteID AND utilisateurID = :utilisateurID";
+                            $query4 = "DELETE FROM evaluations giWHERE touiteID = :touiteID AND utilisateurID = :utilisateurID";
                             $st4 = $db->prepare($query4);
                             $st4->bindParam(":touiteID", $touiteID);
                             $st4->bindParam(":utilisateurID", $_SESSION['utilisateur']['userID']);
