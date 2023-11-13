@@ -17,14 +17,14 @@ class TendanceAdmin extends ActionAdmin{
         $db = ConnectionFactoryAdmin::makeConnection();
 
         // Requête SQL pour obtenir les libellés des tags et leur nombre d'occurrences.
-        $query = $db->query("SELECT Tags.libelle, COUNT(TouitesTags.TagID) as count
-                             FROM TouitesTags
-                             JOIN Tags ON TouitesTags.TagID = Tags.tagID
-                             GROUP BY TouitesTags.TagID
+        $query = $db->query("SELECT tags.libelle, COUNT(touitestags.TagID) as count
+                             FROM touitestags
+                             JOIN tags ON touitestags.TagID = tags.tagID
+                             GROUP BY touitestags.TagID
                              ORDER BY count desc");
 
         // Initialisation de la variable qui va contenir les balises HTML représentant les tendances.
-        $trendingTags = '';
+        $trendingtags = '';
 
         // Traitement de chaque ligne résultat de la requête.
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -33,7 +33,7 @@ class TendanceAdmin extends ActionAdmin{
             $tagCount = $row['count'];
 
             // Construction du HTML pour chaque tag tendance avec son nombre de mentions.
-            $trendingTags .= <<<HTML
+            $trendingtags .= <<<HTML
                 <div class="influenceurs-container">
                     <div class="influenceur">
                         <div class="influenceur-name">$tagLabel</div>
@@ -53,7 +53,7 @@ class TendanceAdmin extends ActionAdmin{
                         </ul>
                     </nav>
             </header>
-                $trendingTags
+                $trendingtags
         HTML;
     }
 }

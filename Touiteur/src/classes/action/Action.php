@@ -248,11 +248,11 @@ abstract class Action
             }
         }
         // Nombre total de touites
-        $countQuery = $db->query("SELECT COUNT(*) as total FROM Touites");
+        $countQuery = $db->query("SELECT COUNT(*) as total FROM touites");
 
         // Nombre de pages
-        $totalTouites = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
-        $totalPages = ceil($totalTouites / $touitesParPages);
+        $totaltouites = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
+        $totalPages = ceil($totaltouites / $touitesParPages);
 
         // Pagination
         $paginationLinks = '';
@@ -278,7 +278,7 @@ abstract class Action
             if ($tag === true) {
                 $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header>$logo<p class='libelle_page_courante'>Touites de $userName</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo = "";
@@ -300,14 +300,14 @@ abstract class Action
             if ($display === true) {
                 $res .= "
                         <div class='form-container'>
-                            <h2 style='text-align: center'>Tags</h2>
+                            <h2 style='text-align: center'>tags</h2>
                             <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
-                                <input type='text' placeholder='S abonner à un tag' name='f' id='tagSearch' class='input-icon-email'>
+                                <input type='text' placeholder='S abonner à un tag' name='f' id='tagsearch' class='input-icon-email'>
                                 <input type='submit' value='S abonner'>
                             </form>
                             <br>
                             <form class='form' action='?action=display-abo&user_id={$_SESSION['utilisateur']['userID']}' method='post'>
-                                <input type='text' placeholder='Se désabonner d un tag' name='u' id='tagSearch' class='input-icon-email'>
+                                <input type='text' placeholder='Se désabonner d un tag' name='u' id='tagsearch' class='input-icon-email'>
                                 <input type='submit' value='Se désabonner'>
                             </form>
                         </div>
@@ -342,7 +342,7 @@ abstract class Action
             if ($tag === true) {
                 $res = "<header>$logo<p class='libelle_page_courante'>$libelle</p>";
             } else if ($listUser === true) {
-                $res = "<header>$logo<p class='libelle_page_courante'>Touites de $userName</p>";
+                $res = "<header>$logo<p class='libelle_page_courante'>touites de $userName</p>";
             } else if ($user === true) {
                 $res = "<div class='tweets'>$tweets</div><div class='pagination'>$paginationLinks</div>";
                 $pasabo = "";
@@ -355,7 +355,6 @@ abstract class Action
                                 <p id='touiteur' class='libelle_page_courante'></p>
                             </div>";
             }
-
             if ($user === true) {
                 return $res;
             } else {

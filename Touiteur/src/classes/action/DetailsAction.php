@@ -25,14 +25,14 @@ class DetailsAction extends Action
             $tweetID = intval($_GET['tweet_id']);
             // Requête
             // La requete permet de récupérer les informations du touite, de l'utilisateur qui l'a publié, de l'image associée et de la note associée
-            $query = $db->prepare("SELECT Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Evaluations.note, Images.cheminFichier
-                FROM Touites
-                INNER JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                INNER JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                LEFT JOIN Evaluations ON Touites.touiteID = Evaluations.touiteID
-                LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.TouiteID
-                LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
-                WHERE Touites.touiteID = :tweet_id");
+            $query = $db->prepare("SELECT touites.texte, utilisateurs.nom, utilisateurs.prenom, touites.datePublication, evaluations.note, images.cheminFichier
+                FROM touites
+                INNER JOIN touitesutilisateurs ON touites.touiteID = touitesutilisateurs.TouiteID
+                INNER JOIN utilisateurs ON touitesutilisateurs.utilisateurID = utilisateurs.utilisateurID
+                LEFT JOIN evaluations ON touites.touiteID = evaluations.touiteID
+                LEFT JOIN touitesimages ON touitesimages.TouiteID = touites.TouiteID
+                LEFT JOIN images ON images.ImageID = touitesimages.ImageID
+                WHERE touites.touiteID = :tweet_id");
             $query->bindParam(':tweet_id', $tweetID, PDO::PARAM_INT);
             $query->execute();
 

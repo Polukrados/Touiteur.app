@@ -2,6 +2,9 @@
 
 namespace iutnc\touiteur\user;
 
+/**
+ * Action permettant d'avoir les infos de l'tilisateur
+ */
 class User
 {
     private int $userID;

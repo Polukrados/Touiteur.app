@@ -4,10 +4,15 @@ namespace iutnc\touiteur\dispatch;
 
 use iutnc\touiteur\action as action;
 
+/**
+ * Classe qui creer les actions
+ * Permet d'afficher les pages
+ */
 class Dispatcher
 {
     protected ?string $action = null;
 
+    // Constructeur
     public function __construct()
     {
         if (isset($_GET["action"])) {
@@ -15,8 +20,10 @@ class Dispatcher
         }
     }
 
+    // Methode qui lance les actions
     public function run(): void
     {
+        // selon l'action on en creer une nouvelle
         switch ($this->action) {
             case 'add-user':
                 $requete = new action\AddUserAction();
@@ -43,11 +50,12 @@ class Dispatcher
                 $requete = new action\LogoutAction();
                 break;
             case 'display-abo':
-                $requete = new action\DisplayAbonnementTouitesAction();
+                $requete = new action\DisplayAbonnementtouitesAction();
                 break;
             case 'delete':
                 $requete = new action\DeleteTouiteAction();
                 break;
+            // action par default donc l'accueil
             default:
                 $requete = new action\DefaultAction();
                 break;

@@ -21,15 +21,15 @@ class DefaultAction extends Action
         if ($this->http_method === 'GET') {
             // On génère le contenu de la page d'accueil donc on appelle la méthode generationAction qui va nous permettre de récupérer les données de la base de données
             $pageContent = parent::generationAction(
-                "SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle
-                            FROM Touites
-                            LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                            LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                            LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.TouiteID
-                            LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
-                            LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
-                            LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-                            ORDER BY Touites.datePublication DESC
+                "SELECT touites.touiteID, touites.texte, utilisateurs.utilisateurID, utilisateurs.nom, utilisateurs.prenom, touites.datePublication, tags.tagID, tags.libelle
+                            FROM touites
+                            LEFT JOIN touitesutilisateurs ON touites.touiteID = touitesutilisateurs.TouiteID
+                            LEFT JOIN utilisateurs ON touitesutilisateurs.utilisateurID = utilisateurs.utilisateurID
+                            LEFT JOIN touitesimages ON touitesimages.TouiteID = touites.TouiteID
+                            LEFT JOIN images ON images.ImageID = touitesimages.ImageID
+                            LEFT JOIN touitestags ON touites.touiteID = touitestags.TouiteID
+                            LEFT JOIN tags ON touitestags.TagID = tags.TagID
+                            ORDER BY touites.datePublication DESC
                             LIMIT :limit OFFSET :offset");
 
         }

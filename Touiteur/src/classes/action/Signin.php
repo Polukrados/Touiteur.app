@@ -4,13 +4,18 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
 
+/**
+ * Action permettant de se connecter ou de s'incrire
+ */
 class Signin extends Action
 {
+    // Constructeur
     public function __construct()
     {
         parent::__construct();
     }
 
+    // Methode qui execute l'action
     public function execute(): string
     {
         $signin = "";

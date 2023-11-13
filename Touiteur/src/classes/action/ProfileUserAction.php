@@ -6,20 +6,26 @@ use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 use PDOException;
 
+/**
+ * Action permettant de voir le profil de l'utilisateur concerné
+ */
 class ProfileUserAction extends Action
 {
+    // Constructeur
     public function __construct()
     {
         parent::__construct();
     }
 
+    // Méthode qui execute l'action
     public function execute(): string
     {
         $db = ConnectionFactory::makeConnection();
 
+        // recupere les informations de l'utilisateur sur lequel on clique
         if (isset($_GET['user_id'])) {
             $userID = $_GET['user_id'];
-            $query = $db->prepare("SELECT nom, prenom FROM Utilisateurs WHERE utilisateurID = :id");
+            $query = $db->prepare("SELECT nom, prenom FROM utilisateurs WHERE utilisateurID = :id");
             $query->bindParam(':id', $userID, PDO::PARAM_INT);
             $query->execute();
 
@@ -27,13 +33,14 @@ class ProfileUserAction extends Action
             $prenom = $row['prenom'];
             $nom = $row['nom'];
 
+            // recuperation des notes en faisant une moyenne
             $scoremoyen = 'Score moyen de l\'utilisateur : ';
-            $query = $db->prepare("SELECT AVG(note) FROM Evaluations
-                                                    INNER JOIN TouitesUtilisateurs ON Evaluations.touiteID = TouitesUtilisateurs.TouiteID");
+            $query = $db->prepare("SELECT AVG(note) FROM evaluations
+                                                    INNER JOIN touitesutilisateurs ON evaluations.touiteID = touitesutilisateurs.TouiteID");
             $query->execute();
             $score = $query->fetchColumn();
 
-            $count = $db->prepare("SELECT * FROM TouitesUtilisateurs WHERE utilisateurID = :id");
+            $count = $db->prepare("SELECT * FROM touitesutilisateurs WHERE utilisateurID = :id");
             $count->bindParam(':id', $userID, PDO::PARAM_INT);
             $count->execute();
 
@@ -47,10 +54,11 @@ class ProfileUserAction extends Action
                 $scoremoyen .= $score;
             }
 
+            // recuperation de la liste des followers
             $listefollowers = '';
-            $query = $db->prepare("SELECT Utilisateurs.prenom, Utilisateurs.nom, Utilisateurs.utilisateurID
-                        FROM Utilisateurs
-                        INNER JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suivreID
+            $query = $db->prepare("SELECT utilisateurs.prenom, utilisateurs.nom, utilisateurs.utilisateurID
+                        FROM utilisateurs
+                        INNER JOIN suivi ON utilisateurs.utilisateurID = suivi.suivreID
                         WHERE suiviID = :id");
 
             $query->bindParam(':id', $userID, PDO::PARAM_INT);
@@ -74,28 +82,29 @@ class ProfileUserAction extends Action
                  }
             }
 
-            $tweets = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.nom, Utilisateurs.prenom, Touites.datePublication, Tags.tagID, Tags.libelle, Utilisateurs.utilisateurID
-                                                    FROM Touites
-                                                    LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                                                    LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                                                    LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.touiteID
-                                                    LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
-                                                    LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
-                                                    LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-                                                    WHERE Utilisateurs.utilisateurID = :user_id
-                                                    ORDER BY Touites.datePublication DESC
+            // recuperation des tweets
+            $tweets = parent::generationAction("SELECT touites.touiteID, touites.texte, utilisateurs.nom, utilisateurs.prenom, touites.datePublication, tags.tagID, tags.libelle, utilisateurs.utilisateurID
+                                                    FROM touites
+                                                    LEFT JOIN touitesutilisateurs ON touites.touiteID = touitesutilisateurs.TouiteID
+                                                    LEFT JOIN utilisateurs ON touitesutilisateurs.utilisateurID = utilisateurs.utilisateurID
+                                                    LEFT JOIN touitesimages ON touitesimages.TouiteID = touites.touiteID
+                                                    LEFT JOIN images ON images.ImageID = touitesimages.ImageID
+                                                    LEFT JOIN touitestags ON touites.touiteID = touitestags.TouiteID
+                                                    LEFT JOIN tags ON touitestags.TagID = tags.TagID
+                                                    WHERE utilisateurs.utilisateurID = :user_id
+                                                    ORDER BY touites.datePublication DESC
                                                     LIMIT :limit OFFSET :offset", false, false, true);
 
         }
 
         if ($this->http_method === 'GET') {
-            $checkQuery = $db->prepare("SELECT COUNT(*) FROM Suivi WHERE suivreID = :followID AND suiviID = :followedID");
+            $checkQuery = $db->prepare("SELECT COUNT(*) FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
             $checkQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
             $checkQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
             $checkQuery->execute();
             $existingRelation = $checkQuery->fetchColumn();
 
-
+            // si l'utilisateur cliqué est l'utilisateur connecté alors un message s'affiche pour nous dire que c'est bien nous
             if ($userID == $_SESSION['utilisateur']['userID']) {
                 $pageContent = "<p>C'est vous.</p>";
             } else {
@@ -158,7 +167,7 @@ class ProfileUserAction extends Action
             if ($follow === 0) {
                 if ($userID !== null) {
                     // La relation n'existe pas alors on fait l'insertion dans la table
-                    $insertQuery = $db->prepare("INSERT INTO Suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
+                    $insertQuery = $db->prepare("INSERT INTO suivi(suivreID, suiviID) VALUES(:followID, :followedID)");
                     $insertQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $insertQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     try {
@@ -177,7 +186,7 @@ class ProfileUserAction extends Action
             } else if ($follow === 1) {
                 if ($userID !== null) {
                     // On supprime, on veut plus le suivre
-                    $deleteQuery = $db->prepare("DELETE FROM Suivi WHERE suivreID = :followID AND suiviID = :followedID");
+                    $deleteQuery = $db->prepare("DELETE FROM suivi WHERE suivreID = :followID AND suiviID = :followedID");
                     $deleteQuery->bindParam(':followID', $_SESSION['utilisateur']['userID'], PDO::PARAM_INT);
                     $deleteQuery->bindParam(':followedID', $userID, PDO::PARAM_INT);
                     $deleteQuery->execute();
@@ -219,7 +228,6 @@ class ProfileUserAction extends Action
             </div>
         </div>
     HTML;
-        header(Refresh:0);
         }
     }
 }

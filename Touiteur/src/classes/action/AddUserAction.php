@@ -5,7 +5,7 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\auth\Auth;
 
 /**
- * Action permettant d'ajouter un utilisateur
+ * Action permettant d'ajouter un utilisateur / s'inscrire
  */
 class AddUserAction extends Action
 {
@@ -46,7 +46,7 @@ class AddUserAction extends Action
             $auth = new Auth();
             // Si l'inscription réussit, on redirige l'utilisateur vers la page d'accueil
             if ($auth->register($nom, $prenom, $email, $passwd)) {
-                header("Location: ?action=default");
+                header('Location: ?action=default');
                 exit;
             // Sinon, on affiche un message d'erreur
             } else {

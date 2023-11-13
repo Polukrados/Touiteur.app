@@ -4,6 +4,9 @@ namespace iutnc\touiteur\db;
 
 use PDO;
 
+/**
+ * Action permettant de se connecter à la base de donnees
+ */
 class ConnectionFactory
 {
 
@@ -14,6 +17,7 @@ class ConnectionFactory
         self::$tableau = parse_ini_file($file);
     }
 
+    // methode de connexion
     public static function makeConnection(): PDO
     {
         $dns = self::$tableau['driver'] . ":host=" . self::$tableau['host'] . ";dbname=" . self::$tableau['database'];

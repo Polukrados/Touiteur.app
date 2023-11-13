@@ -15,10 +15,10 @@ class InfluenceurAdmin extends ActionAdmin
         $db = ConnectionFactoryAdmin::makeConnection();
         // Récupère les influenceurs donc le nombre de followers est le plus élevé
         // Trier par ordre décroissant
-        $query = $db->prepare("SELECT Utilisateurs.*, COUNT(Suivi.suiviID) AS followers_count
-                               FROM Utilisateurs
-                               LEFT JOIN Suivi ON Utilisateurs.utilisateurID = Suivi.suiviID
-                               GROUP BY Utilisateurs.utilisateurID
+        $query = $db->prepare("SELECT utilisateurs.*, COUNT(suivi.suiviID) AS followers_count
+                               FROM utilisateurs
+                               LEFT JOIN suivi ON utilisateurs.utilisateurID = suivi.suiviID
+                               GROUP BY utilisateurs.utilisateurID
                                ORDER BY followers_count DESC");
         $query->execute();
 

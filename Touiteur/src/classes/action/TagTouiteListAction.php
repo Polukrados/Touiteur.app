@@ -2,27 +2,32 @@
 
 namespace iutnc\touiteur\action;
 
+/**
+ * Action permettant de voir la liste des touites d'un tag choisi
+ */
 class TagTouiteListAction extends Action
 {
+    // Constructeur
     public function __construct()
     {
         parent::__construct();
     }
 
+    // Methode qui execute l'action
     public function execute(): string
     {
         $pageContent = "";
         if ($this->http_method === 'GET') {
-            $pageContent = parent::generationAction("SELECT Touites.touiteID, Touites.texte, Utilisateurs.utilisateurID, Utilisateurs.prenom, Utilisateurs.nom, Touites.datePublication, Tags.libelle, Tags.tagID
-                    FROM Touites
-                    LEFT JOIN TouitesUtilisateurs ON Touites.touiteID = TouitesUtilisateurs.TouiteID
-                    LEFT JOIN Utilisateurs ON TouitesUtilisateurs.utilisateurID = Utilisateurs.utilisateurID
-                    LEFT JOIN TouitesImages ON TouitesImages.TouiteID = Touites.touiteID
-                    LEFT JOIN Images ON Images.ImageID = TouitesImages.ImageID
-                    LEFT JOIN TouitesTags ON Touites.touiteID = TouitesTags.TouiteID
-                    LEFT JOIN Tags ON TouitesTags.TagID = Tags.TagID
-                    WHERE Tags.TagID = :tag_id
-                    ORDER BY Touites.datePublication DESC
+            $pageContent = parent::generationAction("SELECT touites.touiteID, touites.texte, utilisateurs.utilisateurID, utilisateurs.prenom, utilisateurs.nom, touites.datePublication, tags.libelle, tags.tagID
+                    FROM touites
+                    LEFT JOIN touitesutilisateurs ON touites.touiteID = touitesutilisateurs.TouiteID
+                    LEFT JOIN utilisateurs ON touitesutilisateurs.utilisateurID = utilisateurs.utilisateurID
+                    LEFT JOIN touitesimages ON touitesimages.TouiteID = touites.touiteID
+                    LEFT JOIN images ON images.ImageID = touitesimages.ImageID
+                    LEFT JOIN touitestags ON touites.touiteID = touitestags.TouiteID
+                    LEFT JOIN tags ON touitestags.TagID = tags.TagID
+                    WHERE tags.TagID = :tag_id
+                    ORDER BY touites.datePublication DESC
                     LIMIT :limit OFFSET :offset", true);
 
         }
